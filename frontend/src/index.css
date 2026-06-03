@@ -1,0 +1,245 @@
+/* ===== BRAND IDENTITY "VINTAGE ELITE" ===== */
+:root {
+  --bg-color: #03140e;          /* Deepest forest green */
+  --bg-gradient: radial-gradient(circle at 50% 30%, #0b3d2e 0%, #052218 60%, #020f0a 100%);
+  --text-color: #f4efeb;        /* Soft vintage off-white */
+  --text-muted: #a9cbb7;        /* Soft sage green */
+  --accent-color: #C5A059;      /* Warm premium gold/brass */
+  --accent-hover: #b08d4a;      /* Richer dark brass */
+  --accent-light: rgba(197, 160, 89, 0.15);
+  --card-bg: rgba(6, 34, 25, 0.5); /* Deep translucent glass */
+  --border-color: rgba(197, 160, 89, 0.2); /* Thin gold border */
+  --border-muted: rgba(255, 255, 255, 0.08);
+  --shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.6);
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ===== RESET & BASE CONFIG ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  background-image: var(--bg-gradient);
+  color: var(--text-color);
+  line-height: 1.6;
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== GRAIN / NOISE OVERLAY ===== */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ===== GLASSMORPHISM & CONTAINER CARDS ===== */
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.br-12 {
+  border-radius: 12px;
+}
+
+/* ===== TYPOGRAPHY & HEADERS ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.serif-title {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  text-transform: capitalize;
+}
+
+.gold-text {
+  color: var(--accent-color);
+}
+
+.cart-header {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-align: center;
+  position: relative;
+}
+
+/* ===== BOUTONS PREMIUM ===== */
+.btn-primary {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid var(--accent-color);
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent-color);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  color: #03140e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.25);
+}
+
+.btn-primary:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Button solid variation */
+.btn-solid {
+  background-color: var(--accent-color);
+  color: #03140e !important;
+  border: 1px solid var(--accent-color);
+}
+
+.btn-solid:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
+}
+
+/* ===== LAYOUT & UTILS ===== */
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.text-center { text-align: center; }
+.mt-4 { margin-top: 2.5rem; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+/* NAVBAR STYLE */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 20px 0;
+  background: rgba(3, 20, 14, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-muted);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .logo {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar .nav-links a {
+  color: var(--text-color);
+  text-decoration: none;
+  margin-left: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.navbar .nav-links a:hover {
+  color: var(--accent-color);
+}
+
+/* FORM FIELDS PREMIUM */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-muted);
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  outline: none;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+/* VINTAGE AD LAYOUT HELPERS */
+.luxury-divider {
+  width: 120px;
+  height: 1px;
+  background-color: var(--accent-color);
+  margin: 1.5rem auto;
+}
+
+.editorial-desc {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  max-width: 650px;
+  margin: 0 auto;
+  text-align: justify;
+  text-align-last: center;
+  font-weight: 300;
+}
