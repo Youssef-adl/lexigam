@@ -43,12 +43,13 @@ export default function Shop({ category = 'All Products' }) {
   useEffect(() => {
     api
       .get(q ? '/produits?nom=' + encodeURIComponent(q) : '/produits')
-      .then((x) => setD(x.data?.data || x.data || []))
-      .catch(() => setD([]))
+      .then((x) => { setD(x.data?.data || x.data || []); setApiError(false); })
+      .catch(() => { setD([]); setApiError(true); })
       .finally(() => setLoad(false));
   }, [q]);
 
   const data = useMemo(() => {
+    if (apiError && !import.meta.env.DEV) return [];
     let arr = d.length
       ? d
       : demo.map((x, i) => ({
@@ -83,7 +84,7 @@ export default function Shop({ category = 'All Products' }) {
     if (sort === 'PRICE_HIGH') arr = [...arr].sort((a, b) => Number(b.prix) - Number(a.prix));
 
     return arr;
-  }, [d, q, fit, color, size, sort]);
+  }, [d, q, fit, color, size, sort, apiError]);
 
   const title =
     category === 'Men'
@@ -216,10 +217,10 @@ export default function Shop({ category = 'All Products' }) {
       )}
 
       {load ? (
-        <div className="pb-loading-screen">
-          <span>LOADING ARCHIVE</span>
-        </div>
-      ) : (
+        <div className="pb-loading-screen"><span>LOADING ARCHIVE</span></div>
+      ) : apiError && !import.meta.env.DEV ? (
+        <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
+      ) : data.length ? (
         <div className="pb-shop-grid">
           {data.map((p, i) => (
             <article className="pb-product-card" key={p.id}>
@@ -246,6 +247,8 @@ export default function Shop({ category = 'All Products' }) {
             </article>
           ))}
         </div>
+      ) : (
+        <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
       )}
     </div>
   );
