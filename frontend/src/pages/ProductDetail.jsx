@@ -153,7 +153,7 @@ export default function ProductDetail() {
     };
 
     load();
-    return (<><SEO title={p.nom} description={p.description} image={image} product={p}/>) => {
+    return () => {
       active = false;
     };
   }, [id]);
@@ -206,7 +206,7 @@ export default function ProductDetail() {
   };
 
   return (
-    <div className="pb-product-page">
+    <><SEO title={p.nom} description={p.description} image={image} product={p}/><div className="pb-product-page">
       <div className="pb-product-breadcrumbs">
         <Link to="/shop">
           <ArrowLeft size={13} /> {language === 'ar' ? 'الرجوع للمتجر' : 'BACK TO SHOP'}
