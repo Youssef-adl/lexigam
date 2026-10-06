@@ -2,30 +2,29 @@
 
 namespace Database\Factories;
 
+use App\Models\Categorie;
 use App\Models\Produit;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Produit>
- */
 class ProduitFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Produit::class;
+
     public function definition(): array
     {
+        $vendor = User::factory()->create(['role' => 'vendeur']);
+        $category = Categorie::query()->first() ?? Categorie::factory()->create();
+
         return [
-            'nom' => fake()->word(),
-            'description' => fake()->paragraph(),
+            'nom' => fake()->words(3, true),
+            'description' => fake()->sentence(),
             'prix' => fake()->randomFloat(2, 50, 2000),
             'stock' => fake()->numberBetween(1, 100),
-            'image' => fake()->imageUrl(),
-
-            'user_id'=> \App\Models\User::where('role','vendeur')->inRandomOrder()->first()->id,
-            'categorie_id' => \App\Models\Categorie::inRandomOrder()->first()->id,
+            'image' => null,
+            'user_id' => $vendor->id,
+            'categorie_id' => $category->id,
+            'statut' => 'approved',
         ];
     }
 }
