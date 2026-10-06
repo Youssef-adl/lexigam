@@ -6,6 +6,17 @@ import api from'../axios';
 import {useLanguage}from'../i18n/LanguageContext';
 import useEditorialMotion from'../hooks/useEditorialMotion';
 const heroSlides=['/webpImage/image-20.jpg','/webpImage/image-22.jpg','/webpImage/image-21.jpg'];
+const artPrints=[
+ ['/webpImage/image-11.jpg','01 / LANDSCAPE'],
+ ['/webpImage/image-14 copy.jpg','02 / FIGURE'],
+ ['/webpImage/image-16.jpg','03 / COLOR STUDY'],
+ ['/webpImage/image-21 copy.jpg','04 / BIRDS'],
+ ['/webpImage/image-22.jpg','05 / OBJECT'],
+ ['/webpImage/image-26 copy.jpg','06 / BLUE STUDY'],
+ ['/webpImage/image-26.jpg','07 / FORM'],
+ ['/webpImage/image-3 copy.jpg','08 / GEOMETRY'],
+ ['/webpImage/image-8.jpg','09 / BIRDS / 02'],
+];
 const fallback=[
  {id:'demo1',nom:'NOCTURNE OVERSHIRT',prix:890,image:'/webpImage/image-1.jpg'},
  {id:'demo2',nom:'ARCHIVE TROUSER',prix:690,image:'/webpImage/image-2.jpg'},
@@ -37,19 +48,21 @@ export default function Home(){
     <span>VISUAL EDITIONS / LEXIGAM ARCHIVE</span>
    </div>
    <div className='pb-art-stage'>
-    <button className='pb-art-arrow left' type='button' aria-label='Previous art print' onClick={()=>setArtSlide(v=>(v+2)%3)}><ChevronLeft size={17}/></button>
+    <button className='pb-art-arrow left' type='button' aria-label='Previous art print' onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={17}/></button>
     <div className='pb-art-track'>
-      {[['/webpImage/image-13.png','01 / FORM'],['/webpImage/image-18.png','02 / OBJECT'],['/webpImage/image-26.jpg','03 / ARCHIVE']].map(([src,label],i)=>(
-        <figure key={src} className={'pb-art-frame '+(i===artSlide?'active':'')}>
-          <div><img src={src} alt={label}/></div>
+      {[-1,0,1].map((offset)=>{
+        const index=(artSlide+offset+artPrints.length)%artPrints.length;
+        const [src,label]=artPrints[index];
+        return <figure key={src} className={'pb-art-frame '+(offset===0?'active':'')}>
+          <div><img src={src} alt={label} loading='lazy' /></div>
           <figcaption>{label}</figcaption>
-        </figure>
-      ))}
+        </figure>;
+      })}
     </div>
-    <button className='pb-art-arrow right' type='button' aria-label='Next art print' onClick={()=>setArtSlide(v=>(v+1)%3)}><ChevronRight size={17}/></button>
+    <button className='pb-art-arrow right' type='button' aria-label='Next art print' onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={17}/></button>
    </div>
    <div className='pb-art-bottom'>
-    <div className='pb-art-dots'>{[0,1,2].map((dot)=><button type='button' key={dot} className={dot===artSlide?'active':''} aria-label={`Go to art print ${dot+1}`} onClick={()=>setArtSlide(dot)}/>)}</div>
+    <div className='pb-art-dots'>{artPrints.map((_,dot)=><button type='button' key={dot} className={dot===artSlide?'active':''} aria-label={`Go to art print ${dot+1}`} onClick={()=>setArtSlide(dot)}/>)}</div>
     <Link to='/shop' className='pb-art-pill'>ART PRINTS <ArrowUpRight size={13}/></Link>
    </div>
   </section>
