@@ -16,12 +16,12 @@ const fallback=[
  {id:'demo7',nom:'WIDE CARGO TROUSER',prix:640,image:'/webpImage/image-8.jpg'},
  {id:'demo8',nom:'CORE TEE / 02',prix:290,image:'/webpImage/image-11.jpg'}
 ];
-function Card({p,i}){const image=p.image?.startsWith('http')?p.image:p.image?.startsWith('/')?p.image:'/webpImage/image-1.jpg';return <Link className='pb-product-card' data-motion='reveal' to={'/product/'+p.id}><div className='pb-product-img'><img src={image} alt={p.nom}/>{i<4&&<span className='pb-badge'>NEW</span>}<button onClick={e=>e.preventDefault()} aria-label='Wishlist'><ArrowUpRight size={14}/></button></div><div className='pb-product-meta'><div><strong>{p.nom}</strong><small>{i%3===0?'Relaxed fit':'Regular fit'}</small></div><b>{p.prix} DH</b></div></Link>}
+function Card({p,i}){const image=p.image?.startsWith('http')?p.image:p.image?.startsWith('/')?p.image:'/webpImage/image-1.jpg';return <article className='pb-product-card' data-motion='reveal'><div className='pb-product-img'><Link to={'/product/'+p.id} aria-label={p.nom}><img src={image} alt={p.nom} loading='lazy' decoding='async'/></Link>{i<4&&<span className='pb-badge'>NEW</span>}<button onClick={e=>e.preventDefault()} aria-label='Wishlist'><ArrowUpRight size={14}/></button></div><div className='pb-product-meta'><div><Link to={'/product/'+p.id}><strong>{p.nom}</strong></Link><small>{i%3===0?'Relaxed fit':'Regular fit'}</small></div><b>{p.prix} DH</b></div></article>}
 function ArrowRightIcon(){return <ChevronRight size={15}/>}
 export default function Home(){
  const {t,language}=useLanguage();useEditorialMotion();
- const [products,setProducts]=useState(fallback),[hero,setHero]=useState(0);
- useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];if(Array.isArray(x)&&x.length)setProducts(x.slice(0,8))}).catch(()=>{})},[]);
+ const [products,setProducts]=useState(fallback),[hero,setHero]=useState(0),[apiError,setApiError]=useState(false);
+ useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];setApiError(false);if(Array.isArray(x)&&x.length)setProducts(x.slice(0,8))}).catch(()=>{setApiError(true);if(!import.meta.env.DEV)setProducts([])})},[]);
  useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
  return <><SEO title="Independent Clothing / Casablanca" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className='pb-home'>
   <section className='pb-hero pb-hero-editorial'><div className='pb-hero-image'><img src={heroSlides[hero]} alt='LEXIGAM campaign'/><div/></div><div className='pb-hero-copy'><small>LEXIGAM / AUTUMN WINTER 2026</small><h1>Wear<br/><i>the</i> everyday.</h1><p>{t.heroText}</p><Link to='/shop' className='pb-btn'>SHOP THE COLLECTION <ArrowUpRight size={16}/></Link></div><div className='pb-hero-count'><span>{String(hero+1).padStart(2,'0')} / 03</span><div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div></div></section>
