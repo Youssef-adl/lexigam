@@ -1,3 +1,283 @@
-import React,{useEffect,useState}from'react';import{useParams,Link}from'react-router-dom';import{useSelector,useDispatch}from'react-redux';import{addToCart}from'../store/cartSlice';import{ArrowUpRight,Heart,Minus,Plus,Star,LoaderCircle}from'lucide-react';import api from'../axios';
-const DEMOS={demo1:{id:'demo1',nom:'NOCTURNE OVERSHIRT',prix:890,stock:12,description:'A structured everyday layer cut for the city. Heavy cotton, relaxed proportions and a clean finish.',image:'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=1400&q=85'},demo2:{id:'demo2',nom:'ARCHIVE TROUSER',prix:690,stock:8,description:'Relaxed straight-leg trousers with an understated uniform silhouette.',image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1400&q=85'},demo3:{id:'demo3',nom:'AFTER DARK JACKET',prix:1190,stock:5,description:'A sharp outer layer built around minimal lines and late-night city movement.',image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1400&q=85'},demo4:{id:'demo4',nom:'DAILY UNIFORM TEE',prix:390,stock:20,description:'Essential heavyweight tee with an oversized editorial fit.',image:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1400&q=85'}};
-export default function ProductDetail(){const{id}=useParams(),user=useSelector(s=>s.auth.user),dispatch=useDispatch(),[p,setP]=useState(null),[reviews,setReviews]=useState([]),[size,setSize]=useState('M'),[qty,setQty]=useState(1),[review,setReview]=useState({note:5,commentaire:''}),[error,setError]=useState(false);useEffect(()=>{let active=true;setP(null);setError(false);const load=async()=>{if(DEMOS[id]){if(active)setP(DEMOS[id]);return}try{const [a,b]=await Promise.all([api.get('/produits/'+id),api.get('/produits/'+id+'/avis')]);if(active){setP(a.data.data);setReviews(b.data.data||[])}}catch(e){if(active)setError(true)}};load();return()=>{active=false}},[id]);if(error)return <div className="empty-page container-wide"><span className="eyebrow">PRODUCT / 404</span><h1>Product not found.</h1><Link className="fashion-cta" to="/shop">BACK TO SHOP <ArrowUpRight size={16}/></Link></div>;if(!p)return <div className="empty-page container-wide"><LoaderCircle className="spin" size={24}/><span className="eyebrow">PRODUCT</span><h1>Loading archive...</h1></div>;const img=p.image?.startsWith('http')?p.image:'http://localhost:8000'+(p.image||'');const submit=async e=>{e.preventDefault();try{const x=await api.post('/avis',{produit_id:id,...review});setReviews([...reviews,{...x.data.data,user}]);setReview({note:5,commentaire:''})}catch(e){alert(e.response?.data?.message||'Unable to publish review')}};return <div className="product-detail container-wide"><div className="product-breadcrumb"><Link to="/shop">SHOP</Link><span>/</span>{p.nom}</div><div className="detail-layout"><div><div className="detail-main-image"><img src={img} alt={p.nom}/><span>LEXIGAM / 026</span></div><div className="detail-caption">OBJECT / {String(p.id).padStart(3,'0')} — MADE FOR DAILY USE</div></div><div className="detail-info"><span className="eyebrow">NEW / SEASON 026</span><h1>{p.nom}</h1><div className="detail-price">{p.prix} DH</div><p className="detail-description">{p.description}</p><div className="size-row"><span className="eyebrow">SELECT SIZE</span><div className="sizes">{['XS','S','M','L','XL'].map(s=><button className={size===s?'selected':''} onClick={()=>setSize(s)} key={s}>{s}</button>)}</div></div><div className="quantity-row"><span className="eyebrow">QUANTITY</span><div><button onClick={()=>setQty(Math.max(1,qty-1))}><Minus/></button><b>{qty}</b><button onClick={()=>setQty(qty+1)}><Plus/></button></div></div><button className="add-bag" onClick={()=>dispatch(addToCart({...p,taille:size,quantite:qty}))}>ADD TO BAG <ArrowUpRight size={18}/></button><button className="wishlist"><Heart size={17}/> ADD TO WISHLIST</button><div className="detail-accordions"><details open><summary>DESCRIPTION <Plus size={15}/></summary><p>{p.description}</p></details><details><summary>SHIPPING & RETURNS <Plus size={15}/></summary><p>Orders are prepared within 1–2 business days. Delivery options are shown at checkout.</p></details><details><summary>CARE <Plus size={15}/></summary><p>Wash cold, inside out. Do not tumble dry.</p></details></div></div></div><section className="reviews"><div><span className="eyebrow">COMMUNITY</span><h2>What people say.</h2></div>{reviews.length?<div className="review-list">{reviews.map((x,i)=><article className="review" key={i}><div><strong>{x.user?.name||'LEXIGAM CLIENT'}</strong><span>{[1,2,3,4,5].map(n=><Star key={n} size={12} fill={n<=x.note?'currentColor':'none'}/>)}</span></div><p>{x.commentaire}</p></article>)}</div>:<p className="muted">No reviews yet.</p>}{user?.role==='client'&&<form className="review-form" onSubmit={submit}><span className="eyebrow">LEAVE A REVIEW</span><select value={review.note} onChange={e=>setReview({...review,note:+e.target.value})}>{[5,4,3,2,1].map(n=><option key={n} value={n}>{n} STARS</option>)}</select><textarea value={review.commentaire} onChange={e=>setReview({...review,commentaire:e.target.value})} placeholder="YOUR EXPERIENCE..."/><button className="fashion-cta">PUBLISH <ArrowUpRight size={16}/></button></form>}</section></div>}
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart } from '../store/cartSlice';
+import { ArrowUpRight, Heart, Minus, Plus, Star, LoaderCircle } from 'lucide-react';
+import api from '../axios';
+
+const DEMOS = {
+  demo0: {
+    id: 'demo0',
+    nom: 'NOCTURNE OVERSHIRT',
+    prix: 890,
+    stock: 12,
+    description: 'A structured everyday layer cut for the city. Heavy cotton, relaxed proportions and a clean finish.',
+    image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=1400&q=85',
+  },
+  demo1: {
+    id: 'demo1',
+    nom: 'ARCHIVE TROUSER',
+    prix: 690,
+    stock: 8,
+    description: 'Relaxed straight-leg trousers with an understated uniform silhouette.',
+    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1400&q=85',
+  },
+  demo2: {
+    id: 'demo2',
+    nom: 'AFTER DARK JACKET',
+    prix: 1190,
+    stock: 5,
+    description: 'A sharp outer layer built around minimal lines and late-night city movement.',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1400&q=85',
+  },
+  demo3: {
+    id: 'demo3',
+    nom: 'DAILY UNIFORM TEE',
+    prix: 390,
+    stock: 20,
+    description: 'Essential heavyweight tee with an oversized editorial fit.',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1400&q=85',
+  },
+  demo4: {
+    id: 'demo4',
+    nom: 'DISTRICT OVERSHIRT',
+    prix: 690,
+    stock: 10,
+    description: 'Brushed wool blend overshirt with dual front chest pockets.',
+    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1400&q=85',
+  },
+  demo5: {
+    id: 'demo5',
+    nom: 'RAW DENIM 01',
+    prix: 720,
+    stock: 15,
+    description: '14oz selvedge Japanese denim with straight relaxed cut.',
+    image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1400&q=85',
+  },
+};
+
+export default function ProductDetail() {
+  const { id } = useParams();
+  const user = useSelector((s) => s.auth.user);
+  const dispatch = useDispatch();
+
+  const [p, setP] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [size, setSize] = useState('M');
+  const [qty, setQty] = useState(1);
+  const [review, setReview] = useState({ note: 5, commentaire: '' });
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    setP(null);
+    setError(false);
+
+    const load = async () => {
+      if (DEMOS[id]) {
+        if (active) {
+          setP(DEMOS[id]);
+          setReviews([
+            {
+              note: 5,
+              commentaire: 'Excellent quality and clean silhouette.',
+              user: { name: 'Archive Collector' },
+            },
+          ]);
+        }
+        return;
+      }
+
+      try {
+        const [a, b] = await Promise.all([
+          api.get('/produits/' + id),
+          api.get('/produits/' + id + '/avis'),
+        ]);
+        if (active) {
+          setP(a.data.data || a.data);
+          setReviews(b.data.data || []);
+        }
+      } catch (e) {
+        if (active) {
+          if (DEMOS['demo1']) {
+            setP(DEMOS['demo1']);
+          } else {
+            setError(true);
+          }
+        }
+      }
+    };
+
+    load();
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (error) {
+    return (
+      <div className="empty-page container-wide">
+        <span className="eyebrow">PRODUCT / 404</span>
+        <h1>Product not found.</h1>
+        <Link className="fashion-cta" to="/shop">
+          BACK TO SHOP <ArrowUpRight size={16} />
+        </Link>
+      </div>
+    );
+  }
+
+  if (!p) {
+    return (
+      <div className="empty-page container-wide">
+        <LoaderCircle className="spin" size={24} />
+        <span className="eyebrow">PRODUCT</span>
+        <h1>Loading archive...</h1>
+      </div>
+    );
+  }
+
+  const img = p.image?.startsWith('http')
+    ? p.image
+    : 'http://localhost:8000' + (p.image || '');
+
+  const submit = async (e) => {
+    e.preventDefault();
+    try {
+      const x = await api.post('/avis', { produit_id: id, ...review });
+      setReviews([...reviews, { ...x.data.data, user }]);
+      setReview({ note: 5, commentaire: '' });
+    } catch (e) {
+      alert(e.response?.data?.message || 'Unable to publish review');
+    }
+  };
+
+  return (
+    <div className="product-detail container-wide">
+      <div className="product-breadcrumb">
+        <Link to="/shop">SHOP</Link>
+        <span>/</span>
+        {p.nom}
+      </div>
+      <div className="detail-layout">
+        <div>
+          <div className="detail-main-image">
+            <img src={img} alt={p.nom} />
+            <span>LEXIGAM / 026</span>
+          </div>
+          <div className="detail-caption">
+            OBJECT / {String(p.id).padStart(3, '0')} — MADE FOR DAILY USE
+          </div>
+        </div>
+        <div className="detail-info">
+          <span className="eyebrow">NEW / SEASON 026</span>
+          <h1>{p.nom}</h1>
+          <div className="detail-price">{p.prix} DH</div>
+          <p className="detail-description">{p.description}</p>
+          <div className="size-row">
+            <span className="eyebrow">SELECT SIZE</span>
+            <div className="sizes">
+              {['XS', 'S', 'M', 'L', 'XL'].map((s) => (
+                <button
+                  className={size === s ? 'selected' : ''}
+                  onClick={() => setSize(s)}
+                  key={s}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="quantity-row">
+            <span className="eyebrow">QUANTITY</span>
+            <div>
+              <button onClick={() => setQty(Math.max(1, qty - 1))}>
+                <Minus />
+              </button>
+              <b>{qty}</b>
+              <button onClick={() => setQty(qty + 1)}>
+                <Plus />
+              </button>
+            </div>
+          </div>
+          <button
+            className="add-bag"
+            onClick={() => dispatch(addToCart({ ...p, taille: size, quantite: qty }))}
+          >
+            ADD TO BAG <ArrowUpRight size={18} />
+          </button>
+          <button className="wishlist">
+            <Heart size={17} /> ADD TO WISHLIST
+          </button>
+          <div className="detail-accordions">
+            <details open>
+              <summary>
+                DESCRIPTION <Plus size={15} />
+              </summary>
+              <p>{p.description}</p>
+            </details>
+            <details>
+              <summary>
+                SHIPPING & RETURNS <Plus size={15} />
+              </summary>
+              <p>Orders are prepared within 1–2 business days. Delivery options are shown at checkout.</p>
+            </details>
+            <details>
+              <summary>
+                CARE <Plus size={15} />
+              </summary>
+              <p>Wash cold, inside out. Do not tumble dry.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+      <section className="reviews">
+        <div>
+          <span className="eyebrow">COMMUNITY</span>
+          <h2>What people say.</h2>
+        </div>
+        {reviews.length ? (
+          <div className="review-list">
+            {reviews.map((x, i) => (
+              <article className="review" key={i}>
+                <div>
+                  <strong>{x.user?.name || 'LEXIGAM CLIENT'}</strong>
+                  <span>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <Star key={n} size={12} fill={n <= x.note ? 'currentColor' : 'none'} />
+                    ))}
+                  </span>
+                </div>
+                <p>{x.commentaire}</p>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="muted">No reviews yet.</p>
+        )}
+        {user?.role === 'client' && (
+          <form className="review-form" onSubmit={submit}>
+            <span className="eyebrow">LEAVE A REVIEW</span>
+            <select
+              value={review.note}
+              onChange={(e) => setReview({ ...review, note: +e.target.value })}
+            >
+              {[5, 4, 3, 2, 1].map((n) => (
+                <option key={n} value={n}>
+                  {n} STARS
+                </option>
+              ))}
+            </select>
+            <textarea
+              value={review.commentaire}
+              onChange={(e) => setReview({ ...review, commentaire: e.target.value })}
+              placeholder="YOUR EXPERIENCE..."
+            />
+            <button className="fashion-cta">
+              PUBLISH <ArrowUpRight size={16} />
+            </button>
+          </form>
+        )}
+      </section>
+    </div>
+  );
+}
