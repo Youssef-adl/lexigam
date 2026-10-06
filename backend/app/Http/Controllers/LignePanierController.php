@@ -3,124 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\LignePanier;
-use App\Http\Requests\StoreLignePanierRequest;
-use App\Http\Requests\UpdateLignePanierRequest;
+use App\Models\Produit;
+use Illuminate\Http\Request;
 
 class LignePanierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private function own(LignePanier $ligne): void
+    {
+        abort_unless($ligne->panier && $ligne->panier->user_id === auth()->id(), 403);
+    }
+
     public function index()
     {
-        try {
-            $lignes = LignePanier::with(['panier', 'produit'])->get();
-
-            return response()->json([
-                'success' => true,
-                'data' => $lignes
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des lignes de panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $rows = LignePanier::with('produit')->whereHas('panier', fn ($q) => $q->where('user_id', auth()->id()))->get();
+        return response()->json(['success' => true,'data' => $rows]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreLignePanierRequest $request)
+    public function store(Request $request)
     {
-        try {
-            $ligne = LignePanier::create($request->validated());
+        $data = $request->validate([
+            'panier_id' => ['required','integer','exists:paniers,id'],
+            'produit_id' => ['required','integer','exists:produits,id'],
+            'quantite' => ['required','integer','min:1','max:20'],
+        ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Produit ajouté au panier avec succès',
-                'data' => $ligne
-            ], 201);
+        $lignePanier = new LignePanier($data);
+        $panier = $lignePanier->panier()->firstOrFail();
+        abort_unless($panier->user_id === auth()->id(), 403);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de l\'ajout au panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $produit = Produit::whereKey($data['produit_id'])->where('statut','approved')->firstOrFail();
+        abort_if($produit->stock < $data['quantite'], 422);
+
+        $lignePanier->prix = $produit->prix;
+        $lignePanier->save();
+
+        return response()->json(['success' => true,'data' => $lignePanier->load('produit')], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        try {
-            $ligne = LignePanier::with(['panier', 'produit'])
-                ->findOrFail($id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $ligne
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ligne de panier introuvable',
-                'error' => $e->getMessage()
-            ], 404);
-        }
+        $ligne = LignePanier::with('produit')->findOrFail($id);
+        $this->own($ligne);
+        return response()->json(['success' => true,'data' => $ligne]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateLignePanierRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
-        try {
-            $ligne = LignePanier::findOrFail($id);
-
-            $ligne->update($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Ligne de panier mise à jour avec succès',
-                'data' => $ligne
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la mise à jour',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $ligne = LignePanier::findOrFail($id);
+        $this->own($ligne);
+        $data = $request->validate(['quantite' => ['required','integer','min:1','max:20']]);
+        abort_if($ligne->produit->stock < $data['quantite'], 422);
+        $ligne->update(['quantite' => $data['quantite'],'prix' => $ligne->produit->prix]);
+        return response()->json(['success' => true,'data' => $ligne->fresh('produit')]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        try {
-            $ligne = LignePanier::findOrFail($id);
-            $ligne->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Produit retiré du panier avec succès'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression du panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $ligne = LignePanier::findOrFail($id);
+        $this->own($ligne);
+        $ligne->delete();
+        return response()->json(['success' => true]);
     }
 }
