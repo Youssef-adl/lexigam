@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap');
 
 :root{--black:#0a0a0a;--paper:#f1eee8;--muted:#8c8982;--line:rgba(241,238,232,.18);--serif:'Playfair Display',Georgia,serif;--sans:'Inter',Arial,sans-serif;--mono:'DM Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{background:var(--black);color:var(--paper);font-family:var(--sans);line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer;color:inherit}.site-shell{min-height:100vh;background:var(--black)}.container-wide{width:min(1440px,100%);margin:auto;padding:0 42px}
@@ -554,3 +554,77 @@ html[data-theme="dark"] .pb-wall-grid figure:after{background:linear-gradient(tr
 
 /* Editorial assets keep their original color and are mapped by scene meaning */
 .pb-hero-image img,.pb-editorial-feature>img,.pb-flagship-image img,.pb-triptych-card>img,.pb-art-prints>img,.pb-service-grid-visual article img{filter:none!important}
+
+/* FINAL DESIGN POLISH */
+:root{
+ --sans:'Sora',Arial,sans-serif;
+ --serif:'Cormorant Garamond',Georgia,serif;
+ --mono:'DM Mono',monospace;
+ --display:'Sora',Arial,sans-serif;
+ --bg:#f7f6f2;--fg:#11110f;--surface:#fff;--surface2:#efeee8;--muted:#77756d;--line:#d7d5cc;
+}
+html[data-theme="dark"]{
+ --bg:#0b0b0a;--fg:#f4f2ea;--surface:#121210;--surface2:#191916;--muted:#9a978d;--line:#30302b;
+}
+body{font-family:var(--sans);letter-spacing:-.012em}
+h1,h2,h3,h4,h5,h6{font-family:var(--display);font-weight:600;letter-spacing:-.065em}
+i{font-family:var(--serif);font-weight:600}
+.pb-header{backdrop-filter:blur(18px);border-bottom-color:color-mix(in srgb,var(--fg) 13%,transparent)}
+.pb-logo{font-family:var(--display);font-weight:700;letter-spacing:-.1em}
+.pb-nav a,.pb-actions button,.pb-actions a{font-size:8px;letter-spacing:.12em}
+.pb-hero-copy h1{font-family:var(--display);font-weight:600;letter-spacing:-.085em}
+.pb-hero-copy h1 i{font-family:var(--serif);font-weight:600;letter-spacing:-.04em}
+.pb-btn{font-size:8px;padding:13px 16px;transition:transform .25s,opacity .25s,box-shadow .25s}
+.pb-btn:hover{transform:translateY(-2px)}
+.pb-promo-strip{font-size:7px;letter-spacing:.14em}
+.pb-new-block,.pb-section,.pb-service,.pb-newsletter{max-width:1460px}
+.pb-new-heading h2,.pb-section-title h2{font-family:var(--display);font-weight:600;letter-spacing:-.07em}
+.pb-new-heading h2{font-size:clamp(42px,5.2vw,78px)}
+.pb-product-img{background:var(--surface2);overflow:hidden}
+.pb-product-img img{transition:transform .75s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.pb-product-card:hover .pb-product-img img{transform:scale(1.045)}
+.pb-product-meta{border-bottom:1px solid transparent;transition:border-color .25s;padding-top:13px}
+.pb-product-card:hover .pb-product-meta{border-bottom-color:var(--line)}
+.pb-product-meta strong,.pb-product-meta b{font-size:8px;letter-spacing:.08em}
+.pb-product-meta small{font-size:7px}
+.pb-badge{font-size:6px;letter-spacing:.11em}
+.pb-editorial-feature{min-height:760px;background:var(--surface2)}
+.pb-editorial-copy h2{font-family:var(--display);font-weight:600;letter-spacing:-.075em}
+.pb-editorial-copy h2 i{font-family:var(--serif)}
+.pb-editorial-copy p,.pb-flagship-copy p,.pb-art-prints p{font-size:11px;line-height:1.85}
+.pb-flagship-visual{min-height:780px;background:var(--surface2)}
+.pb-flagship-copy h2{font-family:var(--display);font-weight:600}
+.pb-flagship-copy h2 i{font-family:var(--serif)}
+.pb-triptych-card h3{font-family:var(--display);font-weight:600;letter-spacing:-.075em}
+.pb-triptych-card h3 i{font-family:var(--serif)}
+.pb-art-prints h2{font-family:var(--display);font-weight:600}
+.pb-art-prints h2 i{font-family:var(--serif)}
+.pb-service{padding-top:105px;padding-bottom:105px}
+.pb-service-grid-visual{gap:0}
+.pb-service-grid-visual article{padding-right:20px}
+.pb-service-grid-visual article img{height:225px;margin-bottom:20px}
+.pb-service-grid-visual article h3{font-size:9px;letter-spacing:.14em}
+.pb-newsletter h2{font-family:var(--display);font-weight:600;line-height:.82}
+.pb-footer-logo{font-family:var(--display)}
+.pb-footer-big{font-family:var(--display);font-weight:700}
+.pb-footer{padding-top:75px}
+.pb-shop-head h1,.pb-product-panel h1,.pb-cart-head h1,.pb-check-head h1,.pb-auth-form h2,.pb-empty h1,.pb-success h1{font-family:var(--display);font-weight:600;letter-spacing:-.075em}
+.pb-shop-head h1{font-size:clamp(58px,7.5vw,112px)}
+.pb-shop-grid{column-gap:12px;row-gap:48px}
+.pb-shop-card:hover .pb-shop-img img{transform:scale(1.035)}
+.pb-shop-info strong,.pb-shop-info b{font-size:8px}
+.pb-gallery-main,.pb-gallery-grid>div{background:var(--surface2)}
+.pb-product-panel h1{font-size:clamp(46px,4.7vw,72px)}
+.pb-product-panel>p,.pb-product-desc{font-size:11px;line-height:1.85}
+.pb-product-specs summary,.pb-size-labels span,.pb-qty-row span{font-size:8px;letter-spacing:.12em}
+.pb-cart-product h2{font-family:var(--display);font-weight:600;letter-spacing:-.055em}
+.pb-check-form h2{font-family:var(--display);font-weight:600}
+.pb-auth-art h1{font-family:var(--display);font-weight:600}
+.pb-auth-art h1 i{font-family:var(--serif)}
+.pb-success h1{font-family:var(--display);font-weight:600}
+.pb-success h1 i{font-family:var(--serif)}
+@media(max-width:900px){
+ .pb-new-heading h2{font-size:13vw}
+ .pb-editorial-feature{min-height:0}
+ .pb-flagship-visual{min-height:0}
+}
