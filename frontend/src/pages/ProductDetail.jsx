@@ -71,6 +71,38 @@ const DEMOS = {
     description: 'Relaxed cotton cargo trousers with deep utility pockets.',
     image: '/webpImage/image-8.jpg',
   },
+  demo8: {
+    id: 'demo8',
+    nom: 'MINIMAL FLEECE',
+    prix: 490,
+    stock: 12,
+    description: 'Soft structured fleece layer with a clean everyday silhouette.',
+    image: '/webpImage/image-12.jpg',
+  },
+  demo9: {
+    id: 'demo9',
+    nom: 'STUDIO SHIRT',
+    prix: 620,
+    stock: 9,
+    description: 'Relaxed studio shirt with a graphic utilitarian finish.',
+    image: '/webpImage/image-14.jpg',
+  },
+  demo10: {
+    id: 'demo10',
+    nom: 'UTILITY VEST',
+    prix: 540,
+    stock: 8,
+    description: 'Light utility vest with practical layering proportions.',
+    image: '/webpImage/image-15.jpg',
+  },
+  demo11: {
+    id: 'demo11',
+    nom: 'CASABLANCA HOODIE',
+    prix: 600,
+    stock: 11,
+    description: 'Heavyweight hood with a relaxed city fit.',
+    image: '/webpImage/image-16.jpg',
+  },
 };
 
 export default function ProductDetail() {
@@ -113,13 +145,7 @@ export default function ProductDetail() {
           setReviews(b.data.data || []);
         }
       } catch (e) {
-        if (active) {
-          if (DEMOS['demo0']) {
-            setP(DEMOS['demo0']);
-          } else {
-            setError(true);
-          }
-        }
+        if (active) setError(true);
       }
     };
 
