@@ -1793,3 +1793,35 @@ html[data-theme="dark"] .pb-art-pill{background:transparent!important;color:#d6d
   .pb-art-frame figcaption{font-size:6px}
   .pb-art-arrow{width:22px!important;height:34px!important;flex-basis:22px}
 }
+
+/* Compact art-print section: remove inherited oversized section height/spacing */
+.pb-art-prints.pb-art-prints-showcase{
+  min-height:0!important;
+  height:auto!important;
+  padding:24px 28px 26px!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-stage{
+  min-height:0!important;
+  height:390px!important;
+  margin:0 auto!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-track{
+  height:100%!important;
+  align-items:center!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-frame>div{
+  max-height:300px!important;
+  aspect-ratio:3/4!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-bottom{
+  margin:0 auto!important;
+}
+@media(max-width:900px){
+  .pb-art-prints.pb-art-prints-showcase{padding:22px 18px 24px!important}
+  .pb-art-prints.pb-art-prints-showcase .pb-art-stage{height:330px!important;min-height:0!important}
+}
+@media(max-width:620px){
+  .pb-art-prints.pb-art-prints-showcase{padding:18px 10px 22px!important}
+  .pb-art-prints.pb-art-prints-showcase .pb-art-stage{height:285px!important;min-height:0!important}
+  .pb-art-prints.pb-art-prints-showcase .pb-art-frame>div{max-height:240px!important}
+}
