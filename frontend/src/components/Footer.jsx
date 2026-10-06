@@ -56,8 +56,8 @@ export default function Footer(){
     <div className="pb-footer-payments">
       <small>{ar?'طرق الدفع':'PAYMENT METHODS'}</small>
       <div className="pb-payment-images">
-        <img src="/webpImage/image-10.png" alt="Secure payment" loading="lazy" />
-        <img src="/webpImage/image-9.png" alt="Accepted cards and payment methods" loading="lazy" />
+        <img src="/webpImage/image-13.png" alt="pay@web and Monri secure payment" loading="lazy" />
+        <img src="/webpImage/image-10.jpg" alt="Mastercard Maestro Visa and Visa Electron" loading="lazy" />
       </div>
       <p>{ar?'الدفع عند الاستلام متاح حالياً.':'Cash on delivery is currently available at checkout.'}</p>
     </div>
