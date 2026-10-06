@@ -118,6 +118,7 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [review, setReview] = useState({ note: 5, commentaire: '' });
   const [error, setError] = useState(false);
+  const [reviewError, setReviewError] = useState('');
 
   useEffect(() => {
     let active = true;
@@ -189,12 +190,17 @@ export default function ProductDetail() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setReviewError('');
     try {
       const res = await api.post('/avis', { produit_id: id, ...review });
       setReviews([...reviews, { ...res.data.data, user }]);
       setReview({ note: 5, commentaire: '' });
     } catch (e) {
-      alert(e.response?.data?.message || 'Unable to publish review');
+      if (e.isAuthError || e.response?.status === 401) {
+        setReviewError(language === 'ar' ? 'خاصك تسجل الدخول باش تقدر تضيف تقييم.' : 'Please sign in to leave a review.');
+      } else {
+        setReviewError(e.response?.data?.message || 'Unable to publish review.');
+      }
     }
   };
 
@@ -329,7 +335,7 @@ export default function ProductDetail() {
 
         {user?.role === 'client' && (
           <form className="pb-review-form" onSubmit={submit}>
-            <small>LEAVE A REVIEW</small>
+            <small>LEAVE A REVIEW</small>{reviewError && <p className="pb-inline-error">{reviewError}</p>}
             <select
               value={review.note}
               onChange={(e) => setReview({ ...review, note: +e.target.value })}
