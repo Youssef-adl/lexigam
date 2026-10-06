@@ -17,7 +17,7 @@ class ProduitController extends Controller
         $query = Produit::with(['categorie','vendeur','avis'])->where('statut', 'approved');
 
         if (auth()->check() && auth()->user()->role === 'admin') {
-            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending'], true)) {
+            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending','archived'], true)) {
                 $query->where('statut', $request->statut);
             }
             if ($request->filled('user_id')) {
@@ -25,7 +25,7 @@ class ProduitController extends Controller
             }
         } elseif (auth()->check() && auth()->user()->role === 'vendeur') {
             $query->where('user_id', auth()->id());
-            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending'], true)) {
+            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending','archived'], true)) {
                 $query->where('statut', $request->statut);
             }
         }
@@ -110,6 +110,10 @@ class ProduitController extends Controller
     public function destroy(Produit $produit)
     {
         $this->authorize('delete', $produit);
+        if ($produit->lignesCommandes()->exists()) {
+            $produit->update(['statut' => 'archived']);
+            return response()->json(['success' => true,'message' => 'Produit archivé pour préserver l’historique des commandes','data' => $produit->fresh()]);
+        }
         $produit->delete();
         return response()->json(['success' => true,'message' => 'Produit supprimé avec succès']);
     }
