@@ -13,7 +13,7 @@ class ProduitFactory extends Factory
 
     public function definition(): array
     {
-        $vendor = User::factory()->create(['role' => 'vendeur']);
+        $vendor = User::query()->where('role','vendeur')->first() ?? User::factory()->create(['role' => 'vendeur']);
         $category = Categorie::query()->first() ?? Categorie::factory()->create();
 
         return [
