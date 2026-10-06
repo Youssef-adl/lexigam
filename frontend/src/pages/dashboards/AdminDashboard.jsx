@@ -85,7 +85,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mt-4" style={{paddingBottom: '100px'}}>
-      <h1 className="cart-header">Console d'Administration</h1>
+      <p className="eyebrow">LEXIGAM / ADMIN STUDIO</p><h1 className="display-title">La maison,<br/><em>en coulisses.</em></h1>
       
       {/* SECTION: COMMANDES GLOBALES */}
       <h2 style={{marginTop: '40px', marginBottom: '20px'}}><Package size={24} /> Toutes les Commandes</h2>
