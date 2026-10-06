@@ -1630,3 +1630,166 @@ html[data-theme="dark"] .pb-art-frame>div{
  .pb-footer-bottom-retail{grid-template-columns:1fr auto;padding:12px 18px;min-height:66px}
  .pb-footer-contact-lines span,.pb-footer-contact-lines a{font-size:7px}
 }
+
+/* REFINED ART PRINT SLIDER */
+.pb-art-prints-showcase{
+  width:100%!important;
+  min-height:650px!important;
+  padding:28px 34px 34px!important;
+  background:#fff!important;
+  color:#111!important;
+  overflow:hidden;
+}
+.pb-art-topline{
+  width:min(1380px,100%);
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#8a887f;
+  font:500 7px var(--mono);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.pb-art-topline small{font:500 7px var(--mono);letter-spacing:.14em}
+.pb-art-topline span{font-size:7px}
+.pb-art-stage{
+  width:min(1450px,100%);
+  min-height:500px!important;
+  height:500px;
+  margin:4px auto 0;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.pb-art-track{
+  width:min(1180px,100%);
+  height:100%;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:34px!important;
+}
+.pb-art-frame{
+  width:100%;
+  margin:0;
+  text-align:center;
+  opacity:.68;
+  transform:scale(.86);
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .3s ease;
+}
+.pb-art-frame.active{
+  opacity:1;
+  transform:scale(1);
+}
+.pb-art-frame>div{
+  width:100%;
+  aspect-ratio:3/4;
+  max-height:400px;
+  background:#f9f8f5!important;
+  padding:20px!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 14px 38px rgba(0,0,0,.09);
+}
+.pb-art-frame img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  display:block;
+}
+.pb-art-frame figcaption{
+  margin-top:8px;
+  font:500 7px var(--mono);
+  letter-spacing:.12em;
+  color:#8a887f;
+}
+.pb-art-arrow{
+  width:42px!important;
+  height:42px!important;
+  flex:0 0 42px;
+  border:0!important;
+  background:transparent!important;
+  color:#78756d!important;
+  display:grid!important;
+  place-items:center;
+}
+.pb-art-arrow:hover{
+  color:#111!important;
+  transform:scale(1.08);
+}
+.pb-art-bottom{
+  width:min(1380px,100%);
+  margin:4px auto 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+.pb-art-dots{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.pb-art-dots button{
+  width:6px;
+  height:6px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#ddd9d0;
+}
+.pb-art-dots button.active{
+  width:7px;
+  height:7px;
+  background:#f15b32;
+}
+.pb-art-pill{
+  height:38px!important;
+  min-width:120px;
+  padding:0 18px!important;
+  border:1px solid #bab6ad!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  color:#5c5952!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font:500 8px var(--mono);
+  letter-spacing:.1em;
+}
+.pb-art-pill:hover{
+  border-color:#111!important;
+  background:#111!important;
+  color:#fff!important;
+}
+html[data-theme="dark"] .pb-art-prints-showcase{background:#111!important;color:#f5f3eb!important}
+html[data-theme="dark"] .pb-art-topline,
+html[data-theme="dark"] .pb-art-frame figcaption{color:#908d84}
+html[data-theme="dark"] .pb-art-frame>div{background:#f4f3ef!important}
+html[data-theme="dark"] .pb-art-pill{background:transparent!important;color:#d6d3cb!important;border-color:#55524a!important}
+@media(max-width:900px){
+  .pb-art-prints-showcase{min-height:550px!important;padding:25px 18px 28px!important}
+  .pb-art-stage{height:405px;min-height:405px!important}
+  .pb-art-track{gap:12px!important}
+  .pb-art-frame{transform:scale(.9)}
+  .pb-art-frame.active{transform:scale(1)}
+  .pb-art-frame>div{padding:12px!important}
+  .pb-art-arrow{width:28px!important;height:36px!important;flex-basis:28px}
+}
+@media(max-width:620px){
+  .pb-art-prints-showcase{min-height:500px!important;padding:20px 10px 24px!important}
+  .pb-art-topline{padding:0 5px}
+  .pb-art-topline span{display:none}
+  .pb-art-stage{height:350px;min-height:350px!important;gap:0}
+  .pb-art-track{gap:3px!important}
+  .pb-art-frame{transform:scale(.82)}
+  .pb-art-frame.active{transform:scale(1)}
+  .pb-art-frame>div{padding:7px!important}
+  .pb-art-frame figcaption{font-size:6px}
+  .pb-art-arrow{width:22px!important;height:34px!important;flex-basis:22px}
+}
