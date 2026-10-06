@@ -2,7 +2,7 @@ import SEO from '../components/SEO';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, SlidersHorizontal, X, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { SlidersHorizontal, X, ChevronDown, ArrowUpRight } from 'lucide-react';
 import api from '../axios';
 import { addToCart } from '../store/cartSlice';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -225,22 +225,23 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-shop-grid">
           {data.map((p, i) => (
             <article className="pb-product-card" key={p.id}>
-              <Link to={'/product/' + p.id} className="pb-product-img">
-                <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
+              <div className="pb-product-img">
+                <Link to={'/product/' + p.id} aria-label={p.nom}>
+                  <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
+                </Link>
                 <span className="pb-badge">{i < 3 ? 'NEW' : '026'}</span>
                 <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(addToCart({ ...p, quantite: 1 }));
-                  }}
+                  type="button"
+                  onClick={() => dispatch(addToCart({ ...p, quantite: 1 }))}
                   title="Add to bag"
+                  aria-label={'Add ' + p.nom + ' to bag'}
                 >
                   <ArrowUpRight size={15} />
                 </button>
-              </Link>
+              </div>
               <div className="pb-product-meta">
                 <div>
-                  <strong>{p.nom}</strong>
+                  <Link to={'/product/' + p.id}><strong>{p.nom}</strong></Link>
                   <small>{p.description}</small>
                 </div>
                 <b>{p.prix} DH</b>
