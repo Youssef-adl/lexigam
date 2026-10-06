@@ -1371,3 +1371,262 @@ html[data-theme="dark"] .pb-art-frame>div{
   .pb-art-arrow{width:22px;height:38px}
   .pb-art-frame figcaption{font-size:6px}
 }
+
+/* NEWSLETTER + FOOTER — clean retail closing sequence */
+.pb-newsletter-retail{
+  max-width:none!important;
+  margin:0!important;
+  padding:62px clamp(20px,8vw,130px) 64px!important;
+  display:grid!important;
+  grid-template-columns:1fr minmax(420px,.9fr)!important;
+  gap:70px;
+  background:#222!important;
+  color:#f7f6f0!important;
+  border-top:0!important;
+}
+.pb-newsletter-retail .pb-newsletter-copy small{
+  color:#a5a39b!important;
+  font:500 8px var(--mono);
+  letter-spacing:.14em;
+}
+.pb-newsletter-retail .pb-newsletter-copy h2{
+  margin:15px 0 13px!important;
+  max-width:720px;
+  font:500 clamp(48px,6.2vw,92px)/.82 var(--sans)!important;
+  letter-spacing:-.075em;
+  text-transform:uppercase;
+  color:#f7f6f0!important;
+}
+.pb-newsletter-retail .pb-newsletter-copy p{
+  max-width:460px;
+  margin:0;
+  color:#aaa89f;
+  font-size:11px;
+  line-height:1.75;
+}
+.pb-newsletter-form{
+  align-self:end;
+  display:block!important;
+}
+.pb-newsletter-form label{
+  display:block;
+  margin-bottom:10px;
+  color:#aaa89f!important;
+  font:500 8px var(--mono)!important;
+  letter-spacing:.13em;
+}
+.pb-newsletter-input{
+  display:grid!important;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+}
+.pb-newsletter-input input{
+  min-height:46px;
+  border:0!important;
+  border-radius:24px;
+  background:#3a3a39!important;
+  color:#f7f6f0!important;
+  padding:0 20px!important;
+  font:400 11px var(--sans)!important;
+}
+.pb-newsletter-input input::placeholder{color:#a6a49d}
+.pb-newsletter-input button{
+  min-height:46px;
+  min-width:145px;
+  border:1px solid #6c6a64!important;
+  border-radius:24px;
+  background:transparent!important;
+  color:#f7f6f0!important;
+  padding:0 18px!important;
+  font:600 8px var(--mono)!important;
+  letter-spacing:.11em;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.pb-newsletter-input button:hover{background:#f15b32!important;border-color:#f15b32!important;color:#111!important}
+.pb-newsletter-form>span{
+  display:block;
+  margin-top:10px;
+  color:#85837c;
+  font:400 7px var(--mono);
+  letter-spacing:.06em;
+}
+.pb-footer-retail{
+  background:#f8f7f3;
+  color:#11110f;
+  border-top:1px solid #ddd9d0;
+}
+.pb-footer-social{
+  min-height:55px;
+  background:#f15b32;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+}
+.pb-footer-social a{
+  width:31px;
+  height:31px;
+  border:1px solid rgba(17,17,15,.75);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:#11110f;
+  font:500 11px var(--sans);
+  transition:transform .2s,background .2s;
+}
+.pb-footer-social a:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.16);
+}
+.pb-footer-retail-main{
+  max-width:1450px;
+  margin:auto;
+  padding:55px 32px 48px;
+  display:grid;
+  grid-template-columns:1.1fr 1.35fr .9fr;
+  gap:55px;
+}
+.pb-footer-contact{
+  display:flex;
+  flex-direction:column;
+}
+.pb-footer-retail-logo{
+  font:700 24px var(--sans);
+  letter-spacing:-.09em;
+}
+.pb-footer-retail-logo sup{
+  font-size:8px;
+  margin-left:3px;
+}
+.pb-footer-contact>p{
+  margin:10px 0 23px;
+  color:#747169;
+  font-size:10px;
+}
+.pb-footer-contact-lines{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.pb-footer-contact-lines span,
+.pb-footer-contact-lines a{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#6f6d66;
+  font:500 8px var(--mono);
+  letter-spacing:.05em;
+}
+.pb-footer-contact-lines a:hover{text-decoration:underline;color:#11110f}
+.pb-footer-retail-links{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+.pb-footer-retail-links>div{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.pb-footer-retail-links small,
+.pb-footer-payments small{
+  margin-bottom:6px;
+  color:#8c8a82;
+  font:500 7px var(--mono);
+  letter-spacing:.14em;
+}
+.pb-footer-retail-links a{
+  color:#65635d;
+  font:500 8px var(--mono);
+  letter-spacing:.07em;
+}
+.pb-footer-retail-links a:hover{color:#11110f}
+.pb-footer-payments{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.pb-payment-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.pb-payment-chips span{
+  min-width:66px;
+  min-height:31px;
+  padding:0 10px;
+  border:1px solid #d6d3ca;
+  background:#fff;
+  display:grid;
+  place-items:center;
+  font:700 9px var(--sans);
+  letter-spacing:.02em;
+}
+.pb-payment-chips span:nth-child(3){
+  font:600 8px var(--mono);
+}
+.pb-footer-payments p{
+  margin:0;
+  max-width:220px;
+  color:#8a887f;
+  font-size:9px;
+  line-height:1.6;
+}
+.pb-footer-bottom-retail{
+  max-width:1450px;
+  margin:auto;
+  border-top:1px solid #ddd9d0;
+  min-height:58px;
+  padding:0 32px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr auto;
+  align-items:center;
+  gap:20px;
+  color:#87847b;
+  font:500 7px var(--mono);
+  letter-spacing:.09em;
+}
+.pb-footer-bottom-retail span:nth-child(2){text-align:center}
+.pb-footer-bottom-retail span:nth-child(3){text-align:right}
+.pb-back-top{
+  width:40px;
+  height:28px;
+  border:1px solid #bdb9b0;
+  border-radius:18px;
+  background:transparent;
+  color:#6f6c65;
+  display:grid;
+  place-items:center;
+}
+.pb-back-top:hover{border-color:#11110f;color:#11110f}
+@media(max-width:900px){
+ .pb-newsletter-retail{
+  grid-template-columns:1fr!important;
+  gap:42px;
+  padding:55px 25px 50px!important;
+ }
+ .pb-newsletter-retail .pb-newsletter-copy h2{font-size:13vw!important}
+ .pb-footer-retail-main{
+  grid-template-columns:1fr;
+  gap:38px;
+  padding:42px 24px 34px;
+ }
+ .pb-footer-retail-links{grid-template-columns:repeat(3,1fr)}
+ .pb-footer-bottom-retail{padding:0 24px;grid-template-columns:1fr 1fr auto;min-height:72px}
+ .pb-footer-bottom-retail span:nth-child(2){text-align:left}
+ .pb-footer-bottom-retail span:nth-child(3){display:none}
+}
+@media(max-width:560px){
+ .pb-newsletter-retail{padding:48px 18px 42px!important}
+ .pb-newsletter-input{grid-template-columns:1fr}
+ .pb-newsletter-input button{width:100%}
+ .pb-footer-social{min-height:52px}
+ .pb-footer-retail-links{grid-template-columns:1fr 1fr}
+ .pb-footer-payments{padding-top:8px}
+ .pb-footer-bottom-retail{grid-template-columns:1fr auto;padding:12px 18px;min-height:66px}
+ .pb-footer-contact-lines span,.pb-footer-contact-lines a{font-size:7px}
+}
