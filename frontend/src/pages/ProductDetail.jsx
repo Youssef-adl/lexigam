@@ -21,7 +21,7 @@ const DEMOS = {
     prix: 690,
     stock: 10,
     description: 'Brushed cotton overshirt designed for layering and everyday wear.',
-    image: '/webpImage/image-6.jpg',
+    image: '/webpImage/image-1.jpg',
   },
   demo2: {
     id: 'demo2',
@@ -86,6 +86,7 @@ const DEMOS = {
     stock: 9,
     description: 'Relaxed studio shirt with a graphic utilitarian finish.',
     image: '/webpImage/image-14.jpg',
+    gallery: ['/webpImage/image-14.jpg','/webpImage/image-14 copy.jpg','/webpImage/image-15.jpg','/webpImage/image-16.jpg'],
   },
   demo10: {
     id: 'demo10',
@@ -155,6 +156,8 @@ export default function ProductDetail() {
     };
   }, [id]);
 
+  const gallery = p?.gallery || [p?.image, '/webpImage/image-15.jpg', '/webpImage/image-16.jpg'].filter(Boolean);
+
   const image = p?.image?.startsWith('http')
     ? p.image
     : p?.image?.startsWith('/')
@@ -213,10 +216,10 @@ export default function ProductDetail() {
           </div>
           <div className="pb-gallery-grid">
             <div>
-              <img src={image} alt="Product detail" />
+              <img src={gallery[1] || image} alt="Product detail" />
             </div>
             <div className="pb-gallery-editorial">
-              <img src="/webpImage/image-23.jpg" alt="LEXIGAM editorial detail" />
+              <img src={gallery[2] || '/webpImage/image-15.jpg'} alt="LEXIGAM product detail" />
             </div>
           </div>
         </div>
