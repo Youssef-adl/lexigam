@@ -1,2 +1,70 @@
-import React from 'react';import{Link}from'react-router-dom';import{ArrowUpRight}from'lucide-react';import{useLanguage}from'../i18n/LanguageContext';
-export default function Footer(){const {t,language}=useLanguage();return <footer className="pb-footer"><div className="pb-footer-top"><div className="pb-footer-brand"><Link to="/" className="pb-footer-logo">LEXIGAM</Link><p>{language==='ar'?'أزياء مستقلة من الدار البيضاء.':'Vêtements indépendants depuis Casablanca.'}</p><div className="pb-footer-big">LEXIGAM®</div></div><div><small>SHOP</small><Link to="/new-arrivals">{t.new}</Link><Link to="/men">{t.men}</Link><Link to="/women">{t.women}</Link><Link to="/shop">ALL PRODUCTS</Link></div><div><small>INFO</small><Link to="/about">{t.about}</Link><Link to="/blog">{t.journal}</Link><Link to="/contact">{t.contact}</Link><Link to="/cart">{t.bag}</Link></div><div><small>CONTACT</small><a href="mailto:support@lexigam.com">EMAIL <ArrowUpRight size={12}/></a><span>CASABLANCA / MOROCCO</span><span>MON — FRI / 10:00 — 18:00</span></div></div><div className="pb-footer-bottom"><span>© 2026 LEXIGAM</span><Link to="/privacy">PRIVACY</Link><Link to="/terms">TERMS</Link><Link to="/returns">RETURNS</Link><span>FR / AR</span></div></footer>}
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {ArrowUp,ArrowUpRight,Facebook,Instagram,Music2,Mail,MapPin,Phone} from 'lucide-react';
+import {useLanguage} from '../i18n/LanguageContext';
+
+export default function Footer(){
+ const {language}=useLanguage();
+ const ar=language==='ar';
+ const backTop=()=>window.scrollTo({top:0,behavior:'smooth'});
+ return <footer className="pb-footer-retail">
+   <div className="pb-footer-social">
+    <a href="#" aria-label="Facebook"><Facebook size={16}/></a>
+    <a href="#" aria-label="X">X</a>
+    <a href="#" aria-label="Instagram"><Instagram size={16}/></a>
+    <a href="#" aria-label="TikTok"><Music2 size={16}/></a>
+   </div>
+
+   <div className="pb-footer-retail-main">
+    <div className="pb-footer-contact">
+      <Link to="/" className="pb-footer-retail-logo">LEXIGAM<sup>®</sup></Link>
+      <p>{ar?'أزياء مستقلة من الدار البيضاء.':'Independent clothing from Casablanca.'}</p>
+      <div className="pb-footer-contact-lines">
+       <span><MapPin size={13}/> CASABLANCA / MOROCCO</span>
+       <a href="tel:+212500000000"><Phone size={13}/> +212 5 00 00 00 00</a>
+       <a href="mailto:support@lexigam.com"><Mail size={13}/> support@lexigam.com</a>
+      </div>
+    </div>
+
+    <nav className="pb-footer-retail-links" aria-label="Footer navigation">
+      <div>
+       <small>{ar?'المتجر':'SHOP'}</small>
+       <Link to="/new-arrivals">{ar?'الجديد':'NEW IN'}</Link>
+       <Link to="/men">{ar?'رجال':'MEN'}</Link>
+       <Link to="/women">{ar?'نساء':'WOMEN'}</Link>
+       <Link to="/shop">{ar?'كل المنتجات':'ALL PRODUCTS'}</Link>
+      </div>
+      <div>
+       <small>{ar?'المعلومات':'INFO'}</small>
+       <Link to="/about">{ar?'عنّا':'ABOUT'}</Link>
+       <Link to="/blog">{ar?'المجلة':'JOURNAL'}</Link>
+       <Link to="/contact">{ar?'تواصل':'CONTACT'}</Link>
+       <Link to="/cart">{ar?'السلة':'BAG'}</Link>
+      </div>
+      <div>
+       <small>{ar?'القانوني':'LEGAL'}</small>
+       <Link to="/privacy">{ar?'الخصوصية':'PRIVACY'}</Link>
+       <Link to="/terms">{ar?'الشروط':'TERMS'}</Link>
+       <Link to="/returns">{ar?'الإرجاع':'RETURNS'}</Link>
+      </div>
+    </nav>
+
+    <div className="pb-footer-payments">
+      <small>{ar?'طرق الدفع':'PAYMENT METHODS'}</small>
+      <div className="pb-payment-chips">
+       <span>VISA</span>
+       <span>MASTERCARD</span>
+       <span>COD</span>
+      </div>
+      <p>{ar?'الدفع عند الاستلام متاح حالياً.':'Cash on delivery is currently available at checkout.'}</p>
+    </div>
+   </div>
+
+   <div className="pb-footer-bottom-retail">
+     <span>© 2026 LEXIGAM®</span>
+     <span>CASABLANCA / MOROCCO</span>
+     <span>FR / AR</span>
+     <button type="button" className="pb-back-top" onClick={backTop} aria-label="Back to top"><ArrowUp size={14}/></button>
+   </div>
+ </footer>
+}
