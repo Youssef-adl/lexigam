@@ -7,46 +7,32 @@ use App\Models\User;
 
 class ProduitPolicy
 {
-    // Voir liste produits
-    public function viewAny(User $user): bool
-    {
-        return true;
-    }
+    public function viewAny(User $user): bool { return true; }
 
-    // Voir un produit
     public function view(User $user, Produit $produit): bool
     {
-        return true;
+        return $produit->statut === 'approved'
+            || $user->role === 'admin'
+            || ($user->role === 'vendeur' && $user->id === $produit->user_id);
     }
 
-    // Créer produit
     public function create(User $user): bool
     {
-        return $user->role === 'vendeur';
+        return in_array($user->role, ['admin','vendeur'], true);
     }
 
-    // Modifier produit
     public function update(User $user, Produit $produit): bool
     {
-        return $user->role === 'vendeur'
-            && $user->id === $produit->user_id;
+        return $user->role === 'admin'
+            || ($user->role === 'vendeur' && $user->id === $produit->user_id);
     }
 
-    // Supprimer produit
     public function delete(User $user, Produit $produit): bool
     {
-        return $user->role === 'vendeur'
-            && $user->id === $produit->user_id;
+        return $user->role === 'admin'
+            || ($user->role === 'vendeur' && $user->id === $produit->user_id);
     }
 
-    // Admin peut restaurer
-    public function restore(User $user, Produit $produit): bool
-    {
-        return $user->role === 'admin';
-    }
-
-    public function forceDelete(User $user, Produit $produit): bool
-    {
-        return $user->role === 'admin';
-    }
+    public function restore(User $user, Produit $produit): bool { return $user->role === 'admin'; }
+    public function forceDelete(User $user, Produit $produit): bool { return $user->role === 'admin'; }
 }
