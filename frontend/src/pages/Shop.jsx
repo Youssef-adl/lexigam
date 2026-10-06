@@ -252,5 +252,4 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
       )}
     </div></>);
-  );
 }
