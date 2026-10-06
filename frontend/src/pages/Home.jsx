@@ -28,10 +28,17 @@ export default function Home(){
  return <div className={'cinematic-home '+(language==='ar'?'home-ar':'')}>
   <div className='cin-progress'/><div className='cin-intro'><div className='cin-intro-noise'/><span>LEXIGAM® / 2026</span><strong>THE<br/><i>ARCHIVE</i></strong><small>{language==='ar'?'اسحب للأسفل للدخول':'SCROLL TO ENTER'}</small><ChevronDown size={17}/></div>
 
-  <section className='cin-scene cin-hero-scene'>
-   <div className='cin-hero-bg'><img src='/webpImage/image-10.avif' alt='LEXIGAM visual'/><div className='cin-hero-grain'/></div>
-   <div className='cin-hero-copy'><small>01 / {t.heroEyebrow}</small><h1>LEXIGAM<br/><i>FIELD</i> / 026</h1><p>{t.heroText}</p><Link to='/shop' className='cin-button'>{t.shopCollection}<ArrowUpRight size={15}/></Link></div>
-   <div className='cin-hero-coord'>33°34′N / 7°36′W</div><div className='cin-hero-index'>01—03</div>
+  <section className='cin-scene cin-hero-scene cin-hero-new'>
+   <div className='hero-new-media'><img data-motion='parallax' data-depth='0.06' src='/webpImage/image-10.avif' alt='LEXIGAM campaign'/><div className='hero-new-texture'/><div className='hero-new-vignette'/></div>
+   <div className='hero-new-top'><span>LEXIGAM® / 026</span><span>CASABLANCA / MOROCCO</span><span>AUTUMN — WINTER 2026</span></div>
+   <div className='hero-new-side'>01<br/><i>03</i></div>
+   <div className='hero-new-copy'>
+    <small>INDEPENDENT CLOTHING / FIELD STUDY</small>
+    <h1>LEXI<span>GAM</span></h1>
+    <div className='hero-new-sub'><strong>FIELD / 026</strong><p>{t.heroText}</p></div>
+    <Link to='/shop' className='hero-new-cta'>{t.shopCollection}<ArrowUpRight size={16}/></Link>
+   </div>
+   <div className='hero-new-bottom'><span>33°34′N / 7°36′W</span><div className='hero-new-scroll'><span>SCROLL</span><ChevronDown size={15}/></div><span>001 / 026</span></div>
   </section>
 
   <section className='cin-paper-scene' data-motion='reveal'><div className='cin-paper-grid'/><div className='cin-torn top'/><div className='cin-torn bottom'/><span>FIELD NOTE / 01</span><h2>{language==='ar'?'أرشيف المدينة':'ARCHIVE OF<br/>THE CITY'}</h2><p>{t.archiveText}</p><div className='cin-paper-mark'>LEXIGAM / CASABLANCA</div><Link to='/blog' className='cin-paper-link'>{language==='ar'?'دخول الأرشيف':'ENTER ARCHIVE'} <ArrowUpRight size={14}/></Link></section>
