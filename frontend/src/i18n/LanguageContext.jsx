@@ -22,8 +22,10 @@ const translations={
 const LanguageContext=createContext(null);
 export function LanguageProvider({children}){
  const [language,setLanguage]=useState(()=>localStorage.getItem('lexigam-language')||'fr');
+ const [theme,setTheme]=useState(()=>localStorage.getItem('lexigam-theme')||'light');
  useEffect(()=>{localStorage.setItem('lexigam-language',language);document.documentElement.lang=language;document.documentElement.dir=language==='ar'?'rtl':'ltr'},[language]);
- const value=useMemo(()=>({language,setLanguage,t:translations[language]}),[language]);
+ useEffect(()=>{localStorage.setItem('lexigam-theme',theme);document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme},[theme]);
+ const value=useMemo(()=>({language,setLanguage,theme,setTheme,t:translations[language]}),[language,theme]);
  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 export function useLanguage(){const ctx=useContext(LanguageContext);if(!ctx)throw new Error('useLanguage must be used inside LanguageProvider');return ctx;}
