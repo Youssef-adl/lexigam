@@ -32,23 +32,24 @@ export default function Home(){
   <section className='pb-flagship-visual' data-motion='reveal'><div className='pb-flagship-image'><img src='/webpImage/image-21.jpg' alt='LEXIGAM flagship Casablanca'/></div><div className='pb-flagship-copy'><small>04 / FLAGSHIP STORE</small><h2>MADE IN<br/><i>CASABLANCA.</i></h2><p>From first sketch to final garment, LEXIGAM grows from the streets, materials and people around the city.</p><Link to='/about' className='pb-text-link'>{t.aboutLink}<ArrowUpRight size={15}/></Link></div></section>
   <section className='pb-visual-journal' data-motion='reveal'><div className='pb-visual-journal-head'><small>05 / VISUAL JOURNAL</small><h2>STREET.<br/><i>STUDIO. OBJECT.</i></h2><p>Additional fragments from the LEXIGAM world, arranged as an editorial sequence.</p></div><div className='pb-visual-journal-grid'><figure className='vj-large'><img src='/webpImage/image-20 copy.jpg' alt='Street archive'/><figcaption>01 / STREET ARCHIVE</figcaption></figure><figure><img src='/webpImage/image-22 copy.jpg' alt='Night texture'/><figcaption>02 / NIGHT TEXTURE</figcaption></figure><figure><img src='/webpImage/image-29.jpg' alt='City reference'/><figcaption>03 / CITY REFERENCE</figcaption></figure><figure><img src='/webpImage/image-12 copy.jpg' alt='Material study'/><figcaption>04 / MATERIAL STUDY</figcaption></figure><figure className='vj-wide'><img src='/webpImage/image-17 copy.jpg' alt='Campaign study'/><figcaption>05 / CAMPAIGN STUDY</figcaption></figure><figure><img src='/webpImage/image-16.png' alt='Garment detail'/><figcaption>06 / GARMENT DETAIL</figcaption></figure><figure><img src='/webpImage/image-15.png' alt='City study'/><figcaption>07 / CITY STUDY</figcaption></figure></div></section>
   <section className='pb-art-prints pb-art-prints-showcase' data-motion='reveal'>
-   <div className='pb-art-head'>
-    <div><small>06 / ART PRINTS</small><h2>FRAME<br/><i>THE CITY.</i></h2></div>
-    <p>Graphic editions, visual studies and objects from the LEXIGAM archive.</p>
+   <div className='pb-art-topline'>
+    <small>06 / ART PRINTS</small>
+    <span>VISUAL EDITIONS / LEXIGAM ARCHIVE</span>
    </div>
    <div className='pb-art-stage'>
-    <button className='pb-art-arrow left' type='button' aria-label='Previous art print' onClick={()=>setArtSlide(v=>(v+2)%3)}><ChevronLeft size={18}/></button>
+    <button className='pb-art-arrow left' type='button' aria-label='Previous art print' onClick={()=>setArtSlide(v=>(v+2)%3)}><ChevronLeft size={17}/></button>
     <div className='pb-art-track'>
       {[['/webpImage/image-13.png','01 / FORM'],['/webpImage/image-18.png','02 / OBJECT'],['/webpImage/image-26.jpg','03 / ARCHIVE']].map(([src,label],i)=>(
         <figure key={src} className={'pb-art-frame '+(i===artSlide?'active':'')}>
-          <div><img src={src} alt={label}/></div><figcaption>{label}</figcaption>
+          <div><img src={src} alt={label}/></div>
+          <figcaption>{label}</figcaption>
         </figure>
       ))}
     </div>
-    <button className='pb-art-arrow right' type='button' aria-label='Next art print' onClick={()=>setArtSlide(v=>(v+1)%3)}><ChevronRight size={18}/></button>
+    <button className='pb-art-arrow right' type='button' aria-label='Next art print' onClick={()=>setArtSlide(v=>(v+1)%3)}><ChevronRight size={17}/></button>
    </div>
    <div className='pb-art-bottom'>
-    <div className='pb-art-dots'>{[0,1,2,3,4].map((dot)=><span key={dot} className={dot===artSlide?'active':''}/>)}</div>
+    <div className='pb-art-dots'>{[0,1,2].map((dot)=><button type='button' key={dot} className={dot===artSlide?'active':''} aria-label={`Go to art print ${dot+1}`} onClick={()=>setArtSlide(dot)}/>)}</div>
     <Link to='/shop' className='pb-art-pill'>ART PRINTS <ArrowUpRight size={13}/></Link>
    </div>
   </section>
