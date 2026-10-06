@@ -9,7 +9,7 @@ class CategorieController extends Controller
 {
     public function index()
     {
-        $query = Categorie::with('produits');
+        $query = Categorie::withCount('produits');
         if (!auth()->check() || auth()->user()->role !== 'admin') {
             $query->where('statut', true);
         }
@@ -40,7 +40,7 @@ class CategorieController extends Controller
 
     public function show(string $id)
     {
-        $categorie = Categorie::with('produits')->findOrFail($id);
+        $categorie = Categorie::withCount('produits')->findOrFail($id);
         if ($categorie->statut !== true && (!auth()->check() || auth()->user()->role !== 'admin')) abort(404);
         return response()->json(['success'=>true,'data'=>$categorie]);
     }
