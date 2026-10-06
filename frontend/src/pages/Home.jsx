@@ -1,12 +1,16 @@
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom';
-import {ArrowUpRight,ChevronDown,Plus,Minus} from 'lucide-react';
+import {ArrowUpRight,ChevronRight,Plus} from 'lucide-react';
 import api from '../axios';
 import {useLanguage} from '../i18n/LanguageContext';
 import useEditorialMotion from '../hooks/useEditorialMotion';
 
-const editorial=['/webpImage/image-20.avif','/webpImage/image-21.avif','/webpImage/image-22.avif','/webpImage/image-23.avif','/webpImage/image-24.avif','/webpImage/image-25.avif'];
-const productsFallback=[
+const editorial=[
+ {image:'/webpImage/image-27.avif',tag:'PHOTOBOOK',title:'URBEX / 026',text:'A visual study of streets, concrete and everyday movement.'},
+ {image:'/webpImage/image-28.avif',tag:'THE STUDIO',title:'MADE IN CASABLANCA',text:'The places and textures behind the collection.'},
+ {image:'/webpImage/image-26.avif',tag:'FIELD NOTES',title:'NIGHT / FORM / MATERIAL',text:'Fragments from the world around LEXIGAM.'}
+];
+const fallback=[
  {id:'demo1',nom:'NOCTURNE OVERSHIRT',prix:890,image:'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=1000&q=90'},
  {id:'demo2',nom:'ARCHIVE TROUSER',prix:690,image:'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=1000&q=90'},
  {id:'demo3',nom:'AFTER DARK JACKET',prix:1190,image:'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1000&q=90'},
@@ -16,45 +20,34 @@ const productsFallback=[
  {id:'demo7',nom:'WIDE CARGO TROUSER',prix:640,image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=90'},
  {id:'demo8',nom:'CORE TEE / 02',prix:290,image:'https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1000&q=90'}
 ];
-
-function ProductCard({p,index}){const img=p.image?.startsWith('http')?p.image:p.image?.startsWith('/')?p.image:'/webpImage/image-20.avif';return <Link className={'cin-product c'+index} data-motion='reveal' to={'/product/'+p.id}><div className='cin-product-photo'><img src={img} alt={p.nom}/><span>0{index+1}</span><b><ArrowUpRight size={17}/></b></div><div className='cin-product-meta'><strong>{p.nom}</strong><em>{p.prix} DH</em></div></Link>}
+function Card({p,i}){return <Link className="pb-product-card" data-motion="reveal" to={'/product/'+p.id}><div className="pb-product-img"><img src={p.image?.startsWith('http')?p.image:p.image?.startsWith('/')?p.image:'/webpImage/image-20.avif'} alt={p.nom}/>{i<4&&<span className="pb-badge">NEW</span>}<button onClick={e=>e.preventDefault()} aria-label="Wishlist"><Plus size={15}/></button></div><div className="pb-product-meta"><div><strong>{p.nom}</strong><small>{i%3===0?'Relaxed fit':'Regular fit'}</small></div><b>{p.prix} DH</b></div></Link>}
 
 export default function Home(){
- const {t,language}=useLanguage();
- useEditorialMotion();
- const [products,setProducts]=useState(productsFallback);
- useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];if(Array.isArray(x)&&x.length)setProducts(x)}).catch(()=>{})},[]);
- const productSet=products.slice(0,8);
- return <div className={'cinematic-home '+(language==='ar'?'home-ar':'')}>
-  <div className='cin-progress'/><div className='cin-intro'><div className='cin-intro-noise'/><span>LEXIGAM® / 2026</span><strong>THE<br/><i>ARCHIVE</i></strong><small>{language==='ar'?'اسحب للأسفل للدخول':'SCROLL TO ENTER'}</small><ChevronDown size={17}/></div>
-
-  <section className='cin-scene cin-hero-scene cin-hero-new'>
-   <div className='hero-new-media'><img data-motion='parallax' data-depth='0.06' src='/webpImage/image-10.avif' alt='LEXIGAM campaign'/><div className='hero-new-texture'/><div className='hero-new-vignette'/></div>
-   <div className='hero-new-top'><span>LEXIGAM® / 026</span><span>CASABLANCA / MOROCCO</span><span>AUTUMN — WINTER 2026</span></div>
-   <div className='hero-new-side'>01<br/><i>03</i></div>
-   <div className='hero-new-copy'>
-    <small>INDEPENDENT CLOTHING / FIELD STUDY</small>
-    <h1>LEXI<span>GAM</span></h1>
-    <div className='hero-new-sub'><strong>FIELD / 026</strong><p>{t.heroText}</p></div>
-    <Link to='/shop' className='hero-new-cta'>{t.shopCollection}<ArrowUpRight size={16}/></Link>
-   </div>
-   <div className='hero-new-bottom'><span>33°34′N / 7°36′W</span><div className='hero-new-scroll'><span>SCROLL</span><ChevronDown size={15}/></div><span>001 / 026</span></div>
+ const {t,language}=useLanguage();useEditorialMotion();
+ const [products,setProducts]=useState(fallback);
+ useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];if(Array.isArray(x)&&x.length)setProducts(x.slice(0,8))}).catch(()=>{})},[]);
+ return <main className="pb-home">
+  <section className="pb-hero pb-hero-editorial">
+   <div className="pb-hero-image"><img src="/webpImage/image-10.avif" alt="LEXIGAM campaign"/><div/></div>
+   <div className="pb-hero-copy"><small>LEXIGAM / AUTUMN WINTER 2026</small><h1>Wear<br/><i>the</i> everyday.</h1><p>{t.heroText}</p><Link to="/shop" className="pb-btn">SHOP THE COLLECTION <ArrowUpRight size={16}/></Link></div>
+   <div className="pb-hero-count">01 / 03</div>
   </section>
 
-  <section className='cin-paper-scene' data-motion='reveal'><div className='cin-paper-grid'/><div className='cin-torn top'/><div className='cin-torn bottom'/><span>FIELD NOTE / 01</span><h2>{language==='ar'?'أرشيف المدينة':'ARCHIVE OF<br/>THE CITY'}</h2><p>{t.archiveText}</p><div className='cin-paper-mark'>LEXIGAM / CASABLANCA</div><Link to='/blog' className='cin-paper-link'>{language==='ar'?'دخول الأرشيف':'ENTER ARCHIVE'} <ArrowUpRight size={14}/></Link></section>
+  <section className="pb-quick-shop" data-motion="reveal"><div className="pb-section-title"><div><small>01 / NEW</small><h2>{t.newTitle}</h2></div><Link to="/new-arrivals">{t.allProducts}<ArrowRightIcon/></Link></div><div className="pb-grid-4">{products.slice(0,4).map((p,i)=><Card p={p} i={i} key={p.id}/>)}</div></section>
 
-  <section className='cin-editorial-sequence' data-motion='stage'><div className='cin-seq-sticky'><div className='cin-seq-copy'><small>02 / VISUAL STUDY</small><h2>STREET<br/><i>STUDY.</i></h2><p>{t.photobookText}</p></div><div className='cin-seq-images'>{editorial.slice(0,4).map((img,i)=><img key={img} className={'seq-img s'+i} src={img} alt={'LEXIGAM visual '+(i+1)}/>)}</div><div className='cin-seq-caption'>FRAME <span>00 / 04</span></div></div></section>
+  <section className="pb-editorial-feature" data-motion="reveal"><img src="/webpImage/image-27.avif" alt="LEXIGAM PhotoBook"/><div className="pb-editorial-copy"><small>02 / PHOTOBOOK</small><h2>Urbex<br/><i>026.</i></h2><p>{t.photobookText}</p><Link to="/blog" className="pb-text-link">{t.readStory}<ArrowUpRight size={15}/></Link></div></section>
 
-  <section className='cin-product-stage' data-motion='stage'><div className='cin-stage-sticky'><div className='cin-stage-head'><div><small>03 / COLLECTION 026</small><h2>{t.featuredTitle}</h2></div><Link to='/shop'>{t.allProducts}<ArrowUpRight size={14}/></Link></div><div className='cin-stage-rail'>{productSet.map((p,i)=><ProductCard key={p.id} p={p} index={i}/>)}</div><div className='cin-stage-count'>SCROLL / 08 PIECES</div></div></section>
+  <section className="pb-section pb-featured" data-motion="reveal"><div className="pb-section-title"><div><small>03 / FEATURED</small><h2>{t.featuredTitle}</h2></div><Link to="/shop">{t.allProducts}<ArrowRightIcon/></Link></div><div className="pb-grid-4">{products.slice(0,8).map((p,i)=><Card p={p} i={i} key={p.id}/>)}</div></section>
 
-  <section className='cin-map-stage' data-motion='stage'><div className='cin-map-sticky'><div className='cin-map-head'><div><small>04 / {t.field}</small><h2>{language==='ar'?'خريطة المراجع':'REFERENCE MAP'}</h2><p>{t.fieldText}</p></div><div className='cin-map-tools'><span>MAP</span><button><Plus size={14}/></button><button><Minus size={14}/></button></div></div><div className='cin-map'><div className='cin-map-paper'/><div className='cin-route r1'/><div className='cin-route r2'/><div className='cin-route r3'/>{editorial.map((img,i)=><article key={img} className={'cin-pin pin'+i} style={{'--pin':i}}><img src={img} alt={'Map archive '+i}/><span>0{i+1} / FIELD</span></article>)}<div className='cin-label l1'>CASABLANCA</div><div className='cin-label l2'>NIGHT / STUDY</div><div className='cin-label l3'>FORM / MATERIAL</div></div></div></section>
+  <section className="pb-triptych" data-motion="reveal">{editorial.map((item,i)=><Link to="/blog" key={item.tag} className="pb-triptych-card"><img src={item.image} alt={item.title}/><div><small>0{i+1} / {item.tag}</small><h3>{item.title}</h3><p>{item.text}</p><span>READ STORY <ArrowUpRight size={14}/></span></div></Link>)}</section>
 
-  <section className='cin-split-scene' data-motion='reveal'><div className='cin-split-image'><img data-motion='parallax' data-depth='0.08' src='/webpImage/image-28.avif' alt='LEXIGAM studio'/></div><div className='cin-split-copy'><small>05 / THE HOUSE</small><h2>{t.houseTitle}</h2><p>{t.houseText}</p><Link to='/about' className='cin-button dark'>{t.aboutLink}<ArrowUpRight size={15}/></Link></div></section>
+  <section className="pb-store-story" data-motion="reveal"><div><small>05 / FLAGSHIP</small><h2>Made in<br/><i>Casablanca.</i></h2><p>From first sketch to final garment, LEXIGAM is built around everyday silhouettes and visual references from the city.</p><Link to="/about" className="pb-btn dark">{t.aboutLink}<ArrowUpRight size={15}/></Link></div><img src="/webpImage/image-28.avif" alt="LEXIGAM flagship"/></section>
 
-  <section className='cin-archive-grid' data-motion='reveal'><div className='cin-archive-heading'><small>06 / {t.field}</small><h2>{t.fieldTitle}</h2><p>{t.fieldText}</p></div><div className='cin-grid'>{editorial.map((img,i)=><div className={'cin-grid-card g'+i} key={img}><img src={img} alt={'Field note '+i}/><span>0{i+1}</span><strong>{['CONCRETE','NIGHT','TEXTURE','MOVEMENT','STUDIO','STREET'][i]}</strong></div>)}</div></section>
+  <section className="pb-service" data-motion="reveal"><div className="pb-section-title"><div><small>06 / SERVICE</small><h2>Everything you need.<br/>Nothing extra.</h2></div></div><div className="pb-service-grid"><article><b>01</b><h3>FAST DELIVERY</h3><p>Prepared quickly with clear delivery information at checkout.</p></article><article><b>02</b><h3>SECURE PAYMENT</h3><p>Simple checkout with secure payment options available for your order.</p></article><article><b>03</b><h3>DIRECT SUPPORT</h3><p>Questions about sizing, stock or orders? Talk directly to LEXIGAM.</p></article></div></section>
 
-  <section className='cin-final' data-motion='reveal'><div className='cin-final-bg'><img src='/webpImage/image-26.avif' alt='LEXIGAM world'/><div/></div><div className='cin-final-copy'><small>07 / THE WORLD</small><h2>WEAR<br/><i>YOUR</i><br/>VERSION.</h2><div><Link to='/men'>MEN <ArrowUpRight size={14}/></Link><Link to='/women'>WOMEN <ArrowUpRight size={14}/></Link><Link to='/shop'>OBJECTS <ArrowUpRight size={14}/></Link></div></div></section>
+  <section className="pb-art-prints" data-motion="reveal"><div><small>07 / ART & OBJECTS</small><h2>Wear it.<br/><i>Frame it.</i></h2><p>Discover visual pieces, accessories and objects that extend the world of the collection.</p><Link to="/shop" className="pb-text-link">EXPLORE OBJECTS <ArrowUpRight size={15}/></Link></div><img src="/webpImage/image-26.avif" alt="LEXIGAM objects"/></section>
 
-  <section className='cin-end'><small>08 / CLOSE THE LOOP</small><h2>{t.newsletterTitle}</h2><form onSubmit={e=>e.preventDefault()}><input type='email' placeholder={language==='ar'?'بريدك الإلكتروني':'votre@email.com'}/><button>{t.join}<ArrowUpRight size={15}/></button></form></section>
- </div>
+  <section className="pb-newsletter" data-motion="reveal"><div><small>08 / NEWSLETTER</small><h2>{t.newsletterTitle}</h2></div><form onSubmit={e=>e.preventDefault()}><label>{t.email}</label><div><input type="email" placeholder={language==='ar'?'بريدك الإلكتروني':'votre@email.com'}/><button>{t.join}<ArrowUpRight size={15}/></button></div></form></section>
+ </main>;
 }
+function ArrowRightIcon(){return <ChevronRight size={15}/>}
