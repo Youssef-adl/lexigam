@@ -54,6 +54,20 @@ export default function Home(){
   </section>
   <section className='pb-service' data-motion='reveal'><div className='pb-section-title'><div><small>07 / SERVICE</small><h2>EVERYTHING YOU NEED.<br/>NOTHING EXTRA.</h2></div></div><div className='pb-service-grid pb-service-grid-visual'><article><img src='/webpImage/image-23.jpg' alt='Delivery options'/><b>01</b><h3>FAST DELIVERY</h3><p>Prepared quickly with clear delivery information at checkout.</p></article><article><img src='/webpImage/image-10.png' alt='Secure payment illustration'/><b>02</b><h3>SECURE PAYMENT</h3><p>Simple checkout with secure payment options for your order.</p></article><article><img src='/webpImage/image-25.jpg' alt='Customer support'/><b>03</b><h3>DIRECT SUPPORT</h3><p>Questions about sizing, stock or orders? Talk directly to LEXIGAM.</p></article></div></section>
   <section className='pb-support-strip' data-motion='reveal'><div><img src='/webpImage/image-4.png' alt='Delivery mark'/><span>DELIVERY</span></div><div><img src='/webpImage/image-9.png' alt='Payment mark'/><span>PAYMENT</span></div><div><img src='/webpImage/image-10.png' alt='Secure payment mark'/><span>SECURE</span></div><div><img src='/webpImage/image-15.png' alt='Studio mark'/><span>STUDIO</span></div></section>
-  <section className='pb-newsletter' data-motion='reveal'><div><small>08 / NEWSLETTER</small><h2>{t.newsletterTitle}</h2></div><form onSubmit={e=>e.preventDefault()}><label>{t.email}</label><div><input type='email' placeholder={language==='ar'?'البريد الإلكتروني':'votre@email.com'}/><button>{t.join}<ArrowUpRight size={15}/></button></div></form></section>
+  <section className='pb-newsletter pb-newsletter-retail' data-motion='reveal'>
+   <div className='pb-newsletter-copy'>
+    <small>08 / NEWSLETTER</small>
+    <h2>{language==='ar'?'كون أول من يعرف.':'STAY IN THE LOOP.'}</h2>
+    <p>{language==='ar'?'اكتشف الجديد، التخفيضات والإصدارات قبل الجميع.':'New drops, visual stories and private offers — straight to your inbox.'}</p>
+   </div>
+   <form onSubmit={e=>e.preventDefault()} className='pb-newsletter-form'>
+    <label>{language==='ar'?'بريدك الإلكتروني':'EMAIL ADDRESS'}</label>
+    <div className='pb-newsletter-input'>
+      <input type='email' placeholder={language==='ar'?'البريد الإلكتروني':'email@lexigam.com'} aria-label='Email address' required/>
+      <button type='submit'>{language==='ar'?'تأكيد':'CONFIRM'} <ArrowUpRight size={14}/></button>
+    </div>
+    <span>{language==='ar'?'يمكنك إلغاء الاشتراك في أي وقت.':'You can unsubscribe at any time.'}</span>
+   </form>
+  </section>
  </main></>;
 }
