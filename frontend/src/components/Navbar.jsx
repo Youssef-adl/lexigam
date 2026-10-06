@@ -13,6 +13,11 @@ export default function Navbar(){
  const [open,setOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[search,setSearch]=useState(''),[scrolled,setScrolled]=useState(false);
  useEffect(()=>{if(!user||user.role!=='client')return;const id=setTimeout(()=>api.post('/paniers/sync',{items:cartItems.filter(i=>i.produit).map(i=>({produit_id:i.produit.id,quantite:i.quantite,prix:i.produit.prix||0}))}).catch(()=>{}),700);return()=>clearTimeout(id)},[cartItems,user]);
  useEffect(()=>setOpen(false),[location.pathname]);
+ useEffect(()=>{
+  const onExpired=()=>{dispatch(logout());dispatch(clearCart());navigate('/login?expired=1');};
+  window.addEventListener('lexigam:auth-expired',onExpired);
+  return()=>window.removeEventListener('lexigam:auth-expired',onExpired);
+ },[dispatch,navigate]);
  useEffect(()=>{const onScroll=()=>setScrolled(window.scrollY>20);onScroll();window.addEventListener('scroll',onScroll,{passive:true});return()=>window.removeEventListener('scroll',onScroll)},[]);
  const submit=e=>{e.preventDefault();if(search.trim()){navigate('/shop?nom='+encodeURIComponent(search.trim()));setSearchOpen(false)}};
  const logoutUser=()=>{dispatch(logout());dispatch(clearCart());navigate('/')};
