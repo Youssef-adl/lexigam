@@ -3,123 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Livraison;
-use App\Http\Requests\StoreLivraisonRequest;
-use App\Http\Requests\UpdateLivraisonRequest;
+use Illuminate\Http\Request;
 
 class LivraisonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        try {
-            $livraisons = Livraison::with('commande')->get();
-
-            return response()->json([
-                'success' => true,
-                'data' => $livraisons
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des livraisons',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(['success'=>true,'data'=>Livraison::with('commande')->latest('id')->paginate(50)->items()]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreLivraisonRequest $request)
+    public function store(Request $request)
     {
-        try {
-            $livraison = Livraison::create($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Livraison créée avec succès',
-                'data' => $livraison
-            ], 201);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la création de la livraison',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $data=$request->validate([
+            'commande_id'=>['required','integer','exists:commandes,id','unique:livraisons,commande_id'],
+            'adresse'=>['required','string','max:500'],
+            'ville'=>['required','string','max:120'],
+            'telephone'=>['nullable','string','max:30'],
+            'statut'=>['required','in:en_preparation,expediee,en_cours,livree'],
+            'date_livraison'=>['nullable','date'],
+        ]);
+        $l=Livraison::create($data);
+        return response()->json(['success'=>true,'data'=>$l],201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        try {
-            $livraison = Livraison::with('commande')->findOrFail($id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $livraison
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Livraison introuvable',
-                'error' => $e->getMessage()
-            ], 404);
-        }
+        return response()->json(['success'=>true,'data'=>Livraison::with('commande')->findOrFail($id)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateLivraisonRequest $request, string $id)
+    public function update(Request $request,string $id)
     {
-        try {
-            $livraison = Livraison::findOrFail($id);
-
-            $livraison->update($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Livraison mise à jour avec succès',
-                'data' => $livraison
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la mise à jour de la livraison',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $data=$request->validate([
+            'adresse'=>['sometimes','string','max:500'],
+            'ville'=>['sometimes','string','max:120'],
+            'telephone'=>['sometimes','nullable','string','max:30'],
+            'statut'=>['sometimes','in:en_preparation,expediee,en_cours,livree'],
+            'date_livraison'=>['sometimes','nullable','date'],
+        ]);
+        $l=Livraison::findOrFail($id);$l->update($data);
+        return response()->json(['success'=>true,'data'=>$l->fresh()]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-            $livraison = Livraison::findOrFail($id);
-            $livraison->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Livraison supprimée avec succès'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression de la livraison',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
+    public function destroy(string $id){Livraison::findOrFail($id)->delete();return response()->json(['success'=>true]);}
 }
