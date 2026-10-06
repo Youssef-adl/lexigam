@@ -8,141 +8,43 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of users.
-     */
     public function index()
     {
-        try {
-            $users = User::all();
-
-            return response()->json([
-                'success' => true,
-                'data' => $users
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des utilisateurs',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(['success'=>true,'data'=>User::query()->latest('id')->paginate(50)->through(fn($u)=>$u->makeHidden(['password','remember_token']))->items()]);
     }
 
-    /**
-     * Store a newly created user.
-     */
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:6'
-            ]);
-
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password)
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Utilisateur créé avec succès',
-                'data' => $user
-            ], 201);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la création de l\'utilisateur',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $data=$request->validate([
+            'name'=>['required','string','max:255'],
+            'email'=>['required','email','max:255','unique:users,email'],
+            'password'=>['required','string','min:8'],
+            'role'=>['required','in:client,vendeur,admin'],
+        ]);
+        $user=User::create([...$data,'password'=>Hash::make($data['password'])]);
+        return response()->json(['success'=>true,'data'=>$user],201);
     }
 
-    /**
-     * Display a specific user.
-     */
-    public function show(string $id)
+    public function show(string $id){return response()->json(['success'=>true,'data'=>User::findOrFail($id)->makeHidden(['password','remember_token'])]);}
+
+    public function update(Request $request,string $id)
     {
-        try {
-            $user = User::findOrFail($id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $user
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Utilisateur introuvable',
-                'error' => $e->getMessage()
-            ], 404);
-        }
+        $user=User::findOrFail($id);
+        $data=$request->validate([
+            'name'=>['sometimes','string','max:255'],
+            'email'=>['sometimes','email','max:255','unique:users,email,'.$id],
+            'password'=>['sometimes','nullable','string','min:8'],
+            'role'=>['sometimes','in:client,vendeur,admin'],
+        ]);
+        if(isset($data['password']) && $data['password']) $data['password']=Hash::make($data['password']); else unset($data['password']);
+        $user->update($data);
+        return response()->json(['success'=>true,'data'=>$user->fresh()->makeHidden(['password','remember_token'])]);
     }
 
-    /**
-     * Update user.
-     */
-    public function update(Request $request, string $id)
-    {
-        try {
-            $user = User::findOrFail($id);
-
-            $request->validate([
-                'name' => 'sometimes|string',
-                'email' => 'sometimes|email|unique:users,email,' . $id,
-                'password' => 'sometimes|min:6'
-            ]);
-
-            $data = $request->only(['name', 'email']);
-
-            if ($request->password) {
-                $data['password'] = Hash::make($request->password);
-            }
-
-            $user->update($data);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Utilisateur mis à jour avec succès',
-                'data' => $user
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la mise à jour de l\'utilisateur',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Delete user.
-     */
     public function destroy(string $id)
     {
-        try {
-            $user = User::findOrFail($id);
-            $user->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Utilisateur supprimé avec succès'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression de l\'utilisateur',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        abort_if((int)$id === auth()->id(),422);
+        User::findOrFail($id)->delete();
+        return response()->json(['success'=>true]);
     }
 }
-
