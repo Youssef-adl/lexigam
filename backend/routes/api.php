@@ -36,9 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('retours/{id}/reject', [RetourController::class, 'reject']);
         Route::delete('avis/{id}', [AvisController::class, 'destroy']);
         Route::patch('commandes/{id}/status', [CommandeController::class, 'updateStatus']);
-        Route::apiResource('paiements', PaiementController::class);
-        Route::apiResource('livraisons', LivraisonController::class);
-        Route::apiResource('ligne-commandes', LigneCommandeController::class);
+        Route::get('paiements', [PaiementController::class, 'index']);
+        Route::get('paiements/{id}', [PaiementController::class, 'show']);
+        Route::patch('paiements/{id}', [PaiementController::class, 'update']);
+        Route::get('livraisons', [LivraisonController::class, 'index']);
+        Route::get('livraisons/{id}', [LivraisonController::class, 'show']);
+        Route::patch('livraisons/{id}', [LivraisonController::class, 'update']);
+        Route::get('ligne-commandes', [LigneCommandeController::class, 'index']);
+        Route::get('ligne-commandes/{id}', [LigneCommandeController::class, 'show']);
         Route::get('avis', [AvisController::class, 'index']);
     });
 
