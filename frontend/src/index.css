@@ -551,3 +551,6 @@ html[data-theme="dark"] .pb-wall-grid figure:after{background:linear-gradient(tr
 .pb-promo-strip{height:42px;background:#ed5b2d;color:#080806;display:flex;align-items:center;justify-content:center;gap:24px;font:600 8px var(--mono);letter-spacing:.1em;text-transform:uppercase}.pb-promo-strip a{display:flex;align-items:center;gap:4px;text-decoration:underline}
 .pb-new-block{max-width:1500px;margin:auto;padding:85px 32px 105px}.pb-new-heading{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px}.pb-new-heading small{font:500 8px var(--mono);letter-spacing:.14em;color:var(--muted)}.pb-new-heading h2{font:800 clamp(42px,6vw,82px)/.82 var(--sans);letter-spacing:-.08em;text-transform:uppercase;margin-top:10px}.pb-new-heading>a{font:500 8px var(--mono);display:flex;align-items:center;gap:3px}
 @media(max-width:900px){.pb-promo-strip{height:38px;padding:0 15px;text-align:center}.pb-new-block{padding:70px 20px 80px}.pb-new-heading{display:block}.pb-new-heading>a{margin-top:14px}}
+
+/* Editorial assets keep their original color and are mapped by scene meaning */
+.pb-hero-image img,.pb-editorial-feature>img,.pb-flagship-image img,.pb-triptych-card>img,.pb-art-prints>img,.pb-service-grid-visual article img{filter:none!important}
