@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React,{useEffect,useState}from'react';
 import {Link}from'react-router-dom';
 import {ArrowUpRight,ChevronRight,ChevronLeft}from'lucide-react';
@@ -22,7 +23,7 @@ export default function Home(){
  const [products,setProducts]=useState(fallback),[hero,setHero]=useState(0);
  useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];if(Array.isArray(x)&&x.length)setProducts(x.slice(0,8))}).catch(()=>{})},[]);
  useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
- return <main className='pb-home'>
+ return <><SEO title="Independent Clothing / Casablanca" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className='pb-home'>
   <section className='pb-hero pb-hero-editorial'><div className='pb-hero-image'><img src={heroSlides[hero]} alt='LEXIGAM campaign'/><div/></div><div className='pb-hero-copy'><small>LEXIGAM / AUTUMN WINTER 2026</small><h1>Wear<br/><i>the</i> everyday.</h1><p>{t.heroText}</p><Link to='/shop' className='pb-btn'>SHOP THE COLLECTION <ArrowUpRight size={16}/></Link></div><div className='pb-hero-count'><span>{String(hero+1).padStart(2,'0')} / 03</span><div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div></div></section>
   <div className='pb-promo-strip'>{t.freeDelivery}<Link to='/shop'>SHOP <ArrowUpRight size={12}/></Link></div>
   <section className='pb-new-block' data-motion='reveal'><div className='pb-new-heading'><small>NOUVEAU / NEW</small><h2>{language==='ar'?'الجديد':'NOUVEAUTÉS'}</h2><Link to='/new-arrivals'>VIEW ALL PRODUCTS <ChevronRight size={14}/></Link></div><div className='pb-grid-4'>{products.slice(0,4).map((p,i)=><Card p={p} i={i} key={p.id}/>)}</div></section>
@@ -34,5 +35,5 @@ export default function Home(){
   <section className='pb-service' data-motion='reveal'><div className='pb-section-title'><div><small>07 / SERVICE</small><h2>EVERYTHING YOU NEED.<br/>NOTHING EXTRA.</h2></div></div><div className='pb-service-grid pb-service-grid-visual'><article><img src='/webpImage/image-23.jpg' alt='Delivery options'/><b>01</b><h3>FAST DELIVERY</h3><p>Prepared quickly with clear delivery information at checkout.</p></article><article><img src='/webpImage/image-10.png' alt='Secure payment illustration'/><b>02</b><h3>SECURE PAYMENT</h3><p>Simple checkout with secure payment options for your order.</p></article><article><img src='/webpImage/image-25.jpg' alt='Customer support'/><b>03</b><h3>DIRECT SUPPORT</h3><p>Questions about sizing, stock or orders? Talk directly to LEXIGAM.</p></article></div></section>
   <section className='pb-support-strip' data-motion='reveal'><div><img src='/webpImage/image-4.png' alt='Delivery mark'/><span>DELIVERY</span></div><div><img src='/webpImage/image-9.png' alt='Payment mark'/><span>PAYMENT</span></div><div><img src='/webpImage/image-10.png' alt='Secure payment mark'/><span>SECURE</span></div><div><img src='/webpImage/image-15.png' alt='Studio mark'/><span>STUDIO</span></div></section>
   <section className='pb-newsletter' data-motion='reveal'><div><small>08 / NEWSLETTER</small><h2>{t.newsletterTitle}</h2></div><form onSubmit={e=>e.preventDefault()}><label>{t.email}</label><div><input type='email' placeholder={language==='ar'?'البريد الإلكتروني':'votre@email.com'}/><button>{t.join}<ArrowUpRight size={15}/></button></div></form></section>
- </main>;
+ </main></>;
 }
