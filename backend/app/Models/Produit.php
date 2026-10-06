@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\LigneCommande;
 
 class Produit extends Model
 {
@@ -21,4 +22,5 @@ class Produit extends Model
     public function vendeur(){ return $this->belongsTo(User::class,'user_id'); }
     public function categorie(){ return $this->belongsTo(Categorie::class); }
     public function avis(){ return $this->hasMany(Avis::class); }
+    public function lignesCommandes(){ return $this->hasMany(LigneCommande::class,'produit_id'); }
 }
