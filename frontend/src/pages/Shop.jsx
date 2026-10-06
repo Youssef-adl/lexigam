@@ -1,37 +1,251 @@
-import React,{useEffect,useMemo,useState}from'react';
-import {useDispatch}from'react-redux';
-import {Link,useLocation}from'react-router-dom';
-import {Heart,SlidersHorizontal,X,ChevronDown,ArrowUpRight}from'lucide-react';
-import api from'../axios';
-import {addToCart}from'../store/cartSlice';
-import {useLanguage}from'../i18n/LanguageContext';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { Heart, SlidersHorizontal, X, ChevronDown, ArrowUpRight } from 'lucide-react';
+import api from '../axios';
+import { addToCart } from '../store/cartSlice';
+import { useLanguage } from '../i18n/LanguageContext';
 
-const demo=[
- ['ARCHIVE BOMBER',890,'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=90'],
- ['HEAVYWEIGHT HOODIE',590,'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=90'],
- ['WIDE CARGO TROUSER',640,'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=900&q=90'],
- ['CORE TEE / 02',290,'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=90'],
- ['DISTRICT OVERSHIRT',690,'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=90'],
- ['RAW DENIM 01',720,'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=900&q=90'],
- ['AFTER DARK JACKET',1190,'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=90'],
- ['FIELD TEE / 01',350,'https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=900&q=90']
+const demo = [
+  ['ARCHIVE BOMBER', 890, '/webpImage/image-1.jpg'],
+  ['HEAVYWEIGHT HOODIE', 590, '/webpImage/image-7.jpg'],
+  ['WIDE CARGO TROUSER', 640, '/webpImage/image-8.jpg'],
+  ['CORE TEE / 02', 290, '/webpImage/image-11.jpg'],
+  ['DISTRICT OVERSHIRT', 690, '/webpImage/image-6.jpg'],
+  ['RAW DENIM 01', 720, '/webpImage/image-2.jpg'],
+  ['AFTER DARK JACKET', 1190, '/webpImage/image-3.jpg'],
+  ['FIELD TEE / 01', 350, '/webpImage/image-5.jpg'],
+  ['MINIMAL FLEECE', 490, '/webpImage/image-12.jpg'],
+  ['STUDIO SHIRT', 620, '/webpImage/image-14.jpg'],
+  ['UTILITY VEST', 540, '/webpImage/image-15.jpg'],
+  ['CASABLANCA HOODIE', 600, '/webpImage/image-16.jpg'],
 ];
-const fits=['ALL','STRAIGHT','BAGGY','RELAXED','SLIM','WIDE LEG'];
-const colors=['BLACK','WHITE','BLUE','GREY','GREEN'];
-const sizes=['XS','S','M','L','XL'];
 
-export default function Shop({category='All Products'}){
- const {t,language}=useLanguage();const[d,setD]=useState([]),[load,setLoad]=useState(true),[drawer,setDrawer]=useState(false),[fit,setFit]=useState('ALL'),[color,setColor]=useState('ALL'),[size,setSize]=useState('ALL'),[sort,setSort]=useState('NEW');
- const loc=useLocation(),dispatch=useDispatch(),q=new URLSearchParams(loc.search).get('nom');
- useEffect(()=>{api.get(q?'/produits?nom='+encodeURIComponent(q):'/produits').then(x=>setD(x.data?.data||x.data||[])).catch(()=>setD([])).finally(()=>setLoad(false))},[q]);
- const data=useMemo(()=>{let arr=d.length?d:demo.map((x,i)=>({id:'demo'+i,nom:x[0],prix:x[1],description:'Premium everyday garment.',image:x[2],taille:'M'}));if(q)arr=arr.filter(p=>(p.nom||'').toLowerCase().includes(q.toLowerCase()));if(fit!=='ALL')arr=arr.filter(p=>(p.description||p.nom||p.fit||'').toLowerCase().includes(fit.toLowerCase()));if(color!=='ALL')arr=arr.filter(p=>(p.color||p.couleur||p.description||p.nom||'').toLowerCase().includes(color.toLowerCase()));if(size!=='ALL')arr=arr.filter(p=>!p.taille||(Array.isArray(p.taille)?p.taille.includes(size):String(p.taille).toUpperCase().includes(size)));if(sort==='PRICE_LOW')arr=[...arr].sort((a,b)=>Number(a.prix)-Number(b.prix));if(sort==='PRICE_HIGH')arr=[...arr].sort((a,b)=>Number(b.prix)-Number(a.prix));return arr},[d,q,fit,sort]);
- const title=category==='Men'?t.men:category==='Women'?t.women:category==='New Arrivals'?t.new:t.allProducts;
- const img=p=>p?.image?.startsWith('http')?p.image:p?.image?.startsWith('/')?p.image:'http://localhost:8000'+(p?.image||'');
- return <div className="pb-shop">
-  <div className="pb-shop-crumb">HOME / {t.shop} / {title}</div>
-  <header className="pb-shop-head"><div><small>LEXIGAM / SHOP</small><h1>{title}</h1><p>{language==='ar'?'مجموعة من القطع المختارة للموسم.':'Une sélection de pièces pour la saison.'}</p></div><span>{data.length} PRODUCTS</span></header>
-  <div className="pb-shop-nav"><div className="pb-categories"><Link to="/shop" className={category==='All Products'?'active':''}>ALL</Link><Link to="/men" className={category==='Men'?'active':''}>{t.men}</Link><Link to="/women" className={category==='Women'?'active':''}>{t.women}</Link><Link to="/new-arrivals" className={category==='New Arrivals'?'active':''}>{t.new}</Link></div><div className="pb-sort"><button onClick={()=>setDrawer(true)}><SlidersHorizontal size={15}/> FILTER</button><label>SORT<select value={sort} onChange={e=>setSort(e.target.value)}><option value="NEW">NEWEST</option><option value="PRICE_LOW">PRICE LOW</option><option value="PRICE_HIGH">PRICE HIGH</option></select><ChevronDown size={13}/></label></div></div>
-  {load?<div className="pb-loading">LOADING PRODUCTS</div>:<div className="pb-shop-grid">{data.map((p,i)=><article className="pb-shop-card" key={p.id}><Link to={'/product/'+p.id} className="pb-shop-img"><img src={img(p) || demo[i%demo.length][2]} alt={p.nom}/><span>{i<4?'NEW':''}</span><button onClick={e=>e.preventDefault()} aria-label="Wishlist"><Heart size={17}/></button></Link><div className="pb-shop-info"><div><strong>{p.nom}</strong><small>{p.description||'LEXIGAM / 026'}</small></div><b>{p.prix} DH</b></div><button className="pb-add" onClick={()=>dispatch(addToCart(p))}>ADD TO BAG</button></article>)}</div>}
-  {drawer&&<aside className="pb-filter-drawer"><div className="pb-filter-top"><strong>FILTERS</strong><button onClick={()=>setDrawer(false)}><X/></button></div><div className="pb-filter-block"><span>FIT</span>{fits.map(x=><button className={fit===x?'selected':''} key={x} onClick={()=>setFit(x)}>{x}</button>)}</div><div className="pb-filter-block"><span>COLOR</span>{colors.map(x=><button className={color===x?'selected':''} key={x} onClick={()=>setColor(x)}>{x}</button>)}</div><div className="pb-filter-block"><span>SIZE</span>{sizes.map(x=><button className={size===x?'selected':''} key={x} onClick={()=>setSize(x)}>{x}</button>)}</div><button className="pb-filter-apply" onClick={()=>setDrawer(false)}>APPLY FILTERS <ArrowUpRight size={16}/></button></aside>}
- </div>
+const fits = ['ALL', 'STRAIGHT', 'BAGGY', 'RELAXED', 'SLIM', 'WIDE LEG'];
+const colors = ['BLACK', 'WHITE', 'BLUE', 'GREY', 'GREEN'];
+const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+
+export default function Shop({ category = 'All Products' }) {
+  const { t, language } = useLanguage();
+  const [d, setD] = useState([]);
+  const [load, setLoad] = useState(true);
+  const [drawer, setDrawer] = useState(false);
+  const [fit, setFit] = useState('ALL');
+  const [color, setColor] = useState('ALL');
+  const [size, setSize] = useState('ALL');
+  const [sort, setSort] = useState('NEW');
+
+  const loc = useLocation();
+  const dispatch = useDispatch();
+  const q = new URLSearchParams(loc.search).get('nom');
+
+  useEffect(() => {
+    api
+      .get(q ? '/produits?nom=' + encodeURIComponent(q) : '/produits')
+      .then((x) => setD(x.data?.data || x.data || []))
+      .catch(() => setD([]))
+      .finally(() => setLoad(false));
+  }, [q]);
+
+  const data = useMemo(() => {
+    let arr = d.length
+      ? d
+      : demo.map((x, i) => ({
+          id: 'demo' + i,
+          nom: x[0],
+          prix: x[1],
+          description: 'Premium everyday garment.',
+          image: x[2],
+          taille: 'M',
+        }));
+
+    if (q) arr = arr.filter((p) => (p.nom || '').toLowerCase().includes(q.toLowerCase()));
+    if (fit !== 'ALL')
+      arr = arr.filter((p) =>
+        (p.description || p.nom || p.fit || '').toLowerCase().includes(fit.toLowerCase())
+      );
+    if (color !== 'ALL')
+      arr = arr.filter((p) =>
+        (p.color || p.couleur || p.description || p.nom || '')
+          .toLowerCase()
+          .includes(color.toLowerCase())
+      );
+    if (size !== 'ALL')
+      arr = arr.filter(
+        (p) =>
+          !p.taille ||
+          (Array.isArray(p.taille)
+            ? p.taille.includes(size)
+            : String(p.taille).toUpperCase().includes(size))
+      );
+    if (sort === 'PRICE_LOW') arr = [...arr].sort((a, b) => Number(a.prix) - Number(b.prix));
+    if (sort === 'PRICE_HIGH') arr = [...arr].sort((a, b) => Number(b.prix) - Number(a.prix));
+
+    return arr;
+  }, [d, q, fit, color, size, sort]);
+
+  const title =
+    category === 'Men'
+      ? t.men
+      : category === 'Women'
+      ? t.women
+      : category === 'New Arrivals'
+      ? t.new
+      : t.allProducts;
+
+  const img = (p) =>
+    p?.image?.startsWith('http')
+      ? p.image
+      : p?.image?.startsWith('/')
+      ? p.image
+      : 'http://localhost:8000' + (p?.image || '');
+
+  return (
+    <div className="pb-shop">
+      <div className="pb-shop-bar">
+        <div>
+          <small>
+            LEXIGAM / {language === 'ar' ? 'المتجر' : 'STORE'}
+          </small>
+          <h1>{title}</h1>
+          <p>
+            {data.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
+          </p>
+        </div>
+        <div className="pb-shop-controls">
+          <button className="pb-filter-toggle" onClick={() => setDrawer(true)}>
+            <SlidersHorizontal size={15} />{' '}
+            {language === 'ar' ? 'تصفية وترتيب' : 'FILTERS & SORT'}
+          </button>
+          <div className="pb-sort-select">
+            <select value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="NEW">{language === 'ar' ? 'الأحدث' : 'NEWEST'}</option>
+              <option value="PRICE_LOW">
+                {language === 'ar' ? 'السعر: من الأقل للأعلى' : 'PRICE: LOW TO HIGH'}
+              </option>
+              <option value="PRICE_HIGH">
+                {language === 'ar' ? 'السعر: من الأعلى للأقل' : 'PRICE: HIGH TO LOW'}
+              </option>
+            </select>
+            <ChevronDown size={14} />
+          </div>
+        </div>
+      </div>
+
+      <div className="pb-active-filters">
+        <div className="pb-pill-group">
+          {fits.map((f) => (
+            <button
+              key={f}
+              className={fit === f ? 'active' : ''}
+              onClick={() => setFit(f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {drawer && (
+        <aside className="pb-drawer-backdrop" onClick={() => setDrawer(false)}>
+          <div className="pb-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="pb-drawer-head">
+              <h3>{language === 'ar' ? 'التصفية' : 'FILTERS'}</h3>
+              <button onClick={() => setDrawer(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="pb-drawer-body">
+              <label>FIT</label>
+              <div className="pb-drawer-chips">
+                {fits.map((f) => (
+                  <button
+                    key={f}
+                    className={fit === f ? 'active' : ''}
+                    onClick={() => setFit(f)}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+
+              <label>COLOR</label>
+              <div className="pb-drawer-chips">
+                {colors.map((c) => (
+                  <button
+                    key={c}
+                    className={color === c ? 'active' : ''}
+                    onClick={() => setColor(c)}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+
+              <label>SIZE</label>
+              <div className="pb-drawer-chips">
+                {sizes.map((s) => (
+                  <button
+                    key={s}
+                    className={size === s ? 'active' : ''}
+                    onClick={() => setSize(s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="pb-drawer-foot">
+              <button
+                className="pb-btn dark"
+                onClick={() => {
+                  setFit('ALL');
+                  setColor('ALL');
+                  setSize('ALL');
+                }}
+              >
+                RESET
+              </button>
+              <button className="pb-btn" onClick={() => setDrawer(false)}>
+                APPLY
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
+
+      {load ? (
+        <div className="pb-loading-screen">
+          <span>LOADING ARCHIVE</span>
+        </div>
+      ) : (
+        <div className="pb-shop-grid">
+          {data.map((p, i) => (
+            <article className="pb-product-card" key={p.id}>
+              <Link to={'/product/' + p.id} className="pb-product-img">
+                <img src={img(p)} alt={p.nom} />
+                <span className="pb-badge">{i < 3 ? 'NEW' : '026'}</span>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(addToCart({ ...p, quantite: 1 }));
+                  }}
+                  title="Add to bag"
+                >
+                  <ArrowUpRight size={15} />
+                </button>
+              </Link>
+              <div className="pb-product-meta">
+                <div>
+                  <strong>{p.nom}</strong>
+                  <small>{p.description}</small>
+                </div>
+                <b>{p.prix} DH</b>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
