@@ -11,7 +11,7 @@ class AvisController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Avis::with(['user','produit'])->latest('id')->paginate(50)->items(),
+            'data' => Avis::with(['user:id,name','produit'])->latest('id')->paginate(50)->items(),
         ]);
     }
 
@@ -36,7 +36,7 @@ class AvisController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Avis::where('produit_id',$productId)->with('user')->latest('id')->get(),
+            'data' => Avis::where('produit_id',$productId)->with('user:id,name')->latest('id')->get(),
         ]);
     }
 
