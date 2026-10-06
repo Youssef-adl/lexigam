@@ -28,6 +28,7 @@ const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 export default function Shop({ category = 'All Products' }) {
   const { t, language } = useLanguage();
   const [d, setD] = useState([]);
+  const [apiError, setApiError] = useState(false);
   const [load, setLoad] = useState(true);
   const [drawer, setDrawer] = useState(false);
   const [fit, setFit] = useState('ALL');
@@ -223,7 +224,7 @@ export default function Shop({ category = 'All Products' }) {
           {data.map((p, i) => (
             <article className="pb-product-card" key={p.id}>
               <Link to={'/product/' + p.id} className="pb-product-img">
-                <img src={img(p)} alt={p.nom} />
+                <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
                 <span className="pb-badge">{i < 3 ? 'NEW' : '026'}</span>
                 <button
                   onClick={(e) => {
