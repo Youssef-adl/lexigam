@@ -2,249 +2,201 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommandeRequest;
+use App\Http\Requests\UpdateCommandeRequest;
 use App\Models\Commande;
+use App\Models\Livraison;
 use App\Models\LigneCommande;
 use App\Models\Paiement;
-use App\Models\Livraison;
-use Illuminate\Http\Request;
+use App\Models\Produit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CommandeController extends Controller
 {
-    /**
-     * Display a listing of the resource (Client: their own, Admin: all).
-     */
     public function index()
     {
-        try {
-            $user = auth()->user();
-            $query = Commande::with(['user', 'lignes.produit', 'paiement', 'livraison']);
-            
-            if ($user->role !== 'admin' && $user->role !== 'vendeur') {
-                $query->where('user_id', $user->id);
-            }
-            // Filtrer pour exclure les annulées du CA global si besoin, 
-            // mais ici on affiche tout l'historique pour l'admin/client. 
-            // C'est dans vendorOrders qu'on fera le calcul fin.
+        $user = auth()->user();
+        $query = Commande::with(['user','lignes.produit','paiement','livraison']);
 
-            return response()->json([
-                'success' => true,
-                'data' => $query->get()
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des commandes',
-                'error' => $e->getMessage()
-            ], 500);
+        if ($user->role !== 'admin') {
+            $query->where('user_id', $user->id);
         }
+
+        return response()->json([
+            'success' => true,
+            'data' => $query->latest('id')->paginate(25)->items(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage (Complex Workflow).
-     */
-    public function store(Request $request)
+    public function store(StoreCommandeRequest $request)
     {
-        // Validation simple
-        $request->validate([
-            'items' => 'required|array',
-            'items.*.id' => 'required|exists:produits,id',
-            'items.*.quantite' => 'required|integer|min:1',
-            'adresse' => 'required|string',
-            'ville' => 'required|string',
-            'telephone' => 'required|string',
-            'payment_mode' => 'required|in:cash,delivery'
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            $user = auth()->user();
+        $commande = DB::transaction(function () use ($request) {
             $total = 0;
-            
-            // Valider le stock avant tout
-            foreach ($request->items as $item) {
-                $produit = \App\Models\Produit::find($item['id']);
-                if ($produit->stock < $item['quantite']) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Stock insuffisant pour le produit : {$produit->nom} (Disponible: {$produit->stock})"
-                    ], 422);
+            $resolved = [];
+
+            foreach ($request->validated('items') as $item) {
+                $produit = Produit::whereKey($item['id'])
+                    ->where('statut', 'approved')
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$produit) {
+                    throw ValidationException::withMessages([
+                        'items' => ['One or more selected products are no longer available.'],
+                    ]);
                 }
-                $total += $produit->prix * $item['quantite'];
+
+                if ($produit->stock < $item['quantite']) {
+                    throw ValidationException::withMessages([
+                        'items' => ["Not enough stock for {$produit->nom}."],
+                    ]);
+                }
+
+                $total += (float) $produit->prix * (int) $item['quantite'];
+                $resolved[] = [$produit, (int) $item['quantite']];
             }
 
-            // 1. Créer la Commande
             $commande = Commande::create([
-                'user_id' => $user->id,
+                'user_id' => auth()->id(),
                 'montant_total' => $total,
-                'statut' => 'en_attente'
+                'statut' => 'en_attente',
+                'date_commande' => now()->toDateString(),
             ]);
 
-            // 2. Créer les Lignes de commande + Déduire le stock
-            foreach ($request->items as $item) {
-                $produit = \App\Models\Produit::find($item['id']);
+            foreach ($resolved as [$produit, $quantity]) {
                 LigneCommande::create([
                     'commande_id' => $commande->id,
                     'produit_id' => $produit->id,
-                    'quantite' => $item['quantite'],
-                    'prix' => $produit->prix
+                    'quantite' => $quantity,
+                    'prix' => $produit->prix,
                 ]);
-                
-                // Déduction du stock
-                $produit->decrement('stock', $item['quantite']);
+                $produit->decrement('stock', $quantity);
             }
 
-            // 3. Créer le Paiement
             Paiement::create([
                 'commande_id' => $commande->id,
-                'mode' => $request->payment_mode === 'delivery' ? 'cash' : $request->payment_mode, // On mappe delivery à cash pour le DB enum
+                'mode' => 'cash',
                 'montant' => $total,
                 'statut' => 'en_attente',
-                'date_paiement' => null
             ]);
-            
-            // 4. Créer la Livraison
+
             Livraison::create([
                 'commande_id' => $commande->id,
-                'adresse' => $request->adresse,
-                'ville' => $request->ville,
-                'telephone' => $request->telephone,
-                'statut' => 'en_preparation' // 'en_preparation' est dans l'enum
+                'adresse' => $request->validated('adresse'),
+                'ville' => $request->validated('ville'),
+                'telephone' => $request->validated('telephone'),
+                'statut' => 'en_preparation',
             ]);
 
-            DB::commit();
+            return $commande->load(['lignes.produit','paiement','livraison']);
+        });
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Commande effectuée avec succès',
-                'commande_id' => $commande->id
-            ], 201);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la création de la commande',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Commande effectuée avec succès',
+            'commande_id' => $commande->id,
+            'data' => $commande,
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        try {
-            $commande = Commande::with(['user', 'lignes.produit', 'paiement', 'livraison'])
-                ->findOrFail($id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $commande
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Commande introuvable'
-            ], 404);
-        }
-    }
-
-    /**
-     * Display orders for a specific vendor (their products).
-     */
-    public function vendorOrders()
-    {
-        try {
-            $user = auth()->user();
-            // Récupérer les lignes de commande dont le produit appartient à ce vendeur
-            $lignes = LigneCommande::whereHas('produit', function($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })->with(['commande.user', 'produit', 'commande.paiement', 'commande.livraison'])->get();
-
-            // Filtrer uniquement les commandes CONFIRMEES/LIVREES pour le CA reel
-            $lignesValides = $lignes->filter(fn($l) => in_array($l->commande->statut, ['confirmee', 'expediee', 'livree']));
-            
-            $totalVentes = $lignesValides->sum(fn($l) => $l->prix * $l->quantite);
-            $nbProduitsVendus = $lignesValides->sum('quantite');
-
-            return response()->json([
-                'success' => true,
-                'data' => $lignes, // On garde tous pour l'affichage
-                'stats' => [
-                    'total_ca' => $totalVentes,
-                    'unites_vendues' => $nbProduitsVendus
-                ]
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des ventes',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
+        $commande = Commande::with(['user','lignes.produit','paiement','livraison'])->findOrFail($id);
         $user = auth()->user();
-        
-        // Validation du statut
-        $request->validate([
-            'statut' => 'required|in:en_attente,confirmee,expediee,livree,annulee'
-        ]);
 
-        try {
-            $commande = Commande::findOrFail($id);
-            
-            // Autorisation simple : Admin peut tout faire, Client peut seulement annuler sa propre commande
-            if ($user->role !== 'admin' && ($user->id !== $commande->user_id || $request->statut !== 'annulee')) {
-                return response()->json(['message' => 'Non autorisé'], 403);
+        abort_unless($user->role === 'admin' || $commande->user_id === $user->id, 403);
+
+        return response()->json(['success' => true,'data' => $commande]);
+    }
+
+    public function updateStatus(UpdateCommandeRequest $request, $id)
+    {
+        $commande = DB::transaction(function () use ($request, $id) {
+            $commande = Commande::with('lignes')->lockForUpdate()->findOrFail($id);
+            $newStatus = $request->validated('statut');
+
+            if ($commande->statut === 'annulee' && $newStatus !== 'annulee') {
+                throw ValidationException::withMessages(['statut' => ['Cancelled orders cannot be reopened.']]);
             }
 
-            $commande->update(['statut' => $request->statut]);
-
-            // Synchroniser avec la table livraisons si nécessaire
-            try {
-                if ($commande->livraison) {
-                    if ($request->statut === 'expediee') {
-                        $commande->livraison->update(['statut' => 'en_cours']);
-                    } elseif ($request->statut === 'livree') {
-                        $commande->livraison->update(['statut' => 'livree', 'date_livraison' => now()]);
-                    } elseif ($request->statut === 'annulee') {
-                        $commande->livraison->update(['statut' => 'annulee']);
+            if ($newStatus === 'annulee' && $commande->statut !== 'annulee') {
+                foreach ($commande->lignes as $ligne) {
+                    $produit = Produit::whereKey($ligne->produit_id)->lockForUpdate()->first();
+                    if ($produit) {
+                        $produit->increment('stock', $ligne->quantite);
                     }
                 }
-            } catch (\Exception $el) {
-                \Log::warning("Erreur sync livraison: " . $el->getMessage());
             }
 
-            // Si la commande est annulée, on remet le stock
-            if ($request->statut === 'annulee') {
-                foreach ($commande->lignes as $ligne) {
-                    $ligne->produit->increment('stock', $ligne->quantite);
+            $commande->update(['statut' => $newStatus]);
+
+            if ($commande->livraison) {
+                $deliveryStatus = match ($newStatus) {
+                    'expediee' => 'en_cours',
+                    'livree' => 'livree',
+                    'annulee' => 'annulee',
+                    default => $commande->livraison->statut,
+                };
+                $payload = ['statut' => $deliveryStatus];
+                if ($newStatus === 'livree') {
+                    $payload['date_livraison'] = now()->toDateString();
+                }
+                $commande->livraison->update($payload);
+            }
+
+            return $commande->fresh(['lignes.produit','paiement','livraison']);
+        });
+
+        return response()->json(['success' => true,'message' => 'Statut mis à jour avec succès','data' => $commande]);
+    }
+
+    public function cancel($id)
+    {
+        $commande = DB::transaction(function () use ($id) {
+            $commande = Commande::with('lignes')->lockForUpdate()->findOrFail($id);
+            abort_unless($commande->user_id === auth()->id(), 403);
+
+            if (!in_array($commande->statut, ['en_attente','confirmee'], true)) {
+                throw ValidationException::withMessages([
+                    'statut' => ['This order can no longer be cancelled.'],
+                ]);
+            }
+
+            foreach ($commande->lignes as $ligne) {
+                $produit = Produit::whereKey($ligne->produit_id)->lockForUpdate()->first();
+                if ($produit) {
+                    $produit->increment('stock', $ligne->quantite);
                 }
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Statut mis à jour avec succès',
-                'data' => $commande->load('livraison')
-            ]);
+            $commande->update(['statut' => 'annulee']);
+            if ($commande->livraison) {
+                $commande->livraison->update(['statut' => 'annulee']);
+            }
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la mise à jour',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+            return $commande->fresh(['lignes.produit','paiement','livraison']);
+        });
+
+        return response()->json(['success' => true,'message' => 'Commande annulée','data' => $commande]);
+    }
+
+    public function vendorOrders()
+    {
+        $user = auth()->user();
+        $lignes = LigneCommande::whereHas('produit', fn ($q) => $q->where('user_id', $user->id))
+            ->with(['commande.user','produit','commande.paiement','commande.livraison'])
+            ->latest('id')
+            ->get();
+
+        $valid = $lignes->whereIn('commande.statut', ['confirmee','expediee','livree']);
+        return response()->json([
+            'success' => true,
+            'data' => $lignes,
+            'stats' => [
+                'total_ca' => $valid->sum(fn ($l) => $l->prix * $l->quantite),
+                'unites_vendues' => $valid->sum('quantite'),
+            ],
+        ]);
     }
 }
