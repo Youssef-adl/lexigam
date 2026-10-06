@@ -14,20 +14,21 @@ class ProduitController extends Controller
 
     public function index(Request $request)
     {
-        $query = Produit::with(['categorie','vendeur','avis'])->where('statut', 'approved');
+        $query = Produit::with(['categorie','vendeur','avis']);
+        $requestedStatus = $request->input('statut');
+        $allowedStatuses = ['approved','pending','rejected','deletion_pending','archived'];
 
         if (auth()->check() && auth()->user()->role === 'admin') {
-            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending','archived'], true)) {
-                $query->where('statut', $request->statut);
-            }
+            $query->where('statut', in_array($requestedStatus, $allowedStatuses, true) ? $requestedStatus : 'approved');
+
             if ($request->filled('user_id')) {
                 $query->where('user_id', $request->integer('user_id'));
             }
         } elseif (auth()->check() && auth()->user()->role === 'vendeur') {
             $query->where('user_id', auth()->id());
-            if ($request->filled('statut') && in_array($request->statut, ['approved','pending','rejected','deletion_pending','archived'], true)) {
-                $query->where('statut', $request->statut);
-            }
+            $query->where('statut', in_array($requestedStatus, $allowedStatuses, true) ? $requestedStatus : 'approved');
+        } else {
+            $query->where('statut', 'approved');
         }
 
         if ($request->filled('nom')) {
