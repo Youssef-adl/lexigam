@@ -33,6 +33,18 @@ export default function Home(){
    <div className="pb-hero-count">01 / 03</div>
   </section>
 
+  <section className="pb-campaign-wall" data-motion="reveal">
+   <div className="pb-wall-title"><small>01 / CAMPAIGN BOARD</small><h2>FIELD NOTES<br/><i>CASABLANCA / 026</i></h2><p>Visual fragments from the city, the collection and the studio.</p></div>
+   <div className="pb-wall-grid">
+    <figure className="w-main"><img src="/webpImage/image-10.avif" alt="LEXIGAM field campaign"/><figcaption><span>01 / FIELD</span><strong>CASABLANCA</strong></figcaption></figure>
+    <figure className="w-tall"><img src="/webpImage/image-19.avif" alt="LEXIGAM campaign detail"/><figcaption><span>02 / STUDY</span><strong>NIGHT / FORM</strong></figcaption></figure>
+    <figure><img src="/webpImage/image-20.avif" alt="LEXIGAM archive"/><figcaption><span>03 / ARCHIVE</span><strong>TEXTURE</strong></figcaption></figure>
+    <figure><img src="/webpImage/image-21.avif" alt="LEXIGAM texture"/><figcaption><span>04 / MATERIAL</span><strong>DENIM / PAPER</strong></figcaption></figure>
+    <figure className="w-wide"><img src="/webpImage/image-26.avif" alt="LEXIGAM street scene"/><figcaption><span>05 / STREET</span><strong>AFTER DARK</strong></figcaption></figure>
+    <figure><img src="/webpImage/image-27.avif" alt="LEXIGAM photobook"/><figcaption><span>06 / PHOTOBOOK</span><strong>URBEX 026</strong></figcaption></figure>
+   </div>
+  </section>
+
   <section className="pb-quick-shop" data-motion="reveal"><div className="pb-section-title"><div><small>01 / NEW</small><h2>{t.newTitle}</h2></div><Link to="/new-arrivals">{t.allProducts}<ArrowRightIcon/></Link></div><div className="pb-grid-4">{products.slice(0,4).map((p,i)=><Card p={p} i={i} key={p.id}/>)}</div></section>
 
   <section className="pb-editorial-feature" data-motion="reveal"><img src="/webpImage/image-27.avif" alt="LEXIGAM PhotoBook"/><div className="pb-editorial-copy"><small>02 / PHOTOBOOK</small><h2>Urbex<br/><i>026.</i></h2><p>{t.photobookText}</p><Link to="/blog" className="pb-text-link">{t.readStory}<ArrowUpRight size={15}/></Link></div></section>
