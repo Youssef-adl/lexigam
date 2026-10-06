@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiRoot = 'http://localhost:8000';
+const apiRoot = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const ensureCsrf = () => axios.get(`${apiRoot}/sanctum/csrf-cookie`, {
   withCredentials: true,
@@ -21,14 +21,26 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     const status = error.response?.status;
-    const path = error.config?.url || '';
-    if ((status === 401 || status === 419) && !/\/(login|register)$/.test(path)) {
+    const config = error.config || {};
+    const path = config.url || '';
+
+    if (status === 419 && !config._csrfRetry) {
+      config._csrfRetry = true;
+      await ensureCsrf();
+      return api(config);
+    }
+
+    if ((status === 401 || status === 419)
+      && localStorage.getItem('user')
+      && !/\/(login|register|logout|me)$/.test(path)) {
       localStorage.removeItem('user');
+      localStorage.removeItem('token');
       window.dispatchEvent(new CustomEvent('lexigam:auth-expired'));
       error.isAuthError = true;
     }
+
     return Promise.reject(error);
   }
 );
