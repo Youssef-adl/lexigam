@@ -39,7 +39,7 @@ class RetourController extends Controller
 
     public function index()
     {
-        $query = Retour::with(['ligneCommande.produit','user']);
+        $query = Retour::with(['ligneCommande.produit','user:id,name']);
         if (auth()->user()->role !== 'admin') {
             $query->where('user_id',auth()->id());
         }
