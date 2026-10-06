@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -152,7 +153,7 @@ export default function ProductDetail() {
     };
 
     load();
-    return () => {
+    return (<><SEO title={p.nom} description={p.description} image={image} product={p}/>) => {
       active = false;
     };
   }, [id]);
@@ -358,6 +359,5 @@ export default function ProductDetail() {
           </form>
         )}
       </section>
-    </div>
-  );
+    </div></>);
 }
