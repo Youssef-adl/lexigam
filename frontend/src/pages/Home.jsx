@@ -20,7 +20,7 @@ function Card({p,i}){const image=p.image?.startsWith('http')?p.image:p.image?.st
 function ArrowRightIcon(){return <ChevronRight size={15}/>}
 export default function Home(){
  const {t,language}=useLanguage();useEditorialMotion();
- const [products,setProducts]=useState(fallback),[hero,setHero]=useState(0),[apiError,setApiError]=useState(false);
+ const [products,setProducts]=useState(fallback),[hero,setHero]=useState(0),[apiError,setApiError]=useState(false),[artSlide,setArtSlide]=useState(1);
  useEffect(()=>{api.get('/produits').then(r=>{const x=r.data?.data||r.data||[];setApiError(false);if(Array.isArray(x)&&x.length)setProducts(x.slice(0,8))}).catch(()=>{setApiError(true);if(!import.meta.env.DEV)setProducts([])})},[]);
  useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
  return <><SEO title="Independent Clothing / Casablanca" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className='pb-home'>
@@ -31,7 +31,27 @@ export default function Home(){
   <section className='pb-section pb-featured' data-motion='reveal'><div className='pb-section-title'><div><small>03 / FEATURED</small><h2>{t.featuredTitle}</h2></div><Link to='/shop'>{t.allProducts}<ArrowRightIcon/></Link></div><div className='pb-grid-4'>{products.slice(4,8).map((p,i)=><Card p={p} i={i+4} key={p.id}/>)}</div></section>
   <section className='pb-flagship-visual' data-motion='reveal'><div className='pb-flagship-image'><img src='/webpImage/image-21.jpg' alt='LEXIGAM flagship Casablanca'/></div><div className='pb-flagship-copy'><small>04 / FLAGSHIP STORE</small><h2>MADE IN<br/><i>CASABLANCA.</i></h2><p>From first sketch to final garment, LEXIGAM grows from the streets, materials and people around the city.</p><Link to='/about' className='pb-text-link'>{t.aboutLink}<ArrowUpRight size={15}/></Link></div></section>
   <section className='pb-visual-journal' data-motion='reveal'><div className='pb-visual-journal-head'><small>05 / VISUAL JOURNAL</small><h2>STREET.<br/><i>STUDIO. OBJECT.</i></h2><p>Additional fragments from the LEXIGAM world, arranged as an editorial sequence.</p></div><div className='pb-visual-journal-grid'><figure className='vj-large'><img src='/webpImage/image-20 copy.jpg' alt='Street archive'/><figcaption>01 / STREET ARCHIVE</figcaption></figure><figure><img src='/webpImage/image-22 copy.jpg' alt='Night texture'/><figcaption>02 / NIGHT TEXTURE</figcaption></figure><figure><img src='/webpImage/image-29.jpg' alt='City reference'/><figcaption>03 / CITY REFERENCE</figcaption></figure><figure><img src='/webpImage/image-12 copy.jpg' alt='Material study'/><figcaption>04 / MATERIAL STUDY</figcaption></figure><figure className='vj-wide'><img src='/webpImage/image-17 copy.jpg' alt='Campaign study'/><figcaption>05 / CAMPAIGN STUDY</figcaption></figure><figure><img src='/webpImage/image-16.png' alt='Garment detail'/><figcaption>06 / GARMENT DETAIL</figcaption></figure><figure><img src='/webpImage/image-15.png' alt='City study'/><figcaption>07 / CITY STUDY</figcaption></figure></div></section>
-  <section className='pb-art-prints' data-motion='reveal'><div><small>06 / ART PRINTS</small><h2>WEAR IT.<br/><i>FRAME IT.</i></h2><p>Visual objects and pieces extending the world of the collection.</p><div className='pb-art-mini'><img src='/webpImage/image-13.png' alt='Graphic print'/><img src='/webpImage/image-18.png' alt='Graphic object'/><img src='/webpImage/image-26.jpg' alt='Art print'/></div><Link to='/shop' className='pb-text-link'>EXPLORE ART & OBJECTS <ArrowUpRight size={15}/></Link></div><img src='/webpImage/image-26.jpg' alt='LEXIGAM art prints'/></section>
+  <section className='pb-art-prints pb-art-prints-showcase' data-motion='reveal'>
+   <div className='pb-art-head'>
+    <div><small>06 / ART PRINTS</small><h2>FRAME<br/><i>THE CITY.</i></h2></div>
+    <p>Graphic editions, visual studies and objects from the LEXIGAM archive.</p>
+   </div>
+   <div className='pb-art-stage'>
+    <button className='pb-art-arrow left' type='button' aria-label='Previous art print' onClick={()=>setArtSlide(v=>(v+2)%3)}><ChevronLeft size={18}/></button>
+    <div className='pb-art-track'>
+      {[['/webpImage/image-13.png','01 / FORM'],['/webpImage/image-18.png','02 / OBJECT'],['/webpImage/image-26.jpg','03 / ARCHIVE']].map(([src,label],i)=>(
+        <figure key={src} className={'pb-art-frame '+(i===artSlide?'active':'')}>
+          <div><img src={src} alt={label}/></div><figcaption>{label}</figcaption>
+        </figure>
+      ))}
+    </div>
+    <button className='pb-art-arrow right' type='button' aria-label='Next art print' onClick={()=>setArtSlide(v=>(v+1)%3)}><ChevronRight size={18}/></button>
+   </div>
+   <div className='pb-art-bottom'>
+    <div className='pb-art-dots'>{[0,1,2,3,4].map((dot)=><span key={dot} className={dot===artSlide?'active':''}/>)}</div>
+    <Link to='/shop' className='pb-art-pill'>ART PRINTS <ArrowUpRight size={13}/></Link>
+   </div>
+  </section>
   <section className='pb-service' data-motion='reveal'><div className='pb-section-title'><div><small>07 / SERVICE</small><h2>EVERYTHING YOU NEED.<br/>NOTHING EXTRA.</h2></div></div><div className='pb-service-grid pb-service-grid-visual'><article><img src='/webpImage/image-23.jpg' alt='Delivery options'/><b>01</b><h3>FAST DELIVERY</h3><p>Prepared quickly with clear delivery information at checkout.</p></article><article><img src='/webpImage/image-10.png' alt='Secure payment illustration'/><b>02</b><h3>SECURE PAYMENT</h3><p>Simple checkout with secure payment options for your order.</p></article><article><img src='/webpImage/image-25.jpg' alt='Customer support'/><b>03</b><h3>DIRECT SUPPORT</h3><p>Questions about sizing, stock or orders? Talk directly to LEXIGAM.</p></article></div></section>
   <section className='pb-support-strip' data-motion='reveal'><div><img src='/webpImage/image-4.png' alt='Delivery mark'/><span>DELIVERY</span></div><div><img src='/webpImage/image-9.png' alt='Payment mark'/><span>PAYMENT</span></div><div><img src='/webpImage/image-10.png' alt='Secure payment mark'/><span>SECURE</span></div><div><img src='/webpImage/image-15.png' alt='Studio mark'/><span>STUDIO</span></div></section>
   <section className='pb-newsletter' data-motion='reveal'><div><small>08 / NEWSLETTER</small><h2>{t.newsletterTitle}</h2></div><form onSubmit={e=>e.preventDefault()}><label>{t.email}</label><div><input type='email' placeholder={language==='ar'?'البريد الإلكتروني':'votre@email.com'}/><button>{t.join}<ArrowUpRight size={15}/></button></div></form></section>
