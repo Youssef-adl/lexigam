@@ -1825,3 +1825,33 @@ html[data-theme="dark"] .pb-art-pill{background:transparent!important;color:#d6d
   .pb-art-prints.pb-art-prints-showcase .pb-art-stage{height:285px!important;min-height:0!important}
   .pb-art-prints.pb-art-prints-showcase .pb-art-frame>div{max-height:240px!important}
 }
+
+/* Footer payment artwork */
+.pb-payment-images{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-start;
+}
+.pb-payment-images img{
+  width:min(210px,100%);
+  max-height:48px;
+  object-fit:contain;
+  object-position:left center;
+  display:block;
+  background:transparent;
+}
+
+/* The local framed-art images already contain their own white print/frame;
+   remove the extra card background and shadow around them. */
+.pb-art-prints.pb-art-prints-showcase .pb-art-frame>div{
+  background:transparent!important;
+  padding:0!important;
+  box-shadow:none!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-frame img{
+  mix-blend-mode:multiply;
+}
+@media(max-width:900px){
+  .pb-payment-images img{width:min(240px,100%)}
+}
