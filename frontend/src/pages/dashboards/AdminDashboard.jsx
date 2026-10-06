@@ -64,7 +64,7 @@ const AdminDashboard = () => {
 
   const handleOrderStatut = async (id, status) => {
     try {
-        await api.put(`/commandes/${id}`, { statut: status });
+        await api.patch(`/commandes/${id}/status`, { statut: status });
         setOrders(orders.map(o => o.id === id ? { ...o, statut: status } : o));
     } catch (err) {
         alert("Erreur");
