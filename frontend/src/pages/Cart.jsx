@@ -39,7 +39,9 @@ export default function Cart() {
                 src={
                   i.produit.image?.startsWith('http')
                     ? i.produit.image
-                    : 'http://localhost:8000' + i.produit.image
+                    : i.produit.image?.startsWith('/')
+                      ? i.produit.image
+                      : 'http://localhost:8000' + i.produit.image
                 }
                 alt={i.produit.nom}
               />
