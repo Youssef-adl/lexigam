@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -102,7 +103,7 @@ export default function Shop({ category = 'All Products' }) {
       ? p.image
       : 'http://localhost:8000' + (p?.image || '');
 
-  return (
+  return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
     <div className="pb-shop">
       <div className="pb-shop-bar">
         <div>
@@ -250,6 +251,6 @@ export default function Shop({ category = 'All Products' }) {
       ) : (
         <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
       )}
-    </div>
+    </div></>);
   );
 }
