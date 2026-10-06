@@ -205,3 +205,11 @@ html[dir='rtl'] .ma-logo{letter-spacing:-.06em}
 .ma-paper-copy h2,.ma-section-head h2,.ma-photo-copy h2,.ma-story-copy h2,.ma-service h2,.ma-newsletter h2{transition:letter-spacing .5s,transform .5s}
 [data-motion="reveal"].is-visible .ma-section-head h2,[data-motion="reveal"].is-visible .ma-paper-copy h2,[data-motion="reveal"].is-visible .ma-photo-copy h2,[data-motion="reveal"].is-visible .ma-story-copy h2,[data-motion="reveal"].is-visible .ma-service h2,[data-motion="reveal"].is-visible .ma-newsletter h2{letter-spacing:-.08em;transform:translateX(0)}
 @media(prefers-reduced-motion:reduce){.ma-intro-curtain{display:none}.ma-hero-copy,.ma-hero-footer{animation:none}[data-motion="reveal"]{opacity:1;transform:none;transition:none}[data-motion="parallax"],[data-motion="map-card"]{translate:0 0!important;rotate:0deg!important;scale:1!important}.ma-ticker span{animation:none}}
+
+.ma-global-progress{position:fixed;left:0;top:0;width:100%;height:3px;background:var(--acid);transform-origin:left center;z-index:10001;pointer-events:none;box-shadow:0 0 10px rgba(200,255,57,.35)}
+.ma-header{transition:height .45s cubic-bezier(.2,.7,.2,1),padding .45s cubic-bezier(.2,.7,.2,1),background .45s ease}
+.ma-header.is-scrolled{height:58px;padding-top:0;padding-bottom:0;background:rgba(9,9,7,.97);box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.ma-header.is-scrolled .ma-logo{font-size:18px}
+.ma-header.is-scrolled .ma-nav{gap:19px}
+.ma-header.is-scrolled .ma-actions{gap:12px}
+@media(max-width:900px){.ma-header.is-scrolled{height:58px}.ma-header.is-scrolled .ma-nav{gap:22px}}
