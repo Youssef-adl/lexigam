@@ -1,0 +1,45 @@
+name: Visual asset audit
+
+on:
+  push:
+    branches: ["fashion-store-redesign"]
+
+jobs:
+  contact-sheet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build contact sheet
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps, ImageDraw, ImageFont
+          root = Path("frontend/public/webpImage")
+          files = sorted([p for p in root.iterdir() if p.suffix.lower() in {".jpg",".jpeg",".png",".webp",".avif"}])
+          thumb_w, thumb_h = 220, 220
+          label_h = 34
+          cols = 5
+          rows = (len(files)+cols-1)//cols
+          sheet = Image.new("RGB", (cols*thumb_w, rows*(thumb_h+label_h)), "white")
+          draw = ImageDraw.Draw(sheet)
+          for i, p in enumerate(files):
+              x=(i%cols)*thumb_w; y=(i//cols)*(thumb_h+label_h)
+              try:
+                  im=Image.open(p).convert("RGB")
+                  im=ImageOps.contain(im,(thumb_w-20,thumb_h-20),Image.Resampling.LANCZOS)
+                  px=x+(thumb_w-im.width)//2; py=y+(thumb_h-im.height)//2
+                  sheet.paste(im,(px,py))
+              except Exception as e:
+                  draw.rectangle([x+10,y+10,x+thumb_w-10,y+thumb_h-10],outline="red",width=2)
+                  draw.text((x+16,y+16),str(e)[:28],fill="red")
+              draw.text((x+10,y+thumb_h+8),p.name,fill="black")
+          out=Path("image-contact-sheet.jpg")
+          sheet.save(out,quality=92)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webpImage-contact-sheet
+          path: image-contact-sheet.jpg
