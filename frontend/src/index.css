@@ -42,3 +42,5 @@
 .admin-kpis>div{background:#111;padding:24px;min-height:130px}.admin-kpis svg{width:17px}.admin-kpis b{display:block;font-size:2.4rem;margin-top:28px;font-weight:500}.admin-kpis span{font:10px 'DM Mono',monospace;text-transform:uppercase;color:#777}
 .empty-state{margin-top:50px;border:1px solid #292929;padding:70px 30px;text-align:center}.empty-state h2{font-size:2rem;font-weight:400;margin:0 0 25px}
 @media(max-width:800px){.admin-kpis{grid-template-columns:repeat(2,1fr)}.fashion-row{grid-template-columns:1fr auto;gap:12px}.fashion-row>:last-child{grid-column:2}.fashion-row .status-pill{grid-column:2;grid-row:1}.display-title{font-size:3.5rem}}
+
+.spin{animation:lexSpin 1s linear infinite;margin-bottom:15px}@keyframes lexSpin{to{transform:rotate(360deg)}}
