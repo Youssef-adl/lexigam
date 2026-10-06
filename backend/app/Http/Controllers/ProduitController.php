@@ -14,7 +14,7 @@ class ProduitController extends Controller
 
     public function index(Request $request)
     {
-        $query = Produit::with(['categorie','vendeur','avis']);
+        $query = Produit::with(['categorie','vendeur:id,name','avis.user:id,name']);
         $requestedStatus = $request->input('statut');
         $allowedStatuses = ['approved','pending','rejected','deletion_pending','archived'];
 
@@ -89,7 +89,7 @@ class ProduitController extends Controller
             if (!$allowed) abort(404);
         }
 
-        $produit->load(['categorie','vendeur','avis.user']);
+        $produit->load(['categorie','vendeur:id,name','avis.user:id,name']);
         return response()->json(['success' => true,'data' => $produit]);
     }
 
