@@ -180,3 +180,28 @@ html[dir='rtl'] .ma-logo{letter-spacing:-.06em}
 .map-pin-a{left:58%;top:42%}.map-pin-b{left:6%;bottom:27%}.map-pin-c{right:17%;top:60%}
 @media(max-width:900px){.ma-paper-break{min-height:420px;padding:65px 20px}.ma-paper-copy h2{font-size:15vw}.ma-paper-button{left:20px;right:auto;bottom:48px}.ma-paper-break:after{right:20px}.ma-map-story{padding:80px 20px}.ma-map-top{display:block}.ma-map-tools{margin-top:22px}.ma-map-canvas{height:560px}.map-card{width:120px;height:150px}.map-card img{height:112px}.map-card-0{left:5%;top:8%}.map-card-1{left:40%;top:14%}.map-card-2{right:3%;top:5%}.map-card-3{left:14%;bottom:5%}.map-card-4{right:25%;bottom:9%}.map-card-5{right:0;bottom:29%}}
 @media(max-width:520px){.ma-paper-break{min-height:390px}.ma-paper-copy p{font-size:11px;max-width:280px}.ma-map-canvas{height:530px}.map-card{width:96px;height:126px;padding:6px}.map-card img{height:94px}.map-card span{font-size:6px}.map-pin{font-size:6px}.map-pin-a{left:45%;top:43%}.map-pin-b{left:4%;bottom:32%}.map-pin-c{right:4%;top:61%}}
+
+/* SCROLL CHOREOGRAPHY */
+.ma-scroll-progress{position:fixed;top:0;left:0;width:100%;height:3px;background:var(--acid);z-index:10000;transform-origin:left center;transform:scaleX(var(--scroll-progress,0));pointer-events:none}
+.ma-intro-curtain{position:fixed;inset:0;background:var(--black);color:var(--paper);z-index:9998;display:grid;place-items:center;pointer-events:none;animation:lexCurtain 1.25s cubic-bezier(.76,0,.24,1) .15s forwards}
+.ma-intro-curtain span{font:500 9px var(--mono);letter-spacing:.2em;animation:lexIntroText .7s ease .2s both}
+@keyframes lexCurtain{0%{clip-path:inset(0 0 0 0)}100%{clip-path:inset(0 0 100% 0)}}
+@keyframes lexIntroText{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+[data-motion="reveal"]{opacity:0;transform:translate3d(0,50px,0);transition:opacity .9s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms),transform 1s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms)}
+[data-motion="reveal"].is-visible{opacity:1;transform:translate3d(0,0,0)}
+.ma-product[data-motion="reveal"]{transition-duration:.8s}
+.ma-product-grid .ma-product:nth-child(2){--reveal-delay:80ms}.ma-product-grid .ma-product:nth-child(3){--reveal-delay:160ms}.ma-product-grid .ma-product:nth-child(4){--reveal-delay:240ms}
+[data-motion="parallax"]{translate:0 var(--parallax-y,0px);scale:var(--parallax-scale,1);will-change:transform}
+.ma-hero>img[data-motion="parallax"]{translate:0 var(--parallax-y,0px)}
+.ma-photo>img[data-motion="parallax"],.ma-story-image img[data-motion="parallax"]{translate:0 var(--parallax-y,0px);scale:var(--parallax-scale,1.01)}
+[data-motion="map-card"]{translate:0 var(--map-y,0px);rotate:var(--map-r,0deg);will-change:transform;transition:box-shadow .3s,filter .3s}
+.ma-map-canvas{perspective:900px}
+.ma-map-canvas:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 28%,rgba(34,34,28,.06) 100%);pointer-events:none}
+.ma-hero{will-change:transform}
+.ma-hero-copy{animation:heroCopyIn 1.1s cubic-bezier(.2,.75,.2,1) .75s both}
+@keyframes heroCopyIn{from{opacity:0;transform:translateY(42px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+.ma-hero-footer{animation:heroFooterIn .8s ease 1.05s both}
+@keyframes heroFooterIn{from{opacity:0}to{opacity:1}}
+.ma-paper-copy h2,.ma-section-head h2,.ma-photo-copy h2,.ma-story-copy h2,.ma-service h2,.ma-newsletter h2{transition:letter-spacing .5s,transform .5s}
+[data-motion="reveal"].is-visible .ma-section-head h2,[data-motion="reveal"].is-visible .ma-paper-copy h2,[data-motion="reveal"].is-visible .ma-photo-copy h2,[data-motion="reveal"].is-visible .ma-story-copy h2,[data-motion="reveal"].is-visible .ma-service h2,[data-motion="reveal"].is-visible .ma-newsletter h2{letter-spacing:-.08em;transform:translateX(0)}
+@media(prefers-reduced-motion:reduce){.ma-intro-curtain{display:none}.ma-hero-copy,.ma-hero-footer{animation:none}[data-motion="reveal"]{opacity:1;transform:none;transition:none}[data-motion="parallax"],[data-motion="map-card"]{translate:0 0!important;rotate:0deg!important;scale:1!important}.ma-ticker span{animation:none}}
