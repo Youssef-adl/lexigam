@@ -217,7 +217,7 @@ html[dir='rtl'] .ma-logo{letter-spacing:-.06em}
 /* CINEMATIC SCROLL EXPERIENCE */
 .cinematic-home{background:#080806;color:var(--paper);overflow:clip}
 .cin-progress{position:fixed;top:0;left:0;width:100%;height:3px;background:var(--acid);transform-origin:left;transform:scaleX(var(--scroll-progress,0));z-index:11000}
-.cin-intro{height:100svh;position:fixed;inset:0;z-index:10999;background:#050504;display:grid;place-items:center;overflow:hidden;pointer-events:none;animation:cinExit 1.4s cubic-bezier(.78,0,.22,1) 2s forwards;color:var(--paper)}
+.cin-intro{height:100svh;position:fixed;inset:0;z-index:10999;background:#050504;display:grid;place-items:center;overflow:hidden;pointer-events:none;animation:cinExit 1.25s cubic-bezier(.78,0,.22,1) .35s forwards;color:var(--paper)}
 .cin-intro-noise{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.08) 0 1px,transparent 1px),radial-gradient(circle at 80% 70%,rgba(255,255,255,.05) 0 1px,transparent 1px);background-size:7px 7px,11px 11px;opacity:.25}
 .cin-intro span{position:absolute;top:35px;font:500 9px var(--mono);letter-spacing:.18em;color:var(--acid)}
 .cin-intro strong{position:relative;font:700 clamp(90px,18vw,280px)/.75 var(--sans);letter-spacing:-.09em;text-transform:uppercase;text-align:center;mix-blend-mode:screen}
