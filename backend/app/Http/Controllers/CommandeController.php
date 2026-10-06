@@ -185,7 +185,7 @@ class CommandeController extends Controller
     {
         $user = auth()->user();
         $lignes = LigneCommande::whereHas('produit', fn ($q) => $q->where('user_id', $user->id))
-            ->with(['commande.user','produit','commande.paiement','commande.livraison'])
+            ->with(['commande.user:id,name','produit','commande.paiement','commande.livraison'])
             ->latest('id')
             ->get();
 
