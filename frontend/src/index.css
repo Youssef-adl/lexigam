@@ -17,3 +17,28 @@
 .fashion-footer{border-top:1px solid var(--line);padding:80px 42px 25px;background:#0a0a0a}.footer-top{max-width:1350px;margin:auto;display:grid;grid-template-columns:2fr repeat(3,1fr);gap:50px;padding-bottom:90px}.footer-logo{font:600 28px var(--mono);letter-spacing:-.08em}.footer-top p{max-width:280px;color:var(--muted);font-size:12px;margin-top:20px}.footer-top>div:not(:first-child){display:flex;flex-direction:column;gap:12px}.footer-top a,.footer-top span:not(.eyebrow){font:9px var(--mono);letter-spacing:.1em;color:#aaa}.footer-top a{display:flex;align-items:center;gap:5px}.footer-bottom{border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;color:var(--muted);font:8px var(--mono);letter-spacing:.1em}
 @media(max-width:900px){.product-grid{grid-template-columns:repeat(2,1fr)}.detail-layout,.cart-layout,.checkout-layout,.reviews{grid-template-columns:1fr}.detail-info{padding-top:10px}.review-form{grid-column:auto}.cart-item{grid-template-columns:100px 1fr}.cart-item img{width:100px;height:130px}.cart-item-total{grid-column:2;flex-direction:row;align-items:center}.cart-summary,.order-summary{position:static}.auth-page{grid-template-columns:1fr}.auth-copy{min-height:400px}.auth-form{padding:70px 0}.footer-top{grid-template-columns:1fr 1fr}.footer-bottom{gap:15px;flex-wrap:wrap}}
 @media(max-width:520px){.shop-heading{display:block}.shop-heading p{text-align:left;margin-top:20px}.product-meta{display:block}.quick-add{opacity:1}.cart-item{grid-template-columns:80px 1fr;gap:15px}.cart-item img{width:80px;height:105px}.cart-item-info h2{font-size:21px}.cart-item-total{grid-column:2}.checkout-row{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr}.footer-bottom{display:block}.footer-bottom span{display:block;margin-bottom:8px}.fashion-footer{padding:60px 20px 20px}}
+
+
+/* DASHBOARD EDITORIAL SYSTEM */
+.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-color,#8c8982);margin:0 0 10px}
+.display-title{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,8vw,7rem);line-height:.9;letter-spacing:-.045em;margin:0;font-weight:500}
+.display-title em{font-weight:400}
+.section-heading{display:flex;justify-content:space-between;align-items:end;gap:20px;border-bottom:1px solid rgba(255,255,255,.16);padding-bottom:16px;margin-bottom:10px}
+.section-heading h2{margin:0;font-size:clamp(1.5rem,3vw,2.5rem);font-weight:500}
+.section-heading>span{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:#888}
+.fashion-table{border-top:1px solid #292929}
+.fashion-row{min-height:86px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:24px;padding:14px 0;border-bottom:1px solid #292929}
+.fashion-row.compact{min-height:52px;padding:8px 0}
+.fashion-row strong{display:block;font-size:14px;font-weight:500}
+.fashion-row small{display:block;color:#777;margin-top:5px;font-family:'DM Mono',monospace;font-size:10px}
+.status-pill{display:inline-flex;border:1px solid #3a3a3a;padding:6px 9px;font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.icon-button{display:grid;place-items:center;background:none;border:1px solid #333;color:#ddd;width:34px;height:34px;cursor:pointer}
+.icon-button:hover{background:#fff;color:#000}
+.icon-button.danger,.text-button.danger{color:#ef8b8b}.icon-button.success,.text-button.success{color:#86d6a1}
+.text-button{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:#bbb;font:inherit;font-size:11px;cursor:pointer}
+.text-button:hover{text-decoration:underline}
+.minimal-select{background:#111;color:#ddd;border:1px solid #333;padding:8px 10px;font-family:'DM Mono',monospace;font-size:10px}
+.admin-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#292929;border:1px solid #292929;margin-bottom:70px}
+.admin-kpis>div{background:#111;padding:24px;min-height:130px}.admin-kpis svg{width:17px}.admin-kpis b{display:block;font-size:2.4rem;margin-top:28px;font-weight:500}.admin-kpis span{font:10px 'DM Mono',monospace;text-transform:uppercase;color:#777}
+.empty-state{margin-top:50px;border:1px solid #292929;padding:70px 30px;text-align:center}.empty-state h2{font-size:2rem;font-weight:400;margin:0 0 25px}
+@media(max-width:800px){.admin-kpis{grid-template-columns:repeat(2,1fr)}.fashion-row{grid-template-columns:1fr auto;gap:12px}.fashion-row>:last-child{grid-column:2}.fashion-row .status-pill{grid-column:2;grid-row:1}.display-title{font-size:3.5rem}}
