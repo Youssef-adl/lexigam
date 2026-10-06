@@ -10,14 +10,15 @@ import {useLanguage} from '../i18n/LanguageContext';
 export default function Navbar(){
  const cartItems=useSelector(s=>s.cart.items),user=useSelector(s=>s.auth.user),dispatch=useDispatch(),navigate=useNavigate(),location=useLocation();
  const {language,setLanguage,t}=useLanguage();
- const [open,setOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[search,setSearch]=useState('');
+ const [open,setOpen]=useState(false),[searchOpen,setSearchOpen]=useState(false),[search,setSearch]=useState(''),[scrolled,setScrolled]=useState(false),[progress,setProgress]=useState(0);
  useEffect(()=>{if(!user||user.role!=='client')return;const id=setTimeout(()=>api.post('/paniers/sync',{items:cartItems.filter(i=>i.produit).map(i=>({produit_id:i.produit.id,quantite:i.quantite,prix:i.produit.prix||0}))}).catch(()=>{}),700);return()=>clearTimeout(id)},[cartItems,user]);
  useEffect(()=>setOpen(false),[location.pathname]);
+ useEffect(()=>{let raf=0;const onScroll=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);setScrolled(window.scrollY>32);setProgress(window.scrollY/max)})};onScroll();window.addEventListener('scroll',onScroll,{passive:true});return()=>{window.removeEventListener('scroll',onScroll);if(raf)cancelAnimationFrame(raf)}},[]);
  const submit=e=>{e.preventDefault();if(search.trim()){navigate('/shop?nom='+encodeURIComponent(search.trim()));setSearchOpen(false)}};
  const logoutUser=()=>{dispatch(logout());dispatch(clearCart());navigate('/')};
  const nav=[[t.home,'/'],[t.shop,'/shop'],[t.journal,'/blog'],[t.about,'/about'],[t.contact,'/contact']];
  return <><div className="announcement">{t.freeDelivery}<span>·</span><button className="lang-mini" onClick={()=>setLanguage(language==='fr'?'ar':'fr')}>{language==='fr'?'AR':'FR'}</button></div>
- <header className="ma-header">
+ <div className="ma-global-progress" style={{transform:'scaleX('+progress+')'}}/><header className={'ma-header '+(scrolled?'is-scrolled':'')}>
   <button className="ma-mobile-toggle" onClick={()=>setOpen(v=>!v)}>{open?<X size={19}/>:<Menu size={19}/>}</button>
   <nav className={open?'ma-nav open':'ma-nav'}>{nav.map(x=><Link key={x[0]} to={x[1]}>{x[0]}</Link>)}</nav>
   <Link className="ma-logo" to="/">LEXIGAM<span>®</span></Link>
