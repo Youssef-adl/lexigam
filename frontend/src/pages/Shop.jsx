@@ -26,6 +26,29 @@ const fits = ['ALL', 'STRAIGHT', 'BAGGY', 'RELAXED', 'SLIM', 'WIDE LEG'];
 const colors = ['BLACK', 'WHITE', 'BLUE', 'GREY', 'GREEN'];
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
+const shopImages = [
+  '/webpImage/image-12.jpg',
+  '/webpImage/image-15.jpg',
+  '/webpImage/image-9.jpg',
+  '/webpImage/image-28.jpg',
+  '/webpImage/image-14.jpg',
+  '/webpImage/image-1.jpg',
+  '/webpImage/image-11 copy.jpg',
+  '/webpImage/image-17.jpg',
+  '/webpImage/image-1 copy.jpg',
+  '/webpImage/image-4.jpg',
+  '/webpImage/image-7.jpg',
+  '/webpImage/image-3.jpg',
+  '/webpImage/image-5.jpg',
+  '/webpImage/image-6.jpg',
+  '/webpImage/image-8.jpg',
+  '/webpImage/image-11.jpg',
+  '/webpImage/image-16.jpg',
+  '/webpImage/image-20.jpg',
+  '/webpImage/image-21.jpg',
+  '/webpImage/image-22.jpg',
+];
+
 export default function Shop({ category = 'All Products' }) {
   const { t, language } = useLanguage();
   const [d, setD] = useState([]);
@@ -96,12 +119,7 @@ export default function Shop({ category = 'All Products' }) {
       ? t.new
       : t.allProducts;
 
-  const img = (p) =>
-    p?.image?.startsWith('http')
-      ? p.image
-      : p?.image?.startsWith('/')
-      ? p.image
-      : 'http://localhost:8000' + (p?.image || '');
+  const img = (p, index) => shopImages[index % shopImages.length];
 
   return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
     <div className="pb-shop">
@@ -226,7 +244,7 @@ export default function Shop({ category = 'All Products' }) {
           {data.map((p) => (
             <article className="pb-product-card pb-product-card-image-only" key={p.id}>
               <Link to={'/product/' + p.id} aria-label={p.nom} className="pb-product-img">
-                <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
+                <img src={img(p, data.indexOf(p))} alt={p.nom} loading="lazy" decoding="async" />
               </Link>
             </article>
           ))}
