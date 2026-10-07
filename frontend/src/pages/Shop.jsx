@@ -119,8 +119,6 @@ export default function Shop({ category = 'All Products' }) {
       ? t.new
       : t.allProducts;
 
-  const img = (_product, index) => shopImages[index % shopImages.length];
-
   return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
     <div className="pb-shop">
       <div className="pb-shop-bar">
@@ -241,10 +239,10 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
       ) : data.length ? (
         <div className="pb-shop-grid">
-          {data.map((p) => (
+          {data.map((p, i) => (
             <article className="pb-product-card pb-product-card-image-only" key={p.id}>
               <Link to={'/product/' + p.id} aria-label={p.nom} className="pb-product-img">
-                <img src={img(p, data.indexOf(p))} alt={p.nom} loading="lazy" decoding="async" />
+                <img src={shopImages[i % shopImages.length]} alt={p.nom} loading="lazy" decoding="async" />
               </Link>
             </article>
           ))}
