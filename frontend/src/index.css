@@ -1855,3 +1855,122 @@ html[data-theme="dark"] .pb-art-pill{background:transparent!important;color:#d6d
 @media(max-width:900px){
   .pb-payment-images img{width:min(240px,100%)}
 }
+
+
+/* SUPPLIED STORE REFERENCE — services/support finish */
+.reference-services{
+  width:100%;
+  padding:64px 3px 42px;
+  background:#fff;
+}
+.reference-services-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+}
+.reference-service-card{
+  min-height:137px;
+  background:#f1f1f1;
+  display:grid;
+  grid-template-columns:64px 1fr;
+  align-items:center;
+  gap:20px;
+  padding:28px 26px;
+}
+.reference-service-card img{
+  width:52px;
+  height:52px;
+  object-fit:contain;
+  display:block;
+}
+.reference-service-card h3{
+  margin:0 0 12px;
+  color:#4e5962;
+  font:500 9px/1 var(--sans);
+  letter-spacing:.06em;
+}
+.reference-service-card p{
+  margin:0;
+  max-width:620px;
+  color:#6f767c;
+  font:400 8px/1.72 var(--sans);
+}
+.reference-support-strip{
+  width:100%;
+  padding:44px 32px 105px;
+  background:#f8f7f3;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;
+}
+.reference-support-card{
+  min-height:184px;
+  border:1px solid #d8d6d1;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+}
+.reference-support-card img{
+  width:76px;
+  height:52px;
+  object-fit:contain;
+  display:block;
+}
+.reference-support-card span{
+  color:#171717;
+  font:600 8px/1 var(--sans);
+  letter-spacing:.08em;
+}
+.pb-art-prints.pb-art-prints-showcase{
+  min-height:0!important;
+  height:auto!important;
+  padding:0 0 26px!important;
+  background:#fff!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-topline,
+.pb-art-prints.pb-art-prints-showcase .pb-art-stage,
+.pb-art-prints.pb-art-prints-showcase .pb-art-dots{
+  display:none!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-bottom{
+  width:100%;
+  margin:0!important;
+  min-height:36px;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-pill{
+  height:27px!important;
+  min-width:120px;
+  padding:0 18px!important;
+  border:1px solid #9d9a94!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  color:#67645e!important;
+  font:500 8px var(--mono)!important;
+  letter-spacing:.08em;
+}
+.pb-art-prints.pb-art-prints-showcase .pb-art-pill:hover{
+  background:#111!important;
+  color:#fff!important;
+  border-color:#111!important;
+}
+@media(max-width:900px){
+  .reference-services{padding:36px 12px 28px}
+  .reference-services-grid{grid-template-columns:1fr}
+  .reference-support-strip{grid-template-columns:repeat(2,minmax(0,1fr));padding:28px 16px 65px}
+}
+@media(max-width:560px){
+  .reference-service-card{grid-template-columns:46px 1fr;padding:20px 18px;gap:14px}
+  .reference-service-card img{width:42px;height:42px}
+  .reference-service-card h3{font-size:8px}
+  .reference-service-card p{font-size:7px}
+  .reference-support-strip{grid-template-columns:1fr 1fr;padding:20px 12px 45px;gap:10px}
+  .reference-support-card{min-height:125px;gap:8px}
+  .reference-support-card img{width:52px;height:40px}
+  .reference-support-card span{font-size:7px}
+}
