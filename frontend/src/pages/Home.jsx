@@ -1,7 +1,9 @@
-import React,{useState} from 'react';
+import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom';
-import {ChevronLeft,ChevronRight,ShieldCheck} from 'lucide-react';
+import {ArrowUpRight,ChevronLeft,ChevronRight,ShieldCheck} from 'lucide-react';
 import SEO from '../components/SEO';
+import {useLanguage} from '../i18n/LanguageContext';
+import useEditorialMotion from '../hooks/useEditorialMotion';
 import './molimao-home.css';
 
 const featured = [
@@ -43,15 +45,29 @@ function ProductCard({product}){
 }
 
 export default function Home(){
+  const {language,setLanguage,t}=useLanguage();
+  useEditorialMotion();
+  useEffect(()=>{if(language!=='fr')setLanguage('fr')},[language,setLanguage]);
+  const [hero,setHero]=useState(0);
   const [artSlide,setArtSlide]=useState(0);
   const products=newProducts;
 
   const visibleArt=[0,1,2,3].map(offset=>artPrints[(artSlide+offset)%artPrints.length]);
+    useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
 
-  return <><SEO title="LEXIGAM — Made of Sarajevo" description="New collection, featured products, photobook and art prints."/><main className="mm-home">
-    <section className="mm-hero">
-      <div className="mm-hero-copy"><div className="mm-eyebrow">FLAGSHIP STORE</div><h1>LEXIGAM<br/>FLAGSHIP<br/>STORE</h1><p>Od 2021. naš studio okuplja odjeću, grafiku i svakodnevne komade. Otkrijte novu kolekciju i vizuelni svijet brenda.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div>
-      <div className="mm-hero-media"><img src="/webpImage/image-3.jpg" alt="Flagship store"/></div>
+  return <><SEO title="LEXIGAM — Vêtements indépendants" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className="mm-home">
+    <section className="pb-hero pb-hero-editorial">
+      <div className="pb-hero-image"><img src={heroSlides[hero]} alt="LEXIGAM campaign"/><div/></div>
+      <div className="pb-hero-copy">
+        <small>{t.heroEyebrow}</small>
+        <h1>{t.heroTitle.split(' / ')[0]}<br/><i>/</i> {t.heroTitle.split(' / ')[1]}</h1>
+        <p>{t.heroText}</p>
+        <Link to="/shop" className="pb-btn">{t.shopCollection} <ArrowUpRight size={16}/></Link>
+      </div>
+      <div className="pb-hero-count">
+        <span>{String(hero+1).padStart(2,'0')} / 03</span>
+        <div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div>
+      </div>
     </section>
 
     <section className="mm-service-top"><div className="mm-service-grid">
