@@ -1,66 +1,91 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import {ArrowUp,ArrowUpRight,Music2,Mail,MapPin,Phone,ShieldCheck} from 'lucide-react';
+import {useLanguage} from '../i18n/LanguageContext';
 
-const Footer = () => {
-  return (
-    <footer className="glass" style={{marginTop: '120px', borderTop: '1px solid var(--border-color)', padding: '60px 0 30px 0'}}>
-      <div className="container">
-        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '40px'}}>
-          <div>
-            <h3 className="logo" style={{marginBottom: '20px', fontFamily: 'var(--font-serif)', letterSpacing: '0.1em'}}>LEXIGAM<span style={{color: "var(--accent-color)"}}>.</span></h3>
-            <p style={{color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.6'}}>L'excellence du laptop reconditionné et neuf. Qualité Premium, Service Pro Max.</p>
-          </div>
-          <div>
-            <h4 style={{marginBottom: '20px', fontFamily: 'var(--font-serif)', fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ffffff'}}>Navigation</h4>
-            <ul style={{listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <li><a href="/" style={{color: 'inherit', textDecoration: 'none', transition: 'color 0.3s'}} onMouseOver={(e)=>e.target.style.color='var(--accent-color)'} onMouseOut={(e)=>e.target.style.color='inherit'}>Accueil</a></li>
-              <li><a href="/shop" style={{color: 'inherit', textDecoration: 'none', transition: 'color 0.3s'}} onMouseOver={(e)=>e.target.style.color='var(--accent-color)'} onMouseOut={(e)=>e.target.style.color='inherit'}>Boutique</a></li>
-              <li><a href="/cart" style={{color: 'inherit', textDecoration: 'none', transition: 'color 0.3s'}} onMouseOver={(e)=>e.target.style.color='var(--accent-color)'} onMouseOut={(e)=>e.target.style.color='inherit'}>Mon Panier</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 style={{marginBottom: '20px', fontFamily: 'var(--font-serif)', fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ffffff'}}>Légal</h4>
-            <ul style={{listStyle: 'none', padding: 0, color: 'var(--text-muted)', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              <li>CGV</li>
-              <li>Politique de retour</li>
-              <li>Mentions légales</li>
-            </ul>
-          </div>
-          <div>
-            <h4 style={{marginBottom: '20px', fontFamily: 'var(--font-serif)', fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ffffff'}}>Newsletter</h4>
-            <p style={{color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '15px'}}>Restez informé de nos arrivages.</p>
-            <div style={{display: 'flex', gap: '10px'}}>
-               <input 
-                    type="email" 
-                    placeholder="Votre email" 
-                    style={{
-                        padding: '10px 14px',
-                        borderRadius: '4px',
-                        background: 'rgba(255,255,255,0.03)',
-                        border: '1px solid var(--border-muted)',
-                        color: 'white',
-                        fontSize: '0.85rem',
-                        flex: 1,
-                        outline: 'none',
-                        transition: 'border-color 0.3s'
-                    }}
-                    onFocus={(e)=>e.target.style.borderColor='var(--accent-color)'}
-                    onBlur={(e)=>e.target.style.borderColor='var(--border-muted)'}
-               />
-               <button className="btn-primary btn-solid" style={{padding: '10px 20px', fontSize: '0.8rem'}}>Ok</button>
-            </div>
-          </div>
-          <div>
-            <h4 style={{marginBottom: '20px', fontFamily: 'var(--font-serif)', fontSize: '1.2rem', letterSpacing: '0.05em', color: '#ffffff'}}>Contact</h4>
-            <p style={{color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '8px'}}>support@lexigam.com</p>
-            <p style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>+212 600 000 000</p>
-          </div>
+export default function Footer(){
+ const {language}=useLanguage();
+ const ar=language==='ar';
+ const backTop=()=>window.scrollTo({top:0,behavior:'smooth'});
+ return <footer className="pb-footer-retail">
+   <section className="mm-service-bottom">
+    <div className="mm-service-grid">
+      <article>
+        <img src="/webpImage/image-10.png" alt="" aria-hidden="true"/>
+        <div>
+          <h3>OPTIONS DE LIVRAISON RAPIDE</h3>
+          <p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p>
         </div>
-        <div style={{textAlign: 'center', borderTop: '1px solid var(--border-muted)', paddingTop: '25px', color: 'rgba(255,255,255,0.2)', fontSize: '0.8rem', letterSpacing: '0.05em'}}>
-          © 2026 Lexigam. Tous droits réservés. L'excellence sans compromis.
+      </article>
+      <article>
+        <span className="mm-footer-shield"><ShieldCheck size={40} strokeWidth={1.4}/></span>
+        <div>
+          <h3>PAIEMENT SÉCURISÉ</h3>
+          <p>Monri propose un système de paiement en ligne rapide et sécurisé. Les transactions et les données sont protégées par les technologies de chiffrement SSL les plus avancées.</p>
         </div>
+      </article>
+    </div>
+   </section>
+   <div className="pb-footer-social">
+    <a href="#" aria-label="Facebook">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+    <a href="#" aria-label="X">X</a>
+    <a href="#" aria-label="Instagram">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+    </a>
+    <a href="#" aria-label="TikTok"><Music2 size={16}/></a>
+   </div>
+
+   <div className="pb-footer-retail-main">
+    <div className="pb-footer-contact">
+      <Link to="/" className="pb-footer-retail-logo">LEXIGAM<sup>®</sup></Link>
+      <p>{ar?'أزياء مستقلة من الدار البيضاء.':'Independent clothing from Casablanca.'}</p>
+      <div className="pb-footer-contact-lines">
+       <span><MapPin size={13}/> CASABLANCA / MOROCCO</span>
+       <a href="tel:+212500000000"><Phone size={13}/> +212 5 00 00 00 00</a>
+       <a href="mailto:support@lexigam.com"><Mail size={13}/> support@lexigam.com</a>
       </div>
-    </footer>
-  );
-};
+    </div>
 
-export default Footer;
+    <nav className="pb-footer-retail-links" aria-label="Footer navigation">
+      <div>
+       <small>{ar?'المتجر':'SHOP'}</small>
+       <Link to="/new-arrivals">{ar?'الجديد':'NEW IN'}</Link>
+       <Link to="/men">{ar?'رجال':'MEN'}</Link>
+       <Link to="/women">{ar?'نساء':'WOMEN'}</Link>
+       <Link to="/shop">{ar?'كل المنتجات':'ALL PRODUCTS'}</Link>
+      </div>
+      <div>
+       <small>{ar?'المعلومات':'INFO'}</small>
+       <Link to="/about">{ar?'عنّا':'ABOUT'}</Link>
+       <Link to="/blog">{ar?'المجلة':'JOURNAL'}</Link>
+       <Link to="/contact">{ar?'تواصل':'CONTACT'}</Link>
+       <Link to="/cart">{ar?'السلة':'BAG'}</Link>
+      </div>
+      <div>
+       <small>{ar?'القانوني':'LEGAL'}</small>
+       <Link to="/privacy">{ar?'الخصوصية':'PRIVACY'}</Link>
+       <Link to="/terms">{ar?'الشروط':'TERMS'}</Link>
+       <Link to="/returns">{ar?'الإرجاع':'RETURNS'}</Link>
+      </div>
+    </nav>
+
+    <div className="pb-footer-payments">
+      <small>{ar?'طرق الدفع':'PAYMENT METHODS'}</small>
+      <div className="pb-payment-images">
+        <img src="/webpImage/image-13.png" alt="pay@web and Monri secure payment" loading="lazy" />
+        <img src="/webpImage/image-10.jpg" alt="Mastercard Maestro Visa and Visa Electron" loading="lazy" />
+      </div>
+      <p>{ar?'الدفع عند الاستلام متاح حالياً.':'Cash on delivery is currently available at checkout.'}</p>
+    </div>
+   </div>
+
+   <div className="pb-footer-bottom-retail">
+     <span>© 2026 LEXIGAM®</span>
+     <span>CASABLANCA / MOROCCO</span>
+     <span>FR / AR</span>
+     <button type="button" className="pb-back-top" onClick={backTop} aria-label="Back to top"><ArrowUp size={14}/></button>
+   </div>
+ </footer>
+}

@@ -11,12 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->statefulApi();
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->alias([
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
-        $middleware->redirectGuestsTo(function () {
-            return null;
-        });
+        $middleware->redirectGuestsTo(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

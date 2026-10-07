@@ -3,178 +3,115 @@
 namespace App\Http\Controllers;
 
 use App\Models\Panier;
-use App\Http\Requests\StorePanierRequest;
-use App\Http\Requests\UpdatePanierRequest;
+use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class PanierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private function own(Panier $panier): void
+    {
+        abort_unless($panier->user_id === auth()->id(), 403);
+    }
+
     public function index()
     {
-        try {
-            $paniers = Panier::with(['user', 'lignePaniers.produit'])->get();
+        $paniers = Panier::with('lignePaniers.produit')
+            ->where('user_id', auth()->id())
+            ->latest('id')
+            ->get();
 
-            return response()->json([
-                'success' => true,
-                'data' => $paniers
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des paniers',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(['success' => true,'data' => $paniers]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePanierRequest $request)
+    public function store(Request $request)
     {
-        try {
-            $panier = Panier::create($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Panier créé avec succès',
-                'data' => $panier
-            ], 201);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la création du panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        try {
-            $panier = Panier::with(['user', 'lignePaniers.produit'])
-                ->findOrFail($id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $panier
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Panier introuvable',
-                'error' => $e->getMessage()
-            ], 404);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePanierRequest $request, string $id)
-    {
-        try {
-            $panier = Panier::findOrFail($id);
-
-            $panier->update($request->validated());
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Panier mis à jour avec succès',
-                'data' => $panier
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la mise à jour du panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-            $panier = Panier::findOrFail($id);
-            $panier->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Panier supprimé avec succès'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression du panier',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Sync local cart to database.
-     */
-    public function sync(Request $request)
-    {
-        $request->validate([
-            'items' => 'present|array',
-            'items.*.produit_id' => 'required|exists:produits,id',
-            'items.*.quantite' => 'required|integer|min:1',
-            'items.*.prix' => 'required|numeric'
+        $data = $request->validate([
+            'statut' => ['sometimes','in:en_cours,valide,annule'],
         ]);
 
-        try {
-            $user = auth()->user();
-            
-            // Trouver ou créer le panier en cours
-            $panier = Panier::firstOrCreate(
-                ['user_id' => $user->id, 'statut' => 'en_cours'],
-                ['prix_total' => 0]
-            );
+        $panier = Panier::firstOrCreate(
+            ['user_id' => auth()->id(), 'statut' => 'en_cours'],
+            ['prix_total' => 0]
+        );
 
-            // Supprimer les anciennes lignes pour re-synchroniser proprement
-            $panier->lignesPaniers()->delete();
+        if (($data['statut'] ?? null) && $data['statut'] !== 'en_cours') {
+            $panier->update(['statut' => $data['statut']]);
+        }
 
-            $total = 0;
-            foreach ($request->items as $item) {
-                $panier->lignesPaniers()->create([
-                    'produit_id' => $item['produit_id'],
-                    'quantite' => $item['quantite'],
-                    'prix' => $item['prix']
-                ]);
-                $total += $item['prix'] * $item['quantite'];
+        return response()->json(['success' => true,'data' => $panier], 201);
+    }
+
+    public function show(string $id)
+    {
+        $panier = Panier::with('lignePaniers.produit')->findOrFail($id);
+        $this->own($panier);
+        return response()->json(['success' => true,'data' => $panier]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $panier = Panier::findOrFail($id);
+        $this->own($panier);
+
+        $data = $request->validate([
+            'statut' => ['sometimes','in:en_cours,valide,annule'],
+        ]);
+        $panier->update($data);
+
+        return response()->json(['success' => true,'data' => $panier->fresh()]);
+    }
+
+    public function destroy(string $id)
+    {
+        $panier = Panier::findOrFail($id);
+        $this->own($panier);
+        $panier->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sync(Request $request)
+    {
+        $items = $request->validate([
+            'items' => ['present','array'],
+            'items.*.produit_id' => ['required','integer','exists:produits,id'],
+            'items.*.quantite' => ['required','integer','min:1','max:20'],
+        ])['items'];
+
+        $panier = Panier::firstOrCreate(
+            ['user_id' => auth()->id(), 'statut' => 'en_cours'],
+            ['prix_total' => 0]
+        );
+
+        $total = 0;
+        $panier->lignesPaniers()->delete();
+
+        foreach ($items as $item) {
+            $produit = Produit::whereKey($item['produit_id'])->where('statut','approved')->first();
+            if (!$produit) {
+                throw ValidationException::withMessages(['items' => ['A selected product is no longer available.']]);
             }
 
-            $panier->update(['prix_total' => $total]);
+            if ($produit->stock < $item['quantite']) {
+                throw ValidationException::withMessages(['items' => ["Insufficient stock for {$produit->nom}."]]);
+            }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Panier synchronisé avec succès',
-                'data' => $panier->load('lignesPaniers.produit')
+            $prix = (float) $produit->prix;
+            $quantity = (int) $item['quantite'];
+            $panier->lignesPaniers()->create([
+                'produit_id' => $produit->id,
+                'quantite' => $quantity,
+                'prix' => $prix,
             ]);
-
-        } catch (\Exception $e) {
-            \Log::error("Sync Panier error: " . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la synchronisation du panier',
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ], 500);
+            $total += $prix * $quantity;
         }
+
+        $panier->update(['prix_total' => $total]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $panier->fresh('lignesPaniers.produit'),
+        ]);
     }
 }

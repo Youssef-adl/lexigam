@@ -2,31 +2,25 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCommandeRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && auth()->user()->role === 'client';
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'montant_total' => 'required|numeric|min:0',
-            'statut' => 'required|string',
-            'date_commande' => 'nullable|date'
+            'items' => ['required','array','min:1'],
+            'items.*.id' => ['required','integer','exists:produits,id'],
+            'items.*.quantite' => ['required','integer','min:1','max:20'],
+            'adresse' => ['required','string','max:500'],
+            'ville' => ['required','string','max:120'],
+            'telephone' => ['required','string','max:30'],
+            'payment_mode' => ['required','in:cash,delivery'],
         ];
     }
 }

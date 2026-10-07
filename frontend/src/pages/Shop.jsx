@@ -1,75 +1,258 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import SEO from '../components/SEO';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import api from '../axios'; // Import de notre axios très simple
+import { SlidersHorizontal, X, ChevronDown, ArrowUpRight } from 'lucide-react';
+import api from '../axios';
 import { addToCart } from '../store/cartSlice';
+import { useLanguage } from '../i18n/LanguageContext';
 
-const Shop = () => {
-  const [produits, setProduits] = useState([]);
-  const [loading, setLoading] = useState(true);
+const demo = [
+  ['ARCHIVE BOMBER', 890, '/webpImage/image-1.jpg'],
+  ['HEAVYWEIGHT HOODIE', 590, '/webpImage/image-7.jpg'],
+  ['WIDE CARGO TROUSER', 640, '/webpImage/image-8.jpg'],
+  ['CORE TEE / 02', 290, '/webpImage/image-11.jpg'],
+  ['DISTRICT OVERSHIRT', 690, '/webpImage/image-6.jpg'],
+  ['RAW DENIM 01', 720, '/webpImage/image-2.jpg'],
+  ['AFTER DARK JACKET', 1190, '/webpImage/image-3.jpg'],
+  ['FIELD TEE / 01', 350, '/webpImage/image-5.jpg'],
+  ['MINIMAL FLEECE', 490, '/webpImage/image-12.jpg'],
+  ['STUDIO SHIRT', 620, '/webpImage/image-14.jpg'],
+  ['UTILITY VEST', 540, '/webpImage/image-15.jpg'],
+  ['CASABLANCA HOODIE', 600, '/webpImage/image-16.jpg'],
+];
+
+const fits = ['ALL', 'STRAIGHT', 'BAGGY', 'RELAXED', 'SLIM', 'WIDE LEG'];
+const colors = ['BLACK', 'WHITE', 'BLUE', 'GREY', 'GREEN'];
+const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+
+const shopImages = [
+  '/shopImage/image-1.jpg',
+  '/shopImage/image-2.jpg',
+  '/shopImage/image-3.jpg',
+  '/shopImage/image-4.jpg',
+  '/shopImage/image-5.jpg',
+  '/shopImage/image-6.png',
+  '/shopImage/image-7.jpg',
+  '/shopImage/image-8.png',
+  '/shopImage/image-9.jpg',
+  '/shopImage/image-10.png',
+  '/shopImage/image-11.jpg',
+  '/shopImage/image-12.jpg',
+];
+
+export default function Shop({ category = 'All Products' }) {
+  const { t, language } = useLanguage();
+  const [d, setD] = useState([]);
+  const [apiError, setApiError] = useState(false);
+  const [load, setLoad] = useState(true);
+  const [drawer, setDrawer] = useState(false);
+  const [fit, setFit] = useState('ALL');
+  const [color, setColor] = useState('ALL');
+  const [size, setSize] = useState('ALL');
+  const [sort, setSort] = useState('NEW');
+  const [validShopImages, setValidShopImages] = useState(shopImages);
+
+  const loc = useLocation();
   const dispatch = useDispatch();
-
-  // Code simple de Axios pour bien comprendre
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const nomQuery = searchParams.get('nom');
+  const q = new URLSearchParams(loc.search).get('nom');
 
   useEffect(() => {
-    setLoading(true);
-    const url = nomQuery ? `/produits?nom=${nomQuery}` : '/produits';
-    api.get(url)
-      .then(response => {
-        setProduits(response.data.data || response.data); 
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des produits:", error);
-        setLoading(false);
-      });
-  }, [nomQuery]);
+    api
+      .get(q ? '/produits?nom=' + encodeURIComponent(q) : '/produits')
+      .then((x) => { setD(x.data?.data || x.data || []); setApiError(false); })
+      .catch(() => { setD([]); setApiError(true); })
+      .finally(() => setLoad(false));
+  }, [q]);
 
-  const user = useSelector((state) => state.auth.user);
-  
-  if (loading) return <div className="container text-center mt-4"><h3>Chargement des laptops...</h3></div>;
+  const data = useMemo(() => {
+    if (apiError && !import.meta.env.DEV) return [];
+    let arr = d.length
+      ? d
+      : demo.map((x, i) => ({
+          id: 'demo' + i,
+          nom: x[0],
+          prix: x[1],
+          description: 'Premium everyday garment.',
+          image: x[2],
+          taille: 'M',
+        }));
 
-  const canAddToCart = !user || user.role === 'client';
+    if (q) arr = arr.filter((p) => (p.nom || '').toLowerCase().includes(q.toLowerCase()));
+    if (fit !== 'ALL')
+      arr = arr.filter((p) =>
+        (p.description || p.nom || p.fit || '').toLowerCase().includes(fit.toLowerCase())
+      );
+    if (color !== 'ALL')
+      arr = arr.filter((p) =>
+        (p.color || p.couleur || p.description || p.nom || '')
+          .toLowerCase()
+          .includes(color.toLowerCase())
+      );
+    if (size !== 'ALL')
+      arr = arr.filter(
+        (p) =>
+          !p.taille ||
+          (Array.isArray(p.taille)
+            ? p.taille.includes(size)
+            : String(p.taille).toUpperCase().includes(size))
+      );
+    if (sort === 'PRICE_LOW') arr = [...arr].sort((a, b) => Number(a.prix) - Number(b.prix));
+    if (sort === 'PRICE_HIGH') arr = [...arr].sort((a, b) => Number(b.prix) - Number(a.prix));
 
-  return (
-    <div className="container mt-4">
-      <h1 className="cart-header text-center" style={{marginBottom: '2rem'}}>Nos Laptops Premium</h1>
-      
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-        {produits.map(produit => (
-          <div key={produit.id} className="glass br-12" style={{ padding: '20px', transition: 'all 0.3s ease' }}>
-            <Link to={`/product/${produit.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
-              {produit.image && (
-                <img 
-                  src={produit.image.startsWith('http') ? produit.image : `http://localhost:8000${produit.image}`} 
-                  alt={produit.nom} 
-                  style={{width: '100%', height: '220px', borderRadius: '8px', objectFit: 'cover', marginBottom: '10px'}} 
-                />
-              )}
-              <h3 style={{marginTop: '5px'}}>{produit.nom}</h3>
-            </Link>
-            <p style={{color: '#94a3b8', fontSize: '0.9rem', marginBottom: '15px'}}>{produit.description}</p>
-            <div className="flex-between">
-              <span style={{fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-color)'}}>
-                {produit.prix} DH
-              </span>
-              {canAddToCart && (
-                <button 
-                  className="btn-primary"
-                  onClick={() => dispatch(addToCart(produit))} // Redux: Action très simple
-                >
-                  Ajouter
-                </button>
-              )}
+    return arr;
+  }, [d, q, fit, color, size, sort, apiError]);
+
+  const title =
+    category === 'Men'
+      ? t.men
+      : category === 'Women'
+      ? t.women
+      : category === 'New Arrivals'
+      ? t.new
+      : t.allProducts;
+
+  return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
+    <div className="pb-shop">
+      <div className="pb-shop-bar">
+        <div>
+          <small>
+            LEXIGAM / {language === 'ar' ? 'المتجر' : 'STORE'}
+          </small>
+          <h1>{title}</h1>
+          <p>
+            {validShopImages.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
+          </p>
+        </div>
+        <div className="pb-shop-controls">
+          <button className="pb-filter-toggle" onClick={() => setDrawer(true)}>
+            <SlidersHorizontal size={15} />{' '}
+            {language === 'ar' ? 'تصفية وترتيب' : 'FILTERS & SORT'}
+          </button>
+          <div className="pb-sort-select">
+            <select value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="NEW">{language === 'ar' ? 'الأحدث' : 'NEWEST'}</option>
+              <option value="PRICE_LOW">
+                {language === 'ar' ? 'السعر: من الأقل للأعلى' : 'PRICE: LOW TO HIGH'}
+              </option>
+              <option value="PRICE_HIGH">
+                {language === 'ar' ? 'السعر: من الأعلى للأقل' : 'PRICE: HIGH TO LOW'}
+              </option>
+            </select>
+            <ChevronDown size={14} />
+          </div>
+        </div>
+      </div>
+
+      <div className="pb-active-filters">
+        <div className="pb-pill-group">
+          {fits.map((f) => (
+            <button
+              key={f}
+              className={fit === f ? 'active' : ''}
+              onClick={() => setFit(f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {drawer && (
+        <aside className="pb-drawer-backdrop" onClick={() => setDrawer(false)}>
+          <div className="pb-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="pb-drawer-head">
+              <h3>{language === 'ar' ? 'التصفية' : 'FILTERS'}</h3>
+              <button onClick={() => setDrawer(false)}>
+                <X size={18} />
+              </button>
+            </div>
+            <div className="pb-drawer-body">
+              <label>FIT</label>
+              <div className="pb-drawer-chips">
+                {fits.map((f) => (
+                  <button
+                    key={f}
+                    className={fit === f ? 'active' : ''}
+                    onClick={() => setFit(f)}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+
+              <label>COLOR</label>
+              <div className="pb-drawer-chips">
+                {colors.map((c) => (
+                  <button
+                    key={c}
+                    className={color === c ? 'active' : ''}
+                    onClick={() => setColor(c)}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+
+              <label>SIZE</label>
+              <div className="pb-drawer-chips">
+                {sizes.map((s) => (
+                  <button
+                    key={s}
+                    className={size === s ? 'active' : ''}
+                    onClick={() => setSize(s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="pb-drawer-foot">
+              <button
+                className="pb-btn dark"
+                onClick={() => {
+                  setFit('ALL');
+                  setColor('ALL');
+                  setSize('ALL');
+                }}
+              >
+                RESET
+              </button>
+              <button className="pb-btn" onClick={() => setDrawer(false)}>
+                APPLY
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+        </aside>
+      )}
 
-export default Shop;
+      {load ? (
+        <div className="pb-loading-screen"><span>LOADING ARCHIVE</span></div>
+      ) : apiError && !import.meta.env.DEV ? (
+        <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
+      ) : validShopImages.length ? (
+        <div className="pb-shop-grid">
+          {validShopImages.map((src, i) => {
+            const product = data[i];
+            const label = product?.nom || `LEXIGAM piece ${i + 1}`;
+            const href = product?.id ? '/product/' + product.id : '/shop';
+            return (
+              <article className="pb-product-card pb-product-card-image-only" key={src}>
+                <Link to={href} aria-label={label} className="pb-product-img">
+                  <img
+                    src={src}
+                    alt={label}
+                    loading="lazy"
+                    decoding="async"
+                    onError={() => setValidShopImages((current) => current.filter((image) => image !== src))}
+                  />
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
+      )}
+    </div></>);
+}

@@ -1,243 +1,84 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React,{useEffect,useState} from 'react';
+import {Link} from 'react-router-dom';
+import {ArrowUpRight,ChevronLeft,ChevronRight,ShieldCheck} from 'lucide-react';
+import SEO from '../components/SEO';
+import {useLanguage} from '../i18n/LanguageContext';
+import useEditorialMotion from '../hooks/useEditorialMotion';
+import './molimao-home.css';
 
-const Home = () => {
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      {/* SECTION 1: HERO POSTER */}
-      <section className="container" style={{ 
-        paddingTop: '60px', 
-        paddingBottom: '60px',
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        maxWidth: '850px'
-      }}>
-        {/* Massive overlapping vintage headers */}
-        <div style={{ marginBottom: '20px', position: 'relative' }}>
-          <span style={{ 
-            fontFamily: 'var(--font-serif)', 
-            fontSize: '4.5rem', 
-            fontWeight: '300', 
-            letterSpacing: '0.2em', 
-            textTransform: 'uppercase',
-            color: 'rgba(255, 255, 255, 0.95)',
-            display: 'block',
-            lineHeight: '1'
-          }}>
-            Lexigam
-          </span>
-          <span style={{ 
-            fontFamily: 'var(--font-serif)', 
-            fontSize: '9rem', 
-            fontWeight: '400', 
-            letterSpacing: '0.05em', 
-            textTransform: 'uppercase',
-            color: '#ffffff',
-            display: 'block',
-            lineHeight: '0.8',
-            marginTop: '-10px'
-          }}>
-            PRO MAX
-          </span>
-        </div>
+const heroSlides=['/webpImage/image-20.jpg','/webpImage/image-22.jpg','/webpImage/image-21.jpg'];
 
-        {/* Elegant divider */}
-        <div style={{ 
-          width: '100%', 
-          height: '1px', 
-          backgroundColor: 'rgba(255,255,255,0.25)', 
-          margin: '25px 0' 
-        }} />
+const featured = [
+  {name:'Ljubav, t-shirt femme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L'],image:'/webpImage/image-14.jpg'},
+  {name:'Šibica, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-1.jpg'},
+  {name:'Molimao « FRAME » portefeuille',price:'120.00 KM',sizes:[],image:'/webpImage/image-11 copy.jpg'},
+  {name:'Icon, casquette',price:'60.00 KM',sizes:[],image:'/webpImage/image-17.jpg'},
+  {name:'TAG, tote bag',price:'40.00 KM',sizes:[],image:'/webpImage/image-1 copy.jpg'},
+  {name:'Krom, t-shirt oversize homme manches courtes',price:'60.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-4.jpg'},
+  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-7.jpg'},
+  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
+];
 
-        {/* Detailed justified description block */}
-        <p style={{ 
-          fontFamily: 'var(--font-serif)', 
-          fontSize: '1.25rem', 
-          lineHeight: '1.7', 
-          color: '#e2efe9', 
-          textAlign: 'justify', 
-          textJustify: 'inter-word',
-          textTransform: 'none',
-          maxWidth: '700px',
-          marginBottom: '40px',
-          fontWeight: '300'
-        }}>
-          Le Lexigam Pro Max a été conçu comme la quintessence absolue de l'ingénierie moderne et du raffinement technologique, créé en réponse aux besoins les plus extrêmes des professionnels et des gamers d'élite. Il intègre des innovations de rupture : processeurs de dernière génération, architecture graphique surpuissante et un système thermique perfectionné sous châssis d'aluminium mat. Aujourd'hui, le Pro Max est considéré comme le dernier Laptop d'exception, façonné pour durer, sans aucun compromis.
-        </p>
+const newProducts = [
+  {name:'Grow, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-12.jpg'},
+  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
+  {name:'Cupid, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-9.jpg'},
+  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-28.jpg'},
+];
 
-        {/* Action Button */}
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-          <Link to="/shop">
-            <button className="btn-primary btn-solid" style={{ padding: '14px 40px' }}>
-              Découvrir la Boutique
-            </button>
-          </Link>
-        </div>
-      </section>
+const artPrints = [
+  '/webpImage/image-14 copy.jpg',
+  '/webpImage/image-26.jpg',
+  '/webpImage/image-21 copy.jpg',
+  '/webpImage/image-2 copy.jpg',
+  '/webpImage/image-11.jpg',
+  '/webpImage/image-8.jpg',
+];
 
-      {/* SECTION 2: THE PRODUCT PORTRAIT (FRAMED IMAGE) */}
-      <section className="container" style={{ 
-        width: '100%', 
-        display: 'flex', 
-        justifyContent: 'center', 
-        marginBottom: '80px',
-        padding: '0 20px'
-      }}>
-        <div style={{
-          border: '1px solid var(--border-color)',
-          padding: '15px',
-          background: 'rgba(2, 15, 10, 0.4)',
-          borderRadius: '4px',
-          maxWidth: '900px',
-          width: '100%',
-          boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
-          position: 'relative'
-        }}>
-          {/* Decorative vintage corners */}
-          <div style={{ position: 'absolute', top: '5px', left: '5px', width: '10px', height: '10px', borderTop: '1px solid var(--accent-color)', borderLeft: '1px solid var(--accent-color)' }} />
-          <div style={{ position: 'absolute', top: '5px', right: '5px', width: '10px', height: '10px', borderTop: '1px solid var(--accent-color)', borderRight: '1px solid var(--accent-color)' }} />
-          <div style={{ position: 'absolute', bottom: '5px', left: '5px', width: '10px', height: '10px', borderBottom: '1px solid var(--accent-color)', borderLeft: '1px solid var(--accent-color)' }} />
-          <div style={{ position: 'absolute', bottom: '5px', right: '5px', width: '10px', height: '10px', borderBottom: '1px solid var(--accent-color)', borderRight: '1px solid var(--accent-color)' }} />
-          
-          <img 
-            src="/laptop_hero.png" 
-            alt="Lexigam Laptop Elite" 
-            style={{ 
-              width: '100%', 
-              height: 'auto', 
-              maxHeight: '500px', 
-              objectFit: 'cover', 
-              borderRadius: '2px',
-              display: 'block'
-            }} 
-          />
-        </div>
-      </section>
+function ProductCard({product}){
+  return <article className="mm-product-card">
+    <Link to="/shop" className="mm-product-image">
+      <img src={product.image} alt={product.name} loading="lazy"/>
+    </Link>
+    {product.sizes.length>0 && <div className="mm-sizes">{product.sizes.map(s=><span key={s}>{s}</span>)}</div>}
+    <div className="mm-product-name">{product.name}</div>
+    <div className="mm-product-price">{product.price}</div>
+  </article>;
+}
 
-      {/* SECTION 3: ENGINEERING DETAILS GRID */}
-      <section className="container" style={{ width: '100%', marginBottom: '100px' }}>
-        <h2 style={{ 
-          fontFamily: 'var(--font-serif)', 
-          fontSize: '2.5rem', 
-          fontWeight: '300', 
-          textAlign: 'center', 
-          marginBottom: '60px',
-          letterSpacing: '0.05em'
-        }}>
-          L'INGÉNIERIE SANS COMPROMIS
-        </h2>
+export default function Home(){
+  const {language,setLanguage,t}=useLanguage();
+  useEditorialMotion();
+  useEffect(()=>{if(language!=='fr')setLanguage('fr')},[language,setLanguage]);
+  const [hero,setHero]=useState(0);
+  const [artSlide,setArtSlide]=useState(0);
+  const products=newProducts;
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
-          gap: '30px' 
-        }}>
-          {/* Spec 1 */}
-          <div style={{ 
-            borderLeft: '1px solid var(--accent-color)', 
-            paddingLeft: '20px', 
-            paddingTop: '10px',
-            paddingBottom: '10px' 
-          }}>
-            <span style={{ 
-              fontFamily: 'var(--font-serif)', 
-              fontSize: '2.2rem', 
-              color: 'var(--accent-color)', 
-              display: 'block',
-              lineHeight: '1',
-              marginBottom: '15px'
-            }}>
-              01
-            </span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Architecture Graphique
-            </h3>
-            <p style={{ color: '#a9cbb7', fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Processeur graphique NVIDIA GeForce RTX pour un rendu photoréaliste et une latence ultra-faible.
-            </p>
-          </div>
+  const visibleArt=[0,1,2,3].map(offset=>artPrints[(artSlide+offset)%artPrints.length]);
+    useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
 
-          {/* Spec 2 */}
-          <div style={{ 
-            borderLeft: '1px solid var(--accent-color)', 
-            paddingLeft: '20px', 
-            paddingTop: '10px',
-            paddingBottom: '10px' 
-          }}>
-            <span style={{ 
-              fontFamily: 'var(--font-serif)', 
-              fontSize: '2.2rem', 
-              color: 'var(--accent-color)', 
-              display: 'block',
-              lineHeight: '1',
-              marginBottom: '15px'
-            }}>
-              02
-            </span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Processeurs d'Élite
-            </h3>
-            <p style={{ color: '#a9cbb7', fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Puces Intel Core i9 et AMD Ryzen 9 de dernière génération pour piloter vos tâches de compilation et de gaming.
-            </p>
-          </div>
+  return <><SEO title="LEXIGAM — Vêtements indépendants" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className="mm-home">
+    <section className="pb-hero pb-hero-editorial">
+      <div className="pb-hero-image"><img src={heroSlides[hero]} alt="LEXIGAM campaign"/><div/></div>
+      <div className="pb-hero-copy">
+        <small>{t.heroEyebrow}</small>
+        <h1>{t.heroTitle.split(' / ')[0]}<br/><i>/</i> {t.heroTitle.split(' / ')[1]}</h1>
+        <p>{t.heroText}</p>
+        <Link to="/shop" className="pb-btn">{t.shopCollection} <ArrowUpRight size={16}/></Link>
+      </div>
+      <div className="pb-hero-count">
+        <span>{String(hero+1).padStart(2,'0')} / 03</span>
+        <div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div>
+      </div>
+    </section>
+    <section className="mm-products-section"><header className="mm-section-heading centered"><div className="mm-eyebrow">NOUVEAUTÉS</div></header><div className="mm-new-grid">{products.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
 
-          {/* Spec 3 */}
-          <div style={{ 
-            borderLeft: '1px solid var(--accent-color)', 
-            paddingLeft: '20px', 
-            paddingTop: '10px',
-            paddingBottom: '10px' 
-          }}>
-            <span style={{ 
-              fontFamily: 'var(--font-serif)', 
-              fontSize: '2.2rem', 
-              color: 'var(--accent-color)', 
-              display: 'block',
-              lineHeight: '1',
-              marginBottom: '15px'
-            }}>
-              03
-            </span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Thermique Avancée
-            </h3>
-            <p style={{ color: '#a9cbb7', fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Chambre à vapeur en cuivre et double ventilateur à pales optimisées pour dissiper la chaleur en silence absolu.
-            </p>
-          </div>
+    <section className="mm-story"><div className="mm-story-image"><img src="/webpImage/image-20.jpg" alt="Summer collection 26 Urbex"/></div><div className="mm-story-copy"><div className="mm-eyebrow">PHOTOBOOK</div><h2>COLLECTION ÉTÉ 26 — URBEX</h2><p>Urbex vient de l'expression Urban Exploration : l'exploration de lieux urbains abandonnés et oubliés. Cette série photo capture notre collection dans les espaces de notre nouveau studio.</p><Link to="/blog" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div></section>
 
-          {/* Spec 4 */}
-          <div style={{ 
-            borderLeft: '1px solid var(--accent-color)', 
-            paddingLeft: '20px', 
-            paddingTop: '10px',
-            paddingBottom: '10px' 
-          }}>
-            <span style={{ 
-              fontFamily: 'var(--font-serif)', 
-              fontSize: '2.2rem', 
-              color: 'var(--accent-color)', 
-              display: 'block',
-              lineHeight: '1',
-              marginBottom: '15px'
-            }}>
-              04
-            </span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Écran de Référence
-            </h3>
-            <p style={{ color: '#a9cbb7', fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Dalle Liquid Retina HDR 120Hz calibrée individuellement en usine pour des couleurs d'une fidélité inégalée.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
+    <section className="mm-products-section mm-featured"><header className="mm-section-heading"><div className="mm-eyebrow">SÉLECTION</div></header><div className="mm-featured-grid">{featured.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
 
-export default Home;
+    <section className="mm-flagship"><div className="mm-flagship-copy"><div className="mm-eyebrow">LEXIGAM FLAGSHIP STORE</div><h2>LEXIGAM FLAGSHIP STORE</h2><p>Depuis août 2021, notre univers peut être découvert à Sarajevo, dans un lieu emblématique de la ville.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div><div className="mm-flagship-image"><img src="/webpImage/image-3.jpg" alt="Flagship store Sarajevo"/></div></section>
+
+    <section className="mm-art"><div className="mm-art-stage"><button type="button" aria-label="Previous art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={18}/></button><div className="mm-art-track">{visibleArt.map((src,i)=><div className="mm-art-frame" key={src+i}><img src={src} alt="Art print" loading="lazy"/></div>)}</div><button type="button" aria-label="Next art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={18}/></button></div><div className="mm-art-dots">{artPrints.slice(0,4).map((_,i)=><button key={i} className={i===artSlide%4?'active':''} onClick={()=>setArtSlide(i)} aria-label={'Art print '+(i+1)}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">ÉDITIONS ART</Link></div></section>
+  </main></>;
+}

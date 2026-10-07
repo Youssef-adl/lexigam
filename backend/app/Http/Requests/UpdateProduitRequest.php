@@ -2,33 +2,24 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProduitRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return true;
+        return auth()->check() && in_array(auth()->user()->role, ['admin','vendeur'], true);
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'nom' => 'sometimes|string|max:255',
-            'description' => 'nullable|string',
-            'prix' => 'sometimes|numeric|min:0',
-            'stock' => 'sometimes|integer|min:0',
-            'image' => 'nullable|string',
-            'categorie_id' => 'sometimes|exists:categories,id'
+            'nom' => ['sometimes','string','max:255'],
+            'description' => ['sometimes','nullable','string','max:10000'],
+            'prix' => ['sometimes','numeric','min:0'],
+            'stock' => ['sometimes','integer','min:0'],
+            'image' => ['sometimes','nullable','file','mimes:jpeg,png,jpg,webp','max:5120'],
+            'categorie_id' => ['sometimes','integer','exists:categories,id'],
         ];
     }
 }

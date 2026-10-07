@@ -1,53 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React,{useEffect}from'react';import{BrowserRouter as Router,Routes,Route}from'react-router-dom';import{useDispatch}from'react-redux';import Navbar from'./components/Navbar';import Footer from'./components/Footer';import{LanguageProvider}from'./i18n/LanguageContext';import api from'./axios';import{setUser}from'./store/authSlice';import Home from'./pages/Home';import Shop from'./pages/Shop';import Cart from'./pages/Cart';import Login from'./pages/Login';import Register from'./pages/Register';import Checkout from'./pages/Checkout';import ClientDashboard from'./pages/dashboards/ClientDashboard';import VendorDashboard from'./pages/dashboards/VendorDashboard';import AdminDashboard from'./pages/dashboards/AdminDashboard';import OrderSuccess from'./pages/OrderSuccess';import ProductDetail from'./pages/ProductDetail';import AddProduct from'./pages/AddProduct';import AddCategory from'./pages/AddCategory';import EditProduct from'./pages/EditProduct';import Blog from'./pages/Blog';import About from'./pages/About';import Contact from'./pages/Contact';import LegalPage from'./pages/LegalPage';
 
-// Composants
-import Navbar from './components/Navbar';
+function SessionBootstrap(){const dispatch=useDispatch();useEffect(()=>{api.get('/me').then(r=>dispatch(setUser(r.data.user))).catch(()=>{if(!localStorage.getItem('user'))dispatch(setUser(null));});},[dispatch]);return null;}
 
-// Pages
-import Home from './pages/Home';
-import Shop from './pages/Shop';
-import Cart from './pages/Cart';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import AddProduct from './pages/AddProduct';
-import AddCategory from './pages/AddCategory';
-import Checkout from './pages/Checkout';
-import ClientDashboard from './pages/dashboards/ClientDashboard';
-import VendorDashboard from './pages/dashboards/VendorDashboard';
-import AdminDashboard from './pages/dashboards/AdminDashboard';
-import OrderSuccess from './pages/OrderSuccess';
-import ProductDetail from './pages/ProductDetail';
-import EditProduct from './pages/EditProduct';
-import Footer from './components/Footer';
-
-function App() {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-success/:id" element={<OrderSuccess />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        
-        {/* Dashboards */}
-        <Route path="/dashboard" element={<ClientDashboard />} />
-        <Route path="/vendor/dashboard" element={<VendorDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-
-        {/* Administration */}
-        <Route path="/admin/add-product" element={<AddProduct />} />
-        <Route path="/admin/add-category" element={<AddCategory />} />
-        <Route path="/vendor/edit-product/:id" element={<EditProduct />} />
-      </Routes>
-      <Footer />
-    </Router>
-  );
-}
-
-export default App;
+export default function App(){return <LanguageProvider><Router><SessionBootstrap/><div className="site-shell"><Navbar/><div className="site-main"><Routes><Route path="/" element={<Home/>}/><Route path="/shop" element={<Shop/>}/><Route path="/men" element={<Shop category="Men"/>}/><Route path="/women" element={<Shop category="Women"/>}/><Route path="/new-arrivals" element={<Shop category="New Arrivals"/>}/><Route path="/product/:id" element={<ProductDetail/>}/><Route path="/blog" element={<Blog/>}/><Route path="/about" element={<About/>}/><Route path="/contact" element={<Contact/>}/><Route path="/privacy" element={<LegalPage type="privacy"/>}/><Route path="/terms" element={<LegalPage type="terms"/>}/><Route path="/returns" element={<LegalPage type="returns"/>}/><Route path="/cart" element={<Cart/>}/><Route path="/checkout" element={<Checkout/>}/><Route path="/order-success/:id" element={<OrderSuccess/>}/><Route path="/login" element={<Login/>}/><Route path="/register" element={<Register/>}/><Route path="/dashboard" element={<ClientDashboard/>}/><Route path="/vendor/dashboard" element={<VendorDashboard/>}/><Route path="/admin/dashboard" element={<AdminDashboard/>}/><Route path="/admin/add-product" element={<AddProduct/>}/><Route path="/admin/add-category" element={<AddCategory/>}/><Route path="/vendor/edit-product/:id" element={<EditProduct/>}/></Routes></div><Footer/></div></Router></LanguageProvider>}
