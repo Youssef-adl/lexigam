@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react';
+import React,{useState} from 'react';
 import {Link} from 'react-router-dom';
 import {ChevronLeft,ChevronRight,ShieldCheck} from 'lucide-react';
 import SEO from '../components/SEO';
@@ -44,21 +44,7 @@ function ProductCard({product}){
 
 export default function Home(){
   const [artSlide,setArtSlide]=useState(0);
-  const [products,setProducts]=useState(newProducts);
-
-  useEffect(()=>{
-    fetch('/api/produits').then(r=>r.ok?r.json():Promise.reject()).then(data=>{
-      const items=data?.data||data;
-      if(Array.isArray(items)&&items.length){
-        setProducts(items.slice(0,4).map((p,i)=>({
-          name:p.nom||newProducts[i].name,
-          price:p.prix?Number(p.prix).toFixed(2)+' KM':newProducts[i].price,
-          sizes:newProducts[i].sizes,
-          image:p.image||newProducts[i].image
-        })));
-      }
-    }).catch(()=>{});
-  },[]);
+  const products=newProducts;
 
   const visibleArt=[0,1,2,3].map(offset=>artPrints[(artSlide+offset)%artPrints.length]);
 
