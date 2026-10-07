@@ -119,10 +119,7 @@ export default function Shop({ category = 'All Products' }) {
       ? t.new
       : t.allProducts;
 
-  const gallery = shopImages.map((image, index) => ({
-    image,
-    product: data[index] || null,
-  }));
+  const img = (_product, index) => shopImages[index % shopImages.length];
 
   return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
     <div className="pb-shop">
@@ -133,7 +130,7 @@ export default function Shop({ category = 'All Products' }) {
           </small>
           <h1>{title}</h1>
           <p>
-            {gallery.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
+            {data.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
           </p>
         </div>
         <div className="pb-shop-controls">
