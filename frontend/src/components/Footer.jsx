@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ArrowUp,ArrowUpRight,Music2,Mail,MapPin,Phone} from 'lucide-react';
+import {ArrowUp,ArrowUpRight,Music2,Mail,MapPin,Phone,ShieldCheck} from 'lucide-react';
 import {useLanguage} from '../i18n/LanguageContext';
 
 export default function Footer(){
@@ -8,6 +8,24 @@ export default function Footer(){
  const ar=language==='ar';
  const backTop=()=>window.scrollTo({top:0,behavior:'smooth'});
  return <footer className="pb-footer-retail">
+   <section className="mm-service-bottom">
+    <div className="mm-service-grid">
+      <article>
+        <img src="/webpImage/image-10.png" alt="" aria-hidden="true"/>
+        <div>
+          <h3>OPTIONS DE LIVRAISON RAPIDE</h3>
+          <p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p>
+        </div>
+      </article>
+      <article>
+        <span className="mm-footer-shield"><ShieldCheck size={40} strokeWidth={1.4}/></span>
+        <div>
+          <h3>PAIEMENT SÉCURISÉ</h3>
+          <p>Monri propose un système de paiement en ligne rapide et sécurisé. Les transactions et les données sont protégées par les technologies de chiffrement SSL les plus avancées.</p>
+        </div>
+      </article>
+    </div>
+   </section>
    <div className="pb-footer-social">
     <a href="#" aria-label="Facebook">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
