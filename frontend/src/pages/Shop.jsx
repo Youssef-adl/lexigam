@@ -27,26 +27,18 @@ const colors = ['BLACK', 'WHITE', 'BLUE', 'GREY', 'GREEN'];
 const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 const shopImages = [
-  '/webpImage/image-12.jpg',
-  '/webpImage/image-15.jpg',
-  '/webpImage/image-9.jpg',
-  '/webpImage/image-28.jpg',
-  '/webpImage/image-14.jpg',
-  '/webpImage/image-1.jpg',
-  '/webpImage/image-11 copy.jpg',
-  '/webpImage/image-17.jpg',
-  '/webpImage/image-1 copy.jpg',
-  '/webpImage/image-4.jpg',
-  '/webpImage/image-7.jpg',
-  '/webpImage/image-3.jpg',
-  '/webpImage/image-5.jpg',
-  '/webpImage/image-6.jpg',
-  '/webpImage/image-8.jpg',
-  '/webpImage/image-11.jpg',
-  '/webpImage/image-16.jpg',
-  '/webpImage/image-20.jpg',
-  '/webpImage/image-21.jpg',
-  '/webpImage/image-22.jpg',
+  '/shopImage/image-1.jpg',
+  '/shopImage/image-2.jpg',
+  '/shopImage/image-3.jpg',
+  '/shopImage/image-4.jpg',
+  '/shopImage/image-5.jpg',
+  '/shopImage/image-6.png',
+  '/shopImage/image-7.jpg',
+  '/shopImage/image-8.png',
+  '/shopImage/image-9.jpg',
+  '/shopImage/image-10.png',
+  '/shopImage/image-11.jpg',
+  '/shopImage/image-12.jpg',
 ];
 
 export default function Shop({ category = 'All Products' }) {
@@ -128,7 +120,7 @@ export default function Shop({ category = 'All Products' }) {
           </small>
           <h1>{title}</h1>
           <p>
-            {data.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
+            {shopImages.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
           </p>
         </div>
         <div className="pb-shop-controls">
