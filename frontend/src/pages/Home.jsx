@@ -1,5 +1,6 @@
-import SEO from 'react';
-import React,{useEffect,useState}from'react';
+import React from 'react';
+import SEO from '../components/SEO';
+import {useEffect,useState}from'react';
 import {Link}from'react-router-dom';
 import {ArrowUpRight,ChevronRight,ChevronLeft}from'lucide-react';
 import api from'../axios';
