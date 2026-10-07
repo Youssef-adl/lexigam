@@ -51,6 +51,7 @@ export default function Shop({ category = 'All Products' }) {
   const [color, setColor] = useState('ALL');
   const [size, setSize] = useState('ALL');
   const [sort, setSort] = useState('NEW');
+  const [validShopImages, setValidShopImages] = useState(shopImages);
 
   const loc = useLocation();
   const dispatch = useDispatch();
@@ -120,7 +121,7 @@ export default function Shop({ category = 'All Products' }) {
           </small>
           <h1>{title}</h1>
           <p>
-            {shopImages.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
+            {validShopImages.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
           </p>
         </div>
         <div className="pb-shop-controls">
@@ -229,16 +230,22 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-loading-screen"><span>LOADING ARCHIVE</span></div>
       ) : apiError && !import.meta.env.DEV ? (
         <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
-      ) : shopImages.length ? (
+      ) : validShopImages.length ? (
         <div className="pb-shop-grid">
-          {shopImages.map((src, i) => {
+          {validShopImages.map((src, i) => {
             const product = data[i];
             const label = product?.nom || `LEXIGAM piece ${i + 1}`;
             const href = product?.id ? '/product/' + product.id : '/shop';
             return (
               <article className="pb-product-card pb-product-card-image-only" key={src}>
                 <Link to={href} aria-label={label} className="pb-product-img">
-                  <img src={src} alt={label} loading="lazy" decoding="async" />
+                  <img
+                    src={src}
+                    alt={label}
+                    loading="lazy"
+                    decoding="async"
+                    onError={() => setValidShopImages((current) => current.filter((image) => image !== src))}
+                  />
                 </Link>
               </article>
             );
