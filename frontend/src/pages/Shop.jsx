@@ -229,15 +229,20 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-loading-screen"><span>LOADING ARCHIVE</span></div>
       ) : apiError && !import.meta.env.DEV ? (
         <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
-      ) : data.length ? (
+      ) : shopImages.length ? (
         <div className="pb-shop-grid">
-          {data.map((p, i) => (
-            <article className="pb-product-card pb-product-card-image-only" key={p.id}>
-              <Link to={'/product/' + p.id} aria-label={p.nom} className="pb-product-img">
-                <img src={shopImages[i % shopImages.length]} alt={p.nom} loading="lazy" decoding="async" />
-              </Link>
-            </article>
-          ))}
+          {shopImages.map((src, i) => {
+            const product = data[i];
+            const label = product?.nom || `LEXIGAM piece ${i + 1}`;
+            const href = product?.id ? '/product/' + product.id : '/shop';
+            return (
+              <article className="pb-product-card pb-product-card-image-only" key={src}>
+                <Link to={href} aria-label={label} className="pb-product-img">
+                  <img src={src} alt={label} loading="lazy" decoding="async" />
+                </Link>
+              </article>
+            );
+          })}
         </div>
       ) : (
         <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
