@@ -6,6 +6,8 @@ import {useLanguage} from '../i18n/LanguageContext';
 import useEditorialMotion from '../hooks/useEditorialMotion';
 import './molimao-home.css';
 
+const heroSlides=['/webpImage/image-20.jpg','/webpImage/image-22.jpg','/webpImage/image-21.jpg'];
+
 const featured = [
   {name:'Ljubav, t-shirt femme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L'],image:'/webpImage/image-14.jpg'},
   {name:'Šibica, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-1.jpg'},
