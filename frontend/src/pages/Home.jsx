@@ -71,12 +71,6 @@ export default function Home(){
         <div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div>
       </div>
     </section>
-
-    <section className="mm-service-top"><div className="mm-service-grid">
-      <article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPTIONS DE LIVRAISON RAPIDE</h3><p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p></div></article>
-      <article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>PAIEMENT SÉCURISÉ</h3><p>Monri propose un système de paiement en ligne rapide et sécurisé. Les transactions et les données sont protégées par les technologies de chiffrement SSL les plus avancées.</p></div></article>
-    </div></section>
-
     <section className="mm-products-section"><header className="mm-section-heading centered"><div className="mm-eyebrow">NOUVEAUTÉS</div></header><div className="mm-new-grid">{products.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
 
     <section className="mm-story"><div className="mm-story-image"><img src="/webpImage/image-20.jpg" alt="Summer collection 26 Urbex"/></div><div className="mm-story-copy"><div className="mm-eyebrow">PHOTOBOOK</div><h2>COLLECTION ÉTÉ 26 — URBEX</h2><p>Urbex vient de l'expression Urban Exploration : l'exploration de lieux urbains abandonnés et oubliés. Cette série photo capture notre collection dans les espaces de notre nouveau studio.</p><Link to="/blog" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div></section>
@@ -86,7 +80,5 @@ export default function Home(){
     <section className="mm-flagship"><div className="mm-flagship-copy"><div className="mm-eyebrow">LEXIGAM FLAGSHIP STORE</div><h2>LEXIGAM FLAGSHIP STORE</h2><p>Depuis août 2021, notre univers peut être découvert à Sarajevo, dans un lieu emblématique de la ville.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div><div className="mm-flagship-image"><img src="/webpImage/image-3.jpg" alt="Flagship store Sarajevo"/></div></section>
 
     <section className="mm-art"><div className="mm-art-stage"><button type="button" aria-label="Previous art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={18}/></button><div className="mm-art-track">{visibleArt.map((src,i)=><div className="mm-art-frame" key={src+i}><img src={src} alt="Art print" loading="lazy"/></div>)}</div><button type="button" aria-label="Next art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={18}/></button></div><div className="mm-art-dots">{artPrints.slice(0,4).map((_,i)=><button key={i} className={i===artSlide%4?'active':''} onClick={()=>setArtSlide(i)} aria-label={'Art print '+(i+1)}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">ÉDITIONS ART</Link></div></section>
-
-    <section className="mm-service-bottom"><div className="mm-service-grid"><article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPTIONS DE LIVRAISON RAPIDE</h3><p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p></div></article><article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>PAIEMENT SÉCURISÉ</h3><p>Monri predstavlja brz i siguran online sistem plaćanja narudžbi. Garantuje 100% sigurne transakcije i sigurnost podataka koje pošaljete.</p></div></article></div></section>
   </main></>;
 }
