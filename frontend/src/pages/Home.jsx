@@ -79,12 +79,6 @@ export default function Home(){
    </div>
   </section>
 
-  <section className='reference-support-strip' data-motion='reveal'>
-    <div className='reference-support-card'><img src='/webpImage/image-4.png' alt=''/><span>DELIVERY</span></div>
-    <div className='reference-support-card'><img src='/webpImage/image-9.png' alt=''/><span>PAYMENT</span></div>
-    <div className='reference-support-card'><img src='/webpImage/image-9.png' alt=''/><span>SECURE</span></div>
-    <div className='reference-support-card'><img src='/webpImage/image-4.png' alt=''/><span>STUDIO</span></div>
-  </section>
 
   <section className='pb-newsletter pb-newsletter-retail' data-motion='reveal'>
    <div className='pb-newsletter-copy'><small>08 / NEWSLETTER</small><h2>{language==='ar'?'كون أول من يعرف.':'STAY IN THE LOOP.'}</h2><p>{language==='ar'?'اكتشف الجديد، التخفيضات والإصدارات قبل الجميع.':'New drops, visual stories and private offers — straight to your inbox.'}</p></div>
