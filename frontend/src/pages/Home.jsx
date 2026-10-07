@@ -7,21 +7,21 @@ import useEditorialMotion from '../hooks/useEditorialMotion';
 import './molimao-home.css';
 
 const featured = [
-  {name:'Ljubav, ženska majica kratki rukav',price:'50.00 KM',sizes:['XS','S','M','L'],image:'/webpImage/image-14.jpg'},
-  {name:'Šibica, muška oversize majica kratki rukav',price:'50.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-1.jpg'},
-  {name:'Molimao “FRAME” novčanik',price:'120.00 KM',sizes:[],image:'/webpImage/image-11 copy.jpg'},
-  {name:'Icon, kačket',price:'60.00 KM',sizes:[],image:'/webpImage/image-17.jpg'},
-  {name:'TAG, ceker',price:'40.00 KM',sizes:[],image:'/webpImage/image-1 copy.jpg'},
-  {name:'Krom, muška oversize majica kratki rukav',price:'60.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-4.jpg'},
-  {name:'Dijamant, ženska oversize majica kratki rukav',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-7.jpg'},
-  {name:'Before, muška majica kratki rukav',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
+  {name:'Ljubav, t-shirt femme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L'],image:'/webpImage/image-14.jpg'},
+  {name:'Šibica, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-1.jpg'},
+  {name:'Molimao « FRAME » portefeuille',price:'120.00 KM',sizes:[],image:'/webpImage/image-11 copy.jpg'},
+  {name:'Icon, casquette',price:'60.00 KM',sizes:[],image:'/webpImage/image-17.jpg'},
+  {name:'TAG, tote bag',price:'40.00 KM',sizes:[],image:'/webpImage/image-1 copy.jpg'},
+  {name:'Krom, t-shirt oversize homme manches courtes',price:'60.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-4.jpg'},
+  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-7.jpg'},
+  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
 ];
 
 const newProducts = [
-  {name:'Grow, muška oversize majica kratki rukav',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-12.jpg'},
-  {name:'Before, muška majica kratki rukav',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
-  {name:'Cupid, ženska oversize majica kratki rukav',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-9.jpg'},
-  {name:'Dijamant, ženska oversize majica kratki rukav',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-28.jpg'},
+  {name:'Grow, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-12.jpg'},
+  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
+  {name:'Cupid, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-9.jpg'},
+  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-28.jpg'},
 ];
 
 const artPrints = [
@@ -71,20 +71,20 @@ export default function Home(){
     </section>
 
     <section className="mm-service-top"><div className="mm-service-grid">
-      <article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPCIJE DOSTAVE BRZOM POŠTOM</h3><p>Opcija dostave brzom poštom je dostupna za sve isporuke unutar Bosne i Hercegovine. Vrijeme isporuke putem kurirske službe BH PostExpress je u roku 24–48 sati. Cijena poštarine iznosi 7,00 KM dok za narudžbe preko 100,00 KM poštarina je besplatna.</p></div></article>
-      <article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>SIGURNO PLAĆANJE</h3><p>Monri predstavlja brz i siguran online sistem plaćanja narudžbi. Garantuje 100% sigurne transakcije i sigurnost podataka koje pošaljete. Podaci nikad neće biti dostupni trećim licima, a sigurnost Vaše kartice je garantovana najnaprednijom tehnologijom enkripcije zahvaljujući SSL protokolu.</p></div></article>
+      <article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPTIONS DE LIVRAISON RAPIDE</h3><p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p></div></article>
+      <article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>PAIEMENT SÉCURISÉ</h3><p>Monri propose un système de paiement en ligne rapide et sécurisé. Les transactions et les données sont protégées par les technologies de chiffrement SSL les plus avancées.</p></div></article>
     </div></section>
 
-    <section className="mm-products-section"><header className="mm-section-heading centered"><div className="mm-eyebrow">NOVO!</div></header><div className="mm-new-grid">{products.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">SVI PROIZVODI</Link></div></section>
+    <section className="mm-products-section"><header className="mm-section-heading centered"><div className="mm-eyebrow">NOUVEAUTÉS</div></header><div className="mm-new-grid">{products.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
 
-    <section className="mm-story"><div className="mm-story-image"><img src="/webpImage/image-20.jpg" alt="Summer collection 26 Urbex"/></div><div className="mm-story-copy"><div className="mm-eyebrow">PHOTOBOOK</div><h2>LJETNA KOLEKCIJA 26 URBEX</h2><p>Urbex dolazi od izraza urban exploration - istraživanje napuštenih i zaboravljenih gradskih prostora. Tako smo i tokom ovog photoshootinga sa našim domaćinima u novom studiju agencije Beyond Adria</p><Link to="/blog" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div></section>
+    <section className="mm-story"><div className="mm-story-image"><img src="/webpImage/image-20.jpg" alt="Summer collection 26 Urbex"/></div><div className="mm-story-copy"><div className="mm-eyebrow">PHOTOBOOK</div><h2>COLLECTION ÉTÉ 26 — URBEX</h2><p>Urbex vient de l'expression Urban Exploration : l'exploration de lieux urbains abandonnés et oubliés. Cette série photo capture notre collection dans les espaces de notre nouveau studio.</p><Link to="/blog" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div></section>
 
-    <section className="mm-products-section mm-featured"><header className="mm-section-heading"><div className="mm-eyebrow">ISTAKNUTO</div></header><div className="mm-featured-grid">{featured.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">SVI PROIZVODI</Link></div></section>
+    <section className="mm-products-section mm-featured"><header className="mm-section-heading"><div className="mm-eyebrow">SÉLECTION</div></header><div className="mm-featured-grid">{featured.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
 
-    <section className="mm-flagship"><div className="mm-flagship-copy"><div className="mm-eyebrow">MOLIMAO FLAGSHIP STORE</div><h2>LEXIGAM FLAGSHIP STORE</h2><p>Od augusta 2021. nas možete posjetiti u Sarajevu na jednom od najpoznatijih uglova na svijetu.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div><div className="mm-flagship-image"><img src="/webpImage/image-3.jpg" alt="Flagship store Sarajevo"/></div></section>
+    <section className="mm-flagship"><div className="mm-flagship-copy"><div className="mm-eyebrow">LEXIGAM FLAGSHIP STORE</div><h2>LEXIGAM FLAGSHIP STORE</h2><p>Depuis août 2021, notre univers peut être découvert à Sarajevo, dans un lieu emblématique de la ville.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div><div className="mm-flagship-image"><img src="/webpImage/image-3.jpg" alt="Flagship store Sarajevo"/></div></section>
 
-    <section className="mm-art"><div className="mm-art-stage"><button type="button" aria-label="Previous art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={18}/></button><div className="mm-art-track">{visibleArt.map((src,i)=><div className="mm-art-frame" key={src+i}><img src={src} alt="Art print" loading="lazy"/></div>)}</div><button type="button" aria-label="Next art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={18}/></button></div><div className="mm-art-dots">{artPrints.slice(0,4).map((_,i)=><button key={i} className={i===artSlide%4?'active':''} onClick={()=>setArtSlide(i)} aria-label={'Art print '+(i+1)}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">ART PRINTOVI</Link></div></section>
+    <section className="mm-art"><div className="mm-art-stage"><button type="button" aria-label="Previous art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={18}/></button><div className="mm-art-track">{visibleArt.map((src,i)=><div className="mm-art-frame" key={src+i}><img src={src} alt="Art print" loading="lazy"/></div>)}</div><button type="button" aria-label="Next art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={18}/></button></div><div className="mm-art-dots">{artPrints.slice(0,4).map((_,i)=><button key={i} className={i===artSlide%4?'active':''} onClick={()=>setArtSlide(i)} aria-label={'Art print '+(i+1)}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">ÉDITIONS ART</Link></div></section>
 
-    <section className="mm-service-bottom"><div className="mm-service-grid"><article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPCIJE DOSTAVE BRZOM POŠTOM</h3><p>Opcija dostave brzom poštom je dostupna za sve isporuke unutar Bosne i Hercegovine. Vrijeme isporuke putem kurirske službe BH PostExpress je u roku 24–48 sati. Cijena poštarine iznosi 7,00 KM dok za narudžbe preko 100,00 KM poštarina je besplatna.</p></div></article><article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>SIGURNO PLAĆANJE</h3><p>Monri predstavlja brz i siguran online sistem plaćanja narudžbi. Garantuje 100% sigurne transakcije i sigurnost podataka koje pošaljete.</p></div></article></div></section>
+    <section className="mm-service-bottom"><div className="mm-service-grid"><article><img src="/webpImage/image-10.png" alt="" aria-hidden="true"/><div><h3>OPTIONS DE LIVRAISON RAPIDE</h3><p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p></div></article><article><ShieldCheck className="mm-shield" size={40} strokeWidth={1.4}/><div><h3>PAIEMENT SÉCURISÉ</h3><p>Monri predstavlja brz i siguran online sistem plaćanja narudžbi. Garantuje 100% sigurne transakcije i sigurnost podataka koje pošaljete.</p></div></article></div></section>
   </main></>;
 }
