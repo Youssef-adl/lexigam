@@ -223,29 +223,11 @@ export default function Shop({ category = 'All Products' }) {
         <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
       ) : data.length ? (
         <div className="pb-shop-grid">
-          {data.map((p, i) => (
-            <article className="pb-product-card" key={p.id}>
-              <div className="pb-product-img">
-                <Link to={'/product/' + p.id} aria-label={p.nom}>
-                  <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
-                </Link>
-                <span className="pb-badge">{i < 3 ? 'NEW' : '026'}</span>
-                <button
-                  type="button"
-                  onClick={() => dispatch(addToCart({ ...p, quantite: 1 }))}
-                  title="Add to bag"
-                  aria-label={'Add ' + p.nom + ' to bag'}
-                >
-                  <ArrowUpRight size={15} />
-                </button>
-              </div>
-              <div className="pb-product-meta">
-                <div>
-                  <Link to={'/product/' + p.id}><strong>{p.nom}</strong></Link>
-                  <small>{p.description}</small>
-                </div>
-                <b>{p.prix} DH</b>
-              </div>
+          {data.map((p) => (
+            <article className="pb-product-card pb-product-card-image-only" key={p.id}>
+              <Link to={'/product/' + p.id} aria-label={p.nom} className="pb-product-img">
+                <img src={img(p)} alt={p.nom} loading="lazy" decoding="async" />
+              </Link>
             </article>
           ))}
         </div>
