@@ -15,16 +15,19 @@ const cartSlice = createSlice({
     addToCart: (state, action) => {
       // Supports addToCart(product) and addToCart({ produit, quantite, taille }).
       const product = unwrapProduct(action.payload);
-      if (!product || product.id == null) return;
+      const productId = Number(product?.id);
+      // Demo catalog IDs such as "m1" are not real database product IDs.
+      if (!Number.isSafeInteger(productId) || productId < 1) return;
 
+      const normalizedProduct = { ...product, id: productId };
       const quantity = safeQuantity(action.payload?.quantite);
-      const existing = state.items.find((item) => String(item.produit?.id) === String(product.id));
+      const existing = state.items.find((item) => Number(item.produit?.id) === productId);
       if (existing) {
         existing.quantite = safeQuantity(existing.quantite) + quantity;
         if (action.payload?.taille) existing.taille = action.payload.taille;
       } else {
         state.items.push({
-          produit: product,
+          produit: normalizedProduct,
           quantite: quantity,
           taille: action.payload?.taille || 'M',
         });
