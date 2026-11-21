@@ -1,11 +1,11 @@
 <?php
 
-namespace App\\Http\\Controllers;
+namespace App\Http\Controllers;
 
-use App\\Models\\User;
-use Illuminate\\Http\\Request;
-use Illuminate\\Support\\Facades\\Hash;
-use Illuminate\\Validation\\ValidationException;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -24,8 +24,8 @@ class AuthController extends Controller
             'role' => 'client',
         ]);
 
-        // This application uses Sanctum personal access tokens (Bearer),
-        // not cookie-based SPA sessions. No CSRF cookie or session is needed.
+        // Authentication uses Sanctum personal access tokens (Bearer).
+        // No cookie-based SPA session or CSRF initialization is required.
         $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
