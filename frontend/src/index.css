@@ -2082,3 +2082,95 @@ html[data-theme="dark"] .pb-art-pill{background:transparent!important;color:#d6d
   .pb-art-prints.pb-art-prints-showcase .pb-art-frame>div{max-height:235px!important}
   .pb-art-prints.pb-art-prints-showcase .pb-art-arrow{width:20px!important;height:32px!important;flex-basis:20px!important}
 }
+
+
+/* LEXIGAM Arabic RTL refinements for product, basket and account screens */
+html[dir="rtl"] body {
+  font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
+  letter-spacing: 0;
+}
+html[dir="rtl"] :is(.pb-product-page,.pb-cart,.pb-checkout,.pb-auth,.pb-empty,.pb-success,.ma-page,.ma-contact-grid) {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] .pb-detail-topline,
+html[dir="rtl"] .pb-detail-layout,
+html[dir="rtl"] .pb-detail-option-head,
+html[dir="rtl"] .pb-detail-quantity,
+html[dir="rtl"] .pb-detail-purchase,
+html[dir="rtl"] .pb-detail-delivery,
+html[dir="rtl"] .pb-detail-review-list article header,
+html[dir="rtl"] .pb-cart-layout,
+html[dir="rtl"] .pb-cart-row,
+html[dir="rtl"] .pb-check-layout { direction: rtl; }
+html[dir="rtl"] .pb-detail-info,
+html[dir="rtl"] .pb-detail-heading,
+html[dir="rtl"] .pb-detail-accordions,
+html[dir="rtl"] .pb-detail-review-form,
+html[dir="rtl"] .pb-cart-summary,
+html[dir="rtl"] .pb-order-summary,
+html[dir="rtl"] .pb-check-form,
+html[dir="rtl"] .pb-auth-form,
+html[dir="rtl"] .pb-empty,
+html[dir="rtl"] .pb-success { text-align: right; }
+html[dir="rtl"] .pb-detail-heading h1,
+html[dir="rtl"] .pb-cart-head h1,
+html[dir="rtl"] .pb-check-head h1,
+html[dir="rtl"] .pb-auth-form h2 {
+  font-family: 'Noto Sans Arabic', Tahoma, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-transform: none;
+}
+html[dir="rtl"] .pb-detail-topline,
+html[dir="rtl"] .pb-detail-back,
+html[dir="rtl"] .pb-back { flex-direction: row-reverse; }
+html[dir="rtl"] .pb-detail-option-head,
+html[dir="rtl"] .pb-detail-quantity,
+html[dir="rtl"] .pb-detail-purchase { flex-direction: row; }
+html[dir="rtl"] .pb-detail-accordions summary,
+html[dir="rtl"] .pb-detail-spec-grid { direction: rtl; text-align: right; }
+html[dir="rtl"] .pb-detail-add { direction: rtl; }
+html[dir="rtl"] .pb-detail-add span { text-align: right; }
+html[dir="rtl"] .pb-detail-review-form textarea,
+html[dir="rtl"] .pb-detail-review-form select,
+html[dir="rtl"] .pb-check-form input,
+html[dir="rtl"] .pb-auth-form input { text-align: right; }
+html[dir="rtl"] .pb-cart-row { grid-template-columns: 140px minmax(0,1fr) auto; }
+html[dir="rtl"] .pb-cart-product { text-align: right; }
+html[dir="rtl"] .pb-cart-side { align-items: flex-start; }
+html[dir="rtl"] .pb-cart-summary>div,
+html[dir="rtl"] .pb-order-summary>div,
+html[dir="rtl"] .pb-order-summary>strong { direction: rtl; }
+html[dir="rtl"] .pb-auth-art>div { left: auto; right: 7vw; text-align: right; }
+html[dir="rtl"] .pb-auth-art h1 {
+  font-family: 'Noto Sans Arabic', Tahoma, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+html[dir="rtl"] .pb-check-actions { direction: rtl; }
+html[dir="rtl"] .pb-empty h1,
+html[dir="rtl"] .pb-success h1 {
+  font-family: 'Noto Sans Arabic', Tahoma, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+html[dir="rtl"] .pb-footer-retail-main,
+html[dir="rtl"] .pb-footer-bottom-retail { direction: rtl; text-align: right; }
+html[dir="rtl"] .pb-filter-drawer {
+  right: auto;
+  left: 0;
+  border-left: 0;
+  border-right: 1px solid var(--line);
+}
+html[dir="rtl"] .pb-filter-block button { margin: 0 0 6px 6px; }
+html[dir="rtl"] .mm-section,
+html[dir="rtl"] .mm-editorial-copy,
+html[dir="rtl"] .mm-flagship-copy { text-align: right; }
+html[dir="rtl"] .mm-primary-btn,
+html[dir="rtl"] .pb-btn { direction: rtl; }
+@media(max-width:900px) {
+  html[dir="rtl"] .pb-cart-row { grid-template-columns: 100px minmax(0,1fr); }
+  html[dir="rtl"] .pb-cart-side { grid-column: 2; flex-direction: row; align-items: center; }
+  html[dir="rtl"] .pb-auth-art>div { right: 22px; left: 22px; }
+}
