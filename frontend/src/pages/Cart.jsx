@@ -26,10 +26,10 @@ export default function Cart() {
           <span className="mm-eyebrow">{isAr ? 'سلة LEXIGAM' : 'PANIER LEXIGAM'}</span>
           <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '8px 0 16px', color: '#0f0f0f' }}>{isAr ? 'سلة التسوق فارغة' : 'Votre panier est vide'}</h1>
           <p style={{ color: '#666', fontSize: '14px', maxWidth: '380px', marginBottom: '28px' }}>
-            Découvrez nos nouvelles pièces streetwear, t-shirts oversize, sweats à capuche et tirages d'art.
+            {isAr ? 'اكتشفوا أحدث قطع أزياء الشارع والقمصان الواسعة والسترات والإصدارات الفنية.' : "Découvrez nos nouvelles pièces streetwear, t-shirts oversize, sweats à capuche et tirages d'art."}
           </p>
           <Link className="mm-primary-btn" to="/shop">
-            DÉCOUVRIR LE VESTIAIRE <ArrowUpRight size={15} />
+            {isAr ? 'اكتشفوا المجموعة' : 'DÉCOUVRIR LE VESTIAIRE'} <ArrowUpRight size={15} />
           </Link>
         </div>
       </>
@@ -50,17 +50,17 @@ export default function Cart() {
 
   return (
     <>
-      <SEO title={isAr ? 'سلة التسوق — LEXIGAM' : 'Panier — LEXIGAM'} description="Vérifiez vos articles et finalisez votre commande en toute sécurité." />
+      <SEO title={isAr ? 'سلة التسوق — LEXIGAM' : 'Panier — LEXIGAM'} description={isAr ? 'راجعوا المنتجات وأتمّوا طلبكم بأمان.' : "Vérifiez vos articles et finalisez votre commande en toute sécurité."} />
       <div className="mm-section" style={{ paddingTop: '40px', minHeight: '80vh' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid #eaeaea', paddingBottom: '24px', marginBottom: '32px' }}>
           <div>
             <span className="mm-eyebrow">{isAr ? 'اختياراتكم' : 'VOTRE SÉLECTION'}</span>
             <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '6px 0 0', color: '#0f0f0f' }}>
-              Panier d'achats ({items.length})
+              {isAr ? `سلة التسوق (${items.length})` : `Panier d'achats (${items.length})`}
             </h1>
           </div>
           <Link to="/shop" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 700, color: '#0f0f0f', textDecoration: 'none' }}>
-            <ArrowLeft size={14} /> CONTINUER MES ACHATS
+            <ArrowLeft size={14} /> {isAr ? 'مواصلة التسوق' : 'CONTINUER MES ACHATS'}
           </Link>
         </div>
 
@@ -89,7 +89,7 @@ export default function Cart() {
                     />
                   ) : (
                     <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: '#999', fontSize: '11px' }}>
-                      Image indisponible
+                      {isAr ? 'الصورة غير متوفرة' : 'Image indisponible'}
                     </div>
                   )}
                 </div>
@@ -99,7 +99,7 @@ export default function Cart() {
                     {i.produit.nom}
                   </h2>
                   <div style={{ fontSize: '12px', color: '#777', marginBottom: '12px' }}>
-                    Taille : <strong>{i.taille || 'M'}</strong>
+                    {isAr ? 'المقاس:' : 'Taille :'} <strong>{i.taille || 'M'}</strong>
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#EB5728', marginBottom: '14px' }}>
                     {getPrice(i.produit).toFixed(0)} DH
@@ -132,7 +132,7 @@ export default function Cart() {
                     type="button"
                     style={{ background: 'none', border: 0, color: '#999', cursor: 'pointer', padding: '6px' }}
                     onClick={() => dispatch(removeFromCart(i.produit.id))}
-                    title="Supprimer l'article"
+                    title={isAr ? 'حذف المنتج' : "Supprimer l'article"}
                   >
                     <Trash2 size={16} />
                   </button>
