@@ -27,7 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('users', UserController::class);
-        Route::apiResource('categories', CategorieController::class);
+        // Public GET /categories already exists above; avoid registering a duplicate protected index route.
+        Route::apiResource('categories', CategorieController::class)->except(['index']);
         Route::put('produits/{id}/approve', [ProduitController::class, 'approve']);
         Route::put('produits/{id}/reject', [ProduitController::class, 'reject']);
         Route::put('produits/{id}/approve-deletion', [ProduitController::class, 'approveDeletion']);
