@@ -14,6 +14,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { language, setLanguage } = useLanguage();
+  const isAr = language === 'ar';
 
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -77,7 +78,7 @@ export default function Navbar() {
     <div className="mm-nav-shell">
       {/* Announcement Bar */}
       <div className="mm-announcement">
-        LIVRAISON OFFERTE PAR COURSIER RAPIDE POUR TOUTE COMMANDE SUPÉRIEURE À 500 DH
+{isAr ? 'توصيل مجاني عبر خدمة سريعة لجميع الطلبات التي تتجاوز 500 درهم' : 'LIVRAISON OFFERTE PAR COURSIER RAPIDE POUR TOUTE COMMANDE SUPÉRIEURE À 500 DH'}
       </div>
 
       {/* Main Sticky Navbar */}
@@ -90,17 +91,17 @@ export default function Navbar() {
             aria-label="Menu"
           >
             <Menu size={20} />
-            <span className="hidden-mobile">MENU</span>
+            <span className="hidden-mobile">{isAr ? 'القائمة' : 'MENU'}</span>
           </button>
           <nav className="mm-desktop-nav">
-            <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Accueil</Link>
-            <Link to="/shop" className={location.pathname === '/shop' ? 'active' : ''}>Boutique</Link>
-            <Link to="/women" className={location.pathname === '/women' ? 'active' : ''}>Femmes</Link>
-            <Link to="/men" className={location.pathname === '/men' ? 'active' : ''}>Hommes</Link>
-            <Link to="/shop?category=Art">Éditions Art</Link>
-            <Link to="/blog">Journal</Link>
-            <Link to="/about">À propos</Link>
-            <Link to="/contact">Contact</Link>
+            <Link to="/" className={location.pathname === '/' ? 'active' : ''}>{isAr ? 'الرئيسية' : 'Accueil'}</Link>
+            <Link to="/shop" className={location.pathname === '/shop' ? 'active' : ''}>{isAr ? 'المتجر' : 'Boutique'}</Link>
+            <Link to="/women" className={location.pathname === '/women' ? 'active' : ''}>{isAr ? 'نساء' : 'Femmes'}</Link>
+            <Link to="/men" className={location.pathname === '/men' ? 'active' : ''}>{isAr ? 'رجال' : 'Hommes'}</Link>
+            <Link to="/shop?category=Art">{isAr ? 'إصدارات فنية' : 'Éditions Art'}</Link>
+            <Link to="/blog">{isAr ? 'المجلة' : 'Journal'}</Link>
+            <Link to="/about">{isAr ? 'من نحن' : 'À propos'}</Link>
+            <Link to="/contact">{isAr ? 'اتصل بنا' : 'Contact'}</Link>
           </nav>
         </div>
 
@@ -130,12 +131,13 @@ export default function Navbar() {
 
         {/* Actions Right */}
         <div className="mm-nav-actions">
+          <button type="button" className="mm-language-switch" onClick={() => setLanguage(isAr ? 'fr' : 'ar')} aria-label={isAr ? 'Passer en français' : 'التبديل إلى العربية'}>{isAr ? 'FR' : 'العربية'}</button>
           <button
             type="button"
             className="mm-action-btn"
             onClick={() => setSearchOpen(true)}
-            aria-label="Rechercher"
-            title="Rechercher"
+            aria-label={isAr ? 'بحث' : 'Rechercher'}
+            title={isAr ? 'بحث' : 'Rechercher'}
           >
             <Search size={19} />
           </button>
@@ -144,8 +146,8 @@ export default function Navbar() {
             type="button"
             className="mm-action-btn"
             onClick={() => navigate(user ? '/dashboard' : '/login')}
-            aria-label="Compte"
-            title={user ? user.nom || 'Mon compte' : 'Se connecter'}
+            aria-label={isAr ? 'الحساب' : 'Compte'}
+            title={user ? user.nom || (isAr ? 'حسابي' : 'Mon compte') : (isAr ? 'تسجيل الدخول' : 'Se connecter')}
           >
             <UserRound size={19} />
           </button>
@@ -153,26 +155,26 @@ export default function Navbar() {
           <button
             type="button"
             className="mm-action-btn hidden-mobile"
-            aria-label="Favoris"
-            title="Favoris"
+            aria-label={isAr ? 'المفضلة' : 'Favoris'}
+            title={isAr ? 'المفضلة' : 'Favoris'}
           >
             <Heart size={19} />
           </button>
 
-          <Link to="/cart" className="mm-action-btn mm-bag-btn" aria-label="Panier">
+          <Link to="/cart" className="mm-action-btn mm-bag-btn" aria-label={isAr ? 'سلة التسوق' : 'Panier'} title={isAr ? 'سلة التسوق' : 'Panier'}>
             <ShoppingBag size={19} />
             {totalCartCount > 0 && <span className="mm-bag-badge">{totalCartCount}</span>}
           </Link>
 
           {user?.role === 'admin' && (
             <Link to="/admin/dashboard" className="mm-studio-badge">
-              STUDIO
+              {isAr ? 'الاستوديو' : 'STUDIO'}
             </Link>
           )}
 
           {user && (
             <button type="button" className="mm-logout-btn" onClick={logoutUser}>
-              DÉCONNEXION
+              {isAr ? 'تسجيل الخروج' : 'DÉCONNEXION'}
             </button>
           )}
         </div>
@@ -184,7 +186,7 @@ export default function Navbar() {
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
-      <aside className={`mm-drawer ${open ? 'open' : ''}`} aria-label="Menu latéral">
+      <aside className={`mm-drawer ${open ? 'open' : ''}`} aria-label={isAr ? 'القائمة الجانبية' : 'Menu latéral'}>
         <div className="mm-drawer-head">
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
             <span style={{ fontSize: '20px', fontWeight: 900, color: '#0f0f0f', letterSpacing: '-0.04em' }}>
@@ -196,30 +198,30 @@ export default function Navbar() {
             type="button"
             className="mm-drawer-close"
             onClick={() => setOpen(false)}
-            aria-label="Fermer le menu"
+            aria-label={isAr ? 'إغلاق القائمة' : 'Fermer le menu'}
           >
             <X size={20} />
           </button>
         </div>
 
         <nav className="mm-drawer-nav">
-          <Link to="/" onClick={() => setOpen(false)}>Accueil</Link>
+          <Link to="/" onClick={() => setOpen(false)}>{isAr ? 'الرئيسية' : 'Accueil'}</Link>
           <Link to="/shop" onClick={() => setOpen(false)}>
-            Boutique <ChevronRight size={16} />
+            {isAr ? 'المتجر' : 'Boutique'} <ChevronRight size={16} />
           </Link>
           <div className="mm-drawer-sub">
-            <Link to="/women" onClick={() => setOpen(false)}>Femmes</Link>
-            <Link to="/men" onClick={() => setOpen(false)}>Hommes</Link>
-            <Link to="/shop?category=Art" onClick={() => setOpen(false)}>Éditions Art</Link>
-            <Link to="/shop?category=Accessoires" onClick={() => setOpen(false)}>Accessoires</Link>
+            <Link to="/women" onClick={() => setOpen(false)}>{isAr ? 'نساء' : 'Femmes'}</Link>
+            <Link to="/men" onClick={() => setOpen(false)}>{isAr ? 'رجال' : 'Hommes'}</Link>
+            <Link to="/shop?category=Art" onClick={() => setOpen(false)}>{isAr ? 'إصدارات فنية' : 'Éditions Art'}</Link>
+            <Link to="/shop?category=Accessoires" onClick={() => setOpen(false)}>{isAr ? 'إكسسوارات' : 'Accessoires'}</Link>
           </div>
-          <Link to="/blog" onClick={() => setOpen(false)}>Journal</Link>
-          <Link to="/about" onClick={() => setOpen(false)}>À propos</Link>
-          <Link to="/contact" onClick={() => setOpen(false)}>Contact</Link>
+          <Link to="/blog" onClick={() => setOpen(false)}>{isAr ? 'المجلة' : 'Journal'}</Link>
+          <Link to="/about" onClick={() => setOpen(false)}>{isAr ? 'من نحن' : 'À propos'}</Link>
+          <Link to="/contact" onClick={() => setOpen(false)}>{isAr ? 'اتصل بنا' : 'Contact'}</Link>
         </nav>
 
         <div className="mm-drawer-footer">
-          <span style={{ fontSize: '11px', color: '#888', fontWeight: 600 }}>LANGUE / LANGUAGE</span>
+          <span style={{ fontSize: '11px', color: '#888', fontWeight: 600 }}>{isAr ? 'اللغة' : 'LANGUE / LANGUAGE'}</span>
           <div className="mm-lang-chips">
             <button
               type="button"
@@ -237,8 +239,8 @@ export default function Navbar() {
             </button>
           </div>
           <div style={{ fontSize: '11px', color: '#777', lineHeight: 1.5 }}>
-            <strong>Studio & Boutique LEXIGAM</strong><br />
-            Casablanca / Maroc<br />
+            <strong>{isAr ? 'استوديو ومتجر LEXIGAM' : 'Studio & Boutique LEXIGAM'}</strong><br />
+            {isAr ? 'الدار البيضاء / المغرب' : 'Casablanca / Maroc'}<br />
             support@lexigam.com
           </div>
         </div>
@@ -251,7 +253,7 @@ export default function Navbar() {
             type="button"
             className="mm-search-close-btn"
             onClick={() => setSearchOpen(false)}
-            aria-label="Fermer la recherche"
+            aria-label={isAr ? 'إغلاق البحث' : 'Fermer la recherche'}
           >
             <X size={28} />
           </button>
@@ -260,9 +262,9 @@ export default function Navbar() {
               autoFocus
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher une pièce..."
+              placeholder={isAr ? 'ابحث عن قطعة...' : 'Rechercher une pièce...'}
             />
-            <button type="submit" aria-label="Lancer la recherche">
+            <button type="submit" aria-label={isAr ? 'بدء البحث' : 'Lancer la recherche'}>
               <Search size={28} />
             </button>
           </form>
