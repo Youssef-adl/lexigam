@@ -22,5 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // API errors must never try to redirect to a browser login route.
+        $exceptions->shouldRenderJsonWhen(
+            fn ($request, $exception) => $request->is('api/*') || $request->expectsJson()
+        );
     })->create();
