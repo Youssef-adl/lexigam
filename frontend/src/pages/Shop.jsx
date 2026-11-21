@@ -9,47 +9,47 @@ import { addToCart } from '../store/cartSlice';
 const demoProducts = [
   {
     id: 'm1',
-    nom: 'T-shirt Oversize « Grow » — Sérigraphie d’Atelier',
+    nom: 'T-shirt Oversize « Grow » — Écru & Marquage Atelier',
     prix: 450.00,
     category: 'Men',
     categoryName: 'Hommes',
     image: '/molimao/prod-grow-1.jpg',
     hover: '/molimao/prod-grow-2.jpg',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Coton peigné lourd 240g avec sérigraphie exclusive Grow sur la poitrine et coupe décontractée.'
+    description: 'T-shirt oversize écru avec petit marquage noir discret sur la poitrine.'
   },
   {
     id: 'm2',
-    nom: 'Hoodie Brut « Radiant » — Molleton Épais 340g',
+    nom: 'Casquette Trucker « Radiant » — Mesh Kaki',
     prix: 790.00,
     category: 'Men',
     categoryName: 'Hommes',
     image: '/molimao/prod-radiant-1.jpg',
     hover: '/molimao/prod-radiant-2.jpg',
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Molleton épais 340g avec intérieur brossé doux. Capuche doublée généreuse et finitions bord-côte.'
+    sizes: ['Taille unique'],
+    description: 'Casquette trucker kaki avec panneaux latéraux en mesh et marquage graphique discret à l’avant.'
   },
   {
     id: 'm3',
-    nom: 'Sweat Col Rond « Puder » — Coton Biologique',
+    nom: 'Sweat Col Rond « Puder » — Beige Sable',
     prix: 690.00,
     category: 'Women',
     categoryName: 'Femmes',
     image: '/molimao/prod-puder-1.jpg',
     hover: '/molimao/prod-puder-2.jpg',
     sizes: ['S', 'M', 'L', 'XL'],
-    description: 'Couleur minérale exclusive, toucher velours, confectionné en 100% coton biologique pré-rétréci.'
+    description: 'Sweat col rond beige sable avec motif abstrait noir sur le devant et petite signature orange.'
   },
   {
     id: 'm4',
-    nom: 'T-shirt Graphic « Krom » — Coton Peigné 240g',
+    nom: 'Sweat Graphique « Krom » — Noir',
     prix: 450.00,
     category: 'Men',
     categoryName: 'Hommes',
     image: '/molimao/prod-krom-1.jpg',
     hover: '/molimao/prod-krom-2.jpg',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    description: 'Sérigraphie graphique industrielle au dos et logo atelier brodé discret sur le buste.'
+    description: 'Sweat noir à manches longues, col rond et grand motif graphique blanc sur le devant.'
   },
   {
     id: 'm5',
