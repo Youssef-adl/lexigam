@@ -287,9 +287,9 @@ export default function Shop({ category = 'All Products' }) {
         title={isAr ? `متجر LEXIGAM — ${getPageTitle()}` : `Boutique LEXIGAM — ${getPageTitle()}`}
         description={isAr ? 'اكتشفوا قطع LEXIGAM المستقلة من الملابس والإكسسوارات والإصدارات الفنية.' : "Découvrez les vestes d'atelier, t-shirts, sweats à capuche et tirages d'art du vestiaire indépendant LEXIGAM."}
       />
-      <div className="mm-section" style={{ paddingTop: '40px', minHeight: '80vh' }}>
+      <div className="mm-section mm-shop-page" style={{ paddingTop: '40px', minHeight: '80vh' }}>
         {/* Shop Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '28px' }}>
+        <div className="mm-shop-heading" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '28px' }}>
           <div>
             <span className="mm-eyebrow">{isAr ? 'المتجر الإلكتروني' : 'BOUTIQUE EN LIGNE'}</span>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, margin: '6px 0 0', color: '#0f0f0f' }}>
@@ -300,7 +300,7 @@ export default function Shop({ category = 'All Products' }) {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div className="mm-shop-sort" style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <div style={{ position: 'relative' }}>
               <select
                 value={sort}
@@ -327,7 +327,7 @@ export default function Shop({ category = 'All Products' }) {
         </div>
 
         {/* Category Tabs */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '36px', borderBottom: '1px solid #eaeaea', paddingBottom: '16px' }}>
+        <div className="mm-shop-tabs" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '36px', borderBottom: '1px solid #eaeaea', paddingBottom: '16px' }}>
           {categoryTabs.map((tab) => (
             <button
               key={tab.key}
