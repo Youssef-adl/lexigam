@@ -27,7 +27,7 @@ export default function OrderSuccess(){
     const phone=order.livraison?.telephone||'—';
     const status=order.statut||'—';
     const total=order.montant_total??lines.reduce((sum,line)=>sum+Number(line.prix||0)*Number(line.quantite||0),0);
-    const document=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>LEXIGAM Receipt #${escapeHtml(id)}</title><style>
+    const receiptHtml=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>LEXIGAM Receipt #${escapeHtml(id)}</title><style>
       @page{size:A4;margin:18mm}body{font-family:Arial,sans-serif;color:#171717;margin:0;font-size:11pt}
       .top{background:#171717;color:#fff;padding:26px 30px}.brand{font-size:25pt;font-weight:800;letter-spacing:3px}.tag{color:#d8b77a;font-size:9pt;letter-spacing:2px;margin-top:6px}
       .wrap{padding:26px 30px}.heading{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #d8b77a;padding-bottom:18px}
@@ -42,7 +42,7 @@ export default function OrderSuccess(){
       <table><thead><tr><th>#</th><th>Product</th><th>Qty</th><th>Unit price</th><th>Subtotal</th></tr></thead><tbody>${rows||'<tr><td colspan="5">No order items</td></tr>'}</tbody></table>
       <div class="total"><span class="muted">TOTAL AMOUNT</span><strong>${money(total)}</strong></div>
       <div class="footer">LEXIGAM · Thank you for your trust.<br>This document is your order receipt.</div></main></body></html>`;
-    const blob=new Blob(['\ufeff',document],{type:'application/msword;charset=utf-8'});
+    const blob=new Blob(['\ufeff',receiptHtml],{type:'application/msword;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const link=document.createElement('a');
     link.href=url;link.download=`LEXIGAM-Receipt-${id}.doc`;
