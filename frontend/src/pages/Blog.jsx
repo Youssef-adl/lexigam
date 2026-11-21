@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const posts = [
   {
@@ -42,25 +43,34 @@ const posts = [
 ];
 
 export default function Blog() {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
+  const arabicPosts = [
+    { id: 1, title: 'طقوس المدينة: قهوة تُرتدى', date: 'نوفمبر 2026', category: 'طقوس حضرية', image: '/molimao/coffee-editorial.jpg', excerpt: 'القهوة في المدن الكبرى ليست مجرد مشروب، بل مساحة للتوقف واللقاء. اكتشفوا خلف كواليس مجموعتنا الجديدة من السترات والقمصان.' },
+    { id: 2, title: 'استكشاف المدينة: جمال المساحات الخام', date: 'أكتوبر 2026', category: 'دفتر بصري', image: '/molimao/slider-shibica.jpg', excerpt: 'جولة فوتوغرافية وسط المباني المهجورة والعمارة المنسية لالتقاط ملمس المدينة والخرسانة وقصّات LEXIGAM الواسعة.' },
+    { id: 3, title: 'الزي اليومي: البساطة تحتاج إلى دقة', date: 'سبتمبر 2026', category: 'التصميم والخامة', image: '/molimao/slider-1.jpg', excerpt: 'كيف نصنع قميصاً يحافظ على شكله ولونه بعد الاستخدام المتكرر؟ نظرة على القطن الممشط بوزن 240 غراماً.' },
+    { id: 4, title: 'المطبوعات الفنية: من الاستوديو إلى الإطار', date: 'أغسطس 2026', category: 'إصدارات فنية', image: '/molimao/slider-3.jpg', excerpt: 'اكتشفوا مراحل صناعة ملصقاتنا الفنية: اختيار ورق الأرشيف، ومزج الأحبار غير اللامعة، والطباعة اليدوية المرقّمة.' }
+  ];
+  const displayPosts = isAr ? arabicPosts : posts;
   return (
     <>
       <SEO
-        title="Le Journal — LEXIGAM / Histoires & Carnets Visuels"
-        description="Plongez dans les récits, inspirations graphiques et carnets de bord du studio LEXIGAM."
+        title={isAr ? 'مجلة LEXIGAM — قصص ودفاتر بصرية' : 'Le Journal — LEXIGAM / Histoires & Carnets Visuels'}
+        description={isAr ? 'اكتشفوا القصص والإلهامات البصرية ودفاتر استوديو LEXIGAM.' : 'Plongez dans les récits, inspirations graphiques et carnets de bord du studio LEXIGAM.'}
       />
       <div className="mm-section" style={{ paddingTop: '50px' }}>
         <div style={{ marginBottom: '40px' }}>
-          <span className="mm-eyebrow">RÉCITS & DOCUMENTATION</span>
+          <span className="mm-eyebrow">{isAr ? 'قصص وتوثيق' : 'RÉCITS & DOCUMENTATION'}</span>
           <h1 style={{ fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 800, margin: '8px 0 16px', color: '#0f0f0f' }}>
-            Le Journal LEXIGAM
+            {isAr ? 'مجلة LEXIGAM' : 'Le Journal LEXIGAM'}
           </h1>
           <p style={{ maxWidth: '640px', fontSize: '15px', color: '#666', lineHeight: 1.7 }}>
-            Articles, carnets d'ambiance, coulisses de fabrication et regards croisés sur l'art urbain et le textile.
+            {isAr ? 'مقالات ودفاتر بصرية وكواليس التصنيع وقراءات في فن الشارع وعالم الأقمشة.' : "Articles, carnets d'ambiance, coulisses de fabrication et regards croisés sur l'art urbain et le textile."}
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '36px' }}>
-          {posts.map((post) => (
+          {displayPosts.map((post) => (
             <article key={post.id} style={{ display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
               <div
                 style={{
@@ -111,7 +121,7 @@ export default function Blog() {
                     cursor: 'pointer',
                   }}
                 >
-                  LIRE L'ARTICLE <ArrowUpRight size={14} />
+                  {isAr ? 'اقرأ المقال' : "LIRE L'ARTICLE"} <ArrowUpRight size={14} />
                 </span>
               </div>
             </article>
