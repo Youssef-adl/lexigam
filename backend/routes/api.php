@@ -44,7 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware('role:admin,vendeur')->group(function () {
-        Route::apiResource('categories', CategorieController::class);
+        Route::apiResource('categories', CategorieController::class)->except(['index']);
         Route::post('produits', [ProduitController::class, 'store']);
         Route::put('produits/{produit}', [ProduitController::class, 'update']);
         Route::delete('produits/{produit}', [ProduitController::class, 'destroy']);
