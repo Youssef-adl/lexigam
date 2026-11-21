@@ -1,8 +1,11 @@
 import React from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 import { Link } from 'react-router-dom';
 import { ArrowUp, MapPin, Phone, Mail, Music2 } from 'lucide-react';
 
 export default function Footer() {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
   const backTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
@@ -31,12 +34,11 @@ export default function Footer() {
             }} />
           </Link>
           <p className="mm-footer-slogan">
-            LEXIGAM est un label vestimentaire indépendant fondé sur des coupes nettes,
-            des matières lourdes et une esthétique street art contemporaine. Conçu pour le mouvement.
+            {isAr ? 'LEXIGAM علامة أزياء مستقلة تقوم على قصّات واضحة وخامات متينة وهوية مستوحاة من فن الشارع. صُممت للحركة.' : 'LEXIGAM est un label vestimentaire indépendant fondé sur des coupes nettes, des matières lourdes et une esthétique street art contemporaine. Conçu pour le mouvement.'}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span className="mm-footer-contact-item">
-              <MapPin size={15} style={{ color: '#EB5728' }} /> Boulevard d’Anfa, Casablanca, Maroc
+              <MapPin size={15} style={{ color: '#EB5728' }} /> {isAr ? 'شارع أنفا، الدار البيضاء، المغرب' : 'Boulevard d’Anfa, Casablanca, Maroc'}
             </span>
             <a href="tel:+212522000000" className="mm-footer-contact-item">
               <Phone size={15} style={{ color: '#EB5728' }} /> +212 5 22 00 00 00
@@ -66,35 +68,34 @@ export default function Footer() {
 
         {/* Colonne 2: BOUTIQUE */}
         <div className="mm-footer-col">
-          <h4>BOUTIQUE</h4>
+          <h4>{isAr ? 'المتجر' : 'BOUTIQUE'}</h4>
           <ul>
-            <li><Link to="/women">Vestiaire Femmes</Link></li>
-            <li><Link to="/men">Vestiaire Hommes</Link></li>
-            <li><Link to="/shop?category=Art">Éditions Art & Sérigraphies</Link></li>
-            <li><Link to="/shop?category=Accessoires">Accessoires & Objets</Link></li>
-            <li><Link to="/shop">Tous les produits</Link></li>
+            <li><Link to="/women">{isAr ? 'مجموعة النساء' : 'Vestiaire Femmes'}</Link></li>
+            <li><Link to="/men">{isAr ? 'مجموعة الرجال' : 'Vestiaire Hommes'}</Link></li>
+            <li><Link to="/shop?category=Art">{isAr ? 'إصدارات فنية وطباعة حريرية' : 'Éditions Art & Sérigraphies'}</Link></li>
+            <li><Link to="/shop?category=Accessoires">{isAr ? 'إكسسوارات وقطع مختارة' : 'Accessoires & Objets'}</Link></li>
+            <li><Link to="/shop">{isAr ? 'جميع المنتجات' : 'Tous les produits'}</Link></li>
           </ul>
         </div>
 
         {/* Colonne 3: INFORMATIONS */}
         <div className="mm-footer-col">
-          <h4>INFORMATIONS</h4>
+          <h4>{isAr ? 'معلومات' : 'INFORMATIONS'}</h4>
           <ul>
-            <li><Link to="/about">À propos de LEXIGAM</Link></li>
-            <li><Link to="/blog">Le Journal du Studio</Link></li>
-            <li><Link to="/contact">Nous contacter</Link></li>
-            <li><Link to="/terms">Conditions Générales</Link></li>
-            <li><Link to="/returns">Livraison & Retours</Link></li>
-            <li><Link to="/privacy">Politique de Confidentialité</Link></li>
+            <li><Link to="/about">{isAr ? 'عن LEXIGAM' : 'À propos de LEXIGAM'}</Link></li>
+            <li><Link to="/blog">{isAr ? 'مجلة الاستوديو' : 'Le Journal du Studio'}</Link></li>
+            <li><Link to="/contact">{isAr ? 'اتصل بنا' : 'Nous contacter'}</Link></li>
+            <li><Link to="/terms">{isAr ? 'الشروط والأحكام' : 'Conditions Générales'}</Link></li>
+            <li><Link to="/returns">{isAr ? 'التوصيل والإرجاع' : 'Livraison & Retours'}</Link></li>
+            <li><Link to="/privacy">{isAr ? 'سياسة الخصوصية' : 'Politique de Confidentialité'}</Link></li>
           </ul>
         </div>
 
         {/* Colonne 4: PAIEMENT & SÉCURITÉ */}
         <div className="mm-footer-col">
-          <h4>PAIEMENT & SÉCURITÉ</h4>
+          <h4>{isAr ? 'الدفع والأمان' : 'PAIEMENT & SÉCURITÉ'}</h4>
           <p style={{ fontSize: '12px', color: '#666', lineHeight: 1.6, margin: '0 0 12px' }}>
-            Paiement en ligne sécurisé par carte bancaire avec technologie 3D Secure et cryptage SSL.
-            Paiement à la livraison également accepté.
+            {isAr ? 'دفع إلكتروني آمن بالبطاقة البنكية باستخدام 3D Secure وتشفير SSL. كما نقبل الدفع عند الاستلام.' : 'Paiement en ligne sécurisé par carte bancaire avec technologie 3D Secure et cryptage SSL. Paiement à la livraison également accepté.'}
           </p>
           <div className="mm-payment-logos">
             <img src="/molimao/payweb.png" alt="Passerelle sécurisée" loading="lazy" />
@@ -105,14 +106,14 @@ export default function Footer() {
 
       {/* Bas de page */}
       <div className="mm-footer-bottom">
-        <span>© 2026 LEXIGAM SARL. Tous droits réservés.</span>
-        <span>Casablanca / Maroc</span>
+        <span>© 2026 LEXIGAM SARL. {isAr ? 'جميع الحقوق محفوظة.' : 'Tous droits réservés.'}</span>
+        <span>{isAr ? 'الدار البيضاء / المغرب' : 'Casablanca / Maroc'}</span>
         <button
           type="button"
           className="mm-back-top-btn"
           onClick={backTop}
-          aria-label="Retour en haut"
-          title="Retour en haut"
+          aria-label={isAr ? 'العودة إلى الأعلى' : 'Retour en haut'}
+          title={isAr ? 'العودة إلى الأعلى' : 'Retour en haut'}
         >
           <ArrowUp size={16} />
         </button>
