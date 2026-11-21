@@ -1789,3 +1789,14 @@ html[dir="rtl"] .mm-demo-badge {
   font-family: 'Noto Sans Arabic', Tahoma, sans-serif;
   letter-spacing: 0;
 }
+
+.mm-cart-preview-warning {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 7px;
+  padding: 4px 7px;
+  border-radius: 3px;
+  background: #fff4ee;
+  color: #b84a27;
+  font: 700 9px/1.5 'Noto Sans Arabic', Tahoma, sans-serif;
+}
