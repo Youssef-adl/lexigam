@@ -48,13 +48,26 @@ export default function Checkout() {
   }
 
   const submit = async () => {
-    setLoading(true);
     setCheckoutError('');
+
+    const hasInvalidProduct = items.some((item) => {
+      const id = Number(item.produit?.id);
+      return !Number.isSafeInteger(id) || id < 1;
+    });
+
+    if (hasInvalidProduct) {
+      setCheckoutError(isAr
+        ? 'السلة فيها منتج تجريبي قديم. حيدو من السلة؛ المنتجات التجريبية ما كتقبلش الطلبات. خاص إضافة منتجات منشورة في المتجر.'
+        : "Votre panier contient un ancien article de démonstration. Supprimez-le : seuls les produits publiés dans la base du magasin peuvent être commandés.");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await api.post('/commandes', {
         items: items.map((item) => ({
-          id: item.produit.id,
-          quantite: item.quantite,
+          id: Number(item.produit.id),
+          quantite: Number(item.quantite),
         })),
         ...form,
       });
@@ -64,7 +77,9 @@ export default function Checkout() {
       if (error.isAuthError || error.response?.status === 401) {
         setCheckoutError(isAr ? 'انتهت صلاحية الجلسة. يرجى تسجيل الدخول من جديد.' : 'Your session has expired. Please sign in again.');
       } else {
+        const validationMessage = Object.values(error.response?.data?.errors || {}).flat()[0];
         setCheckoutError(
+          validationMessage ||
           error.response?.data?.message ||
           (isAr ? 'تعذّر إتمام الطلب. حاولوا مرة أخرى.' : error.message || 'Unable to place the order.')
         );
