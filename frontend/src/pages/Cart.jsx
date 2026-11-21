@@ -21,7 +21,7 @@ export default function Cart() {
     return (
       <>
         <SEO title={isAr ? 'سلة التسوق — LEXIGAM' : 'Panier — LEXIGAM'} description={isAr ? 'سلة التسوق فارغة حالياً.' : "Votre panier d'achats est actuellement vide."} />
-        <div className="mm-section" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '100px 20px' }}>
+        <div className="mm-section mm-cart-page mm-cart-empty" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '100px 20px' }}>
           <ShoppingBag size={48} style={{ color: '#bbb', marginBottom: '20px' }} />
           <span className="mm-eyebrow">{isAr ? 'سلة LEXIGAM' : 'PANIER LEXIGAM'}</span>
           <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '8px 0 16px', color: '#0f0f0f' }}>{isAr ? 'سلة التسوق فارغة' : 'Votre panier est vide'}</h1>
@@ -51,8 +51,8 @@ export default function Cart() {
   return (
     <>
       <SEO title={isAr ? 'سلة التسوق — LEXIGAM' : 'Panier — LEXIGAM'} description={isAr ? 'راجعوا المنتجات وأتمّوا طلبكم بأمان.' : "Vérifiez vos articles et finalisez votre commande en toute sécurité."} />
-      <div className="mm-section" style={{ paddingTop: '40px', minHeight: '80vh' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid #eaeaea', paddingBottom: '24px', marginBottom: '32px' }}>
+      <div className="mm-section mm-cart-page" style={{ paddingTop: '40px', minHeight: '80vh' }}>
+        <div className="mm-cart-heading" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid #eaeaea', paddingBottom: '24px', marginBottom: '32px' }}>
           <div>
             <span className="mm-eyebrow">{isAr ? 'اختياراتكم' : 'VOTRE SÉLECTION'}</span>
             <h1 style={{ fontSize: '32px', fontWeight: 800, margin: '6px 0 0', color: '#0f0f0f' }}>
@@ -64,12 +64,13 @@ export default function Cart() {
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '50px' }}>
+        <div className="mm-cart-layout" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '50px' }}>
           {/* Liste des articles du panier */}
-          <section style={{ display: 'flex', flexDirection: 'column' }}>
+          <section className="mm-cart-items" style={{ display: 'flex', flexDirection: 'column' }}>
             {items.map((i) => (
               <article
                 key={i.produit.id}
+                className="mm-cart-row"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '100px 1fr auto',
@@ -142,7 +143,7 @@ export default function Cart() {
           </section>
 
           {/* Récapitulatif de commande */}
-          <aside style={{ background: '#f8f8f8', padding: '32px', borderRadius: '4px', border: '1px solid #eaeaea', height: 'fit-content' }}>
+          <aside className="mm-cart-summary" style={{ background: '#f8f8f8', padding: '32px', borderRadius: '4px', border: '1px solid #eaeaea', height: 'fit-content' }}>
             <span className="mm-eyebrow">{isAr ? 'ملخص الطلب' : 'RÉCAPITULATIF'}</span>
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid #eaeaea', fontSize: '14px', fontWeight: 600 }}>
               <span>{isAr ? 'المجموع الفرعي:' : 'Sous-total :'}</span>
