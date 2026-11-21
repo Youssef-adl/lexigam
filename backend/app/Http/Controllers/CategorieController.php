@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategorieController extends Controller
 {
     public function index()
     {
         $query = Categorie::withCount('produits');
-        if (!auth()->check() || auth()->user()->role !== 'admin') {
+        // This route is public for storefront visitors, but also accepts an
+        // optional Sanctum Bearer token so admins can retrieve hidden categories.
+        $user = Auth::guard('sanctum')->user();
+        if (!$user || $user->role !== 'admin') {
             $query->where('statut', true);
         }
 
