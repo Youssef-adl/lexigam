@@ -2174,3 +2174,41 @@ html[dir="rtl"] .pb-btn { direction: rtl; }
   html[dir="rtl"] .pb-cart-side { grid-column: 2; flex-direction: row; align-items: center; }
   html[dir="rtl"] .pb-auth-art>div { right: 22px; left: 22px; }
 }
+
+
+/* One consistent Arabic type system across every public and account page. */
+html[dir="rtl"] body :is(
+  h1,h2,h3,h4,h5,h6,p,a,button,input,select,textarea,label,small,span,strong,
+  em,li,dt,dd,th,td,summary,option
+) {
+  font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+html[dir="rtl"] .mm-brand-link,
+html[dir="rtl"] .mm-brand-link * {
+  font-family: 'Mulish', 'Sora', Arial, sans-serif !important;
+  letter-spacing: -0.04em !important;
+}
+html[dir="rtl"] .mm-brand-link { direction: ltr; }
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3 {
+  line-height: 1.45;
+}
+html[dir="rtl"] p,
+html[dir="rtl"] label,
+html[dir="rtl"] li {
+  line-height: 1.9;
+}
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select {
+  direction: rtl;
+  text-align: right;
+}
+html[dir="rtl"] .mm-product-price,
+html[dir="rtl"] .pb-price,
+html[dir="rtl"] .pb-cart-price,
+html[dir="rtl"] .pb-order-summary b {
+  unicode-bidi: plaintext;
+}
