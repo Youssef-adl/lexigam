@@ -357,10 +357,10 @@ export default function ProductDetail() {
   if (error) {
     return (
       <div className="pb-detail-state">
-        <small>PRODUCT / 404</small>
-        <h1>Product not found.</h1>
+        <small>{isAr ? 'المنتج / 404' : 'PRODUCT / 404'}</small>
+        <h1>{isAr ? 'المنتج غير موجود.' : 'Product not found.'}</h1>
         <Link to="/shop" className="pb-detail-link">
-          BACK TO SHOP <ArrowUpRight size={15} />
+          {isAr ? 'العودة إلى المتجر' : 'BACK TO SHOP'} <ArrowUpRight size={15} />
         </Link>
       </div>
     );
@@ -370,7 +370,7 @@ export default function ProductDetail() {
     return (
       <div className="pb-detail-state">
         <LoaderCircle className="spin" />
-        <small>LOADING PRODUCT</small>
+        <small>{isAr ? 'جارٍ تحميل المنتج' : 'LOADING PRODUCT'}</small>
       </div>
     );
   }
@@ -404,7 +404,7 @@ export default function ProductDetail() {
                 />
               )}
               <span className="pb-detail-image-label">
-                {p.stock < 6 ? 'LOW STOCK' : 'LEXIGAM'}
+                {p.stock < 6 ? (isAr ? 'الكمية محدودة' : 'LOW STOCK') : 'LEXIGAM'}
               </span>
             </div>
 
@@ -416,7 +416,7 @@ export default function ProductDetail() {
                     type="button"
                     className={src === activeImage ? 'active' : ''}
                     onClick={() => setSelectedImage(src)}
-                    aria-label={`View product image ${index + 1}`}
+                    aria-label={isAr ? `عرض صورة المنتج ${index + 1}` : `View product image ${index + 1}`}
                   >
                     <img src={src} alt={`${p.nom} detail ${index + 1}`} loading="lazy" />
                   </button>
@@ -470,7 +470,7 @@ export default function ProductDetail() {
                 <button
                   type="button"
                   onClick={() => setQty((value) => Math.max(1, value - 1))}
-                  aria-label="Decrease quantity"
+                  aria-label={isAr ? 'تقليل الكمية' : 'Decrease quantity'}
                 >
                   <Minus size={14} />
                 </button>
@@ -478,7 +478,7 @@ export default function ProductDetail() {
                 <button
                   type="button"
                   onClick={() => setQty((value) => Math.min(Math.max(1, Number(p.stock) || 1), value + 1))}
-                  aria-label="Increase quantity"
+                  aria-label={isAr ? 'زيادة الكمية' : 'Increase quantity'}
                   disabled={qty >= Number(p.stock || 1)}
                 >
                   <Plus size={14} />
@@ -535,9 +535,9 @@ export default function ProductDetail() {
                   <ChevronDown size={15} />
                 </summary>
                 <div className="pb-detail-spec-grid">
-                  <span>FIT</span><strong>{fit}</strong>
-                  <span>MATERIAL</span><strong>{material}</strong>
-                  <span>SIZE</span><strong>{sizes.join(', ')}</strong>
+                  <span>{isAr ? 'القصة' : 'FIT'}</span><strong>{fit}</strong>
+                  <span>{isAr ? 'الخامة' : 'MATERIAL'}</span><strong>{material}</strong>
+                  <span>{isAr ? 'المقاس' : 'SIZE'}</span><strong>{sizes.join(', ')}</strong>
                 </div>
               </details>
 
@@ -546,7 +546,7 @@ export default function ProductDetail() {
                   <span>{isAr ? 'العناية' : 'ENTRETIEN'}</span>
                   <ChevronDown size={15} />
                 </summary>
-                <p>Lavage à 30°C sur l'envers. Ne pas sécher en machine. Repassage doux sur l'envers.</p>
+                <p>{isAr ? 'يُغسل على الجهة الداخلية بدرجة 30. يُمنع التجفيف الآلي. يُكوى بلطف من الداخل.' : "Lavage à 30°C sur l'envers. Ne pas sécher en machine. Repassage doux sur l'envers."}</p>
               </details>
 
               <details>
@@ -566,7 +566,7 @@ export default function ProductDetail() {
 
         <section className="pb-detail-reviews">
           <div>
-            <small>COMMUNITY / {reviews.length}</small>
+            <small>{isAr ? 'آراء المجتمع' : 'COMMUNITY'} / {reviews.length}</small>
             <h2>{isAr ? 'آراء العملاء' : 'AVIS CLIENTS'}</h2>
           </div>
 
@@ -574,7 +574,7 @@ export default function ProductDetail() {
             {reviews.length ? reviews.map((item, index) => (
               <article key={item.id || index}>
                 <header>
-                  <strong>{item.user?.name || 'VERIFIED CLIENT'}</strong>
+                  <strong>{item.user?.name || (isAr ? 'عميل موثّق' : 'VERIFIED CLIENT')}</strong>
                   <span>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
@@ -588,7 +588,7 @@ export default function ProductDetail() {
                 <p>{item.commentaire}</p>
               </article>
             )) : (
-              <p className="pb-detail-muted">No reviews yet.</p>
+              <p className="pb-detail-muted">{isAr ? 'لا توجد تقييمات بعد.' : 'No reviews yet.'}</p>
             )}
 
             {user?.role === 'client' && (
@@ -600,27 +600,27 @@ export default function ProductDetail() {
                   onChange={(e) => setReview({ ...review, note: Number(e.target.value) })}
                 >
                   {[5, 4, 3, 2, 1].map((value) => (
-                    <option key={value} value={value}>{value} STARS</option>
+                    <option key={value} value={value}>{isAr ? `${value} نجوم` : `${value} STARS`}</option>
                   ))}
                 </select>
                 <textarea
                   value={review.commentaire}
                   onChange={(e) => setReview({ ...review, commentaire: e.target.value })}
-                  placeholder="Tell us about the fit, texture and quality..."
+                  placeholder={isAr ? 'شاركنا رأيك في المقاس والملمس والجودة...' : 'Tell us about the fit, texture and quality...'}
                   required
                 />
                 <button type="submit" className="pb-detail-review-submit">
-                  SUBMIT REVIEW <ArrowUpRight size={14} />
+                  {isAr ? 'إرسال التقييم' : 'SUBMIT REVIEW'} <ArrowUpRight size={14} />
                 </button>
               </form>
             )}
           </div>
         </section>
 
-        <section className="pb-detail-service-strip" aria-label="LEXIGAM services">
-          <div><Truck size={18} /><span>DELIVERY</span><p>Morocco-wide delivery</p></div>
-          <div><RotateCcw size={18} /><span>RETURNS</span><p>Simple return request</p></div>
-          <div><Heart size={18} /><span>LEXIGAM</span><p>Independent Casablanca label</p></div>
+        <section className="pb-detail-service-strip" aria-label={isAr ? 'خدمات LEXIGAM' : 'LEXIGAM services'}>
+          <div><Truck size={18} /><span>{isAr ? 'التوصيل' : 'DELIVERY'}</span><p>{isAr ? 'توصيل لجميع مناطق المغرب' : 'Morocco-wide delivery'}</p></div>
+          <div><RotateCcw size={18} /><span>{isAr ? 'الإرجاع' : 'RETURNS'}</span><p>{isAr ? 'طلب إرجاع سهل' : 'Simple return request'}</p></div>
+          <div><Heart size={18} /><span>LEXIGAM</span><p>{isAr ? 'علامة مستقلة من الدار البيضاء' : 'Independent Casablanca label'}</p></div>
         </section>
       </main>
     </>
