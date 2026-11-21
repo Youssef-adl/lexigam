@@ -8,7 +8,11 @@ import SEO from '../components/SEO';
 export default function Cart() {
   const { items } = useSelector((s) => s.cart);
   const dispatch = useDispatch();
-  const total = items.reduce((a, i) => a + Number(i.produit.prix) * i.quantite, 0);
+  const getPrice = (product) => {
+    const value = Number(product?.prix ?? product?.price ?? product?.prix_unitaire);
+    return Number.isFinite(value) ? value : 0;
+  };
+  const total = items.reduce((sum, item) => sum + getPrice(item.produit) * (Number(item.quantite) || 1), 0);
 
   if (!items.length) {
     return (
@@ -29,10 +33,13 @@ export default function Cart() {
     );
   }
 
-  const src = (p) => {
-    const img = p?.image || p?.primary || '';
-    if (img.startsWith('http') || img.startsWith('/')) return img;
-    return (import.meta.env.VITE_API_URL || 'http://localhost:8000') + img;
+  const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\\/+$/, '');
+  const backendOrigin = apiUrl.replace(/\\/api$/i, '');
+  const src = (product) => {
+    const image = product?.image || product?.primary || product?.image_url || '';
+    if (!image) return '';
+    if (/^https?:\\/\\//i.test(image)) return image;
+    return backendOrigin + (image.startsWith('/') ? image : '/' + image);
   };
 
   const shippingCost = total >= 500 ? 0 : 40;
@@ -70,7 +77,18 @@ export default function Cart() {
                 }}
               >
                 <div style={{ width: '100px', aspectRatio: '4/5', background: '#f7f7f7', borderRadius: '4px', overflow: 'hidden' }}>
-                  <img src={src(i.produit)} alt={i.produit.nom} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {src(i.produit) ? (
+                    <img
+                      src={src(i.produit)}
+                      alt={i.produit?.nom || 'Produit'}
+                      onError={(event) => { event.currentTarget.style.display = 'none'; }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: '#999', fontSize: '11px' }}>
+                      Image indisponible
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -81,7 +99,7 @@ export default function Cart() {
                     Taille : <strong>{i.taille || 'M'}</strong>
                   </div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: '#EB5728', marginBottom: '14px' }}>
-                    {Number(i.produit.prix).toFixed(0)} DH
+                    {getPrice(i.produit).toFixed(0)} DH
                   </div>
 
                   <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid #ddd', borderRadius: '20px', padding: '2px 8px' }}>
@@ -105,7 +123,7 @@ export default function Cart() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', height: '100%' }}>
                   <strong style={{ fontSize: '15px', fontWeight: 800, color: '#0f0f0f' }}>
-                    {(Number(i.produit.prix) * i.quantite).toFixed(0)} DH
+                    {(getPrice(i.produit) * (Number(i.quantite) || 1)).toFixed(0)} DH
                   </strong>
                   <button
                     type="button"
