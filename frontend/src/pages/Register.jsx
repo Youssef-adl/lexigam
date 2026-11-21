@@ -4,8 +4,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../store/authSlice';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 import api from '../axios';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Register() {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -53,33 +56,33 @@ export default function Register() {
       </div>
 
       <form className="pb-auth-form" onSubmit={submit}>
-        <Link to="/shop" className="pb-back"><ArrowLeft size={14} /> BACK TO SHOP</Link>
-        <small>CREATE ACCOUNT</small>
-        <h2>Join the archive.</h2>
+        <Link to="/shop" className="pb-back"><ArrowLeft size={14} /> {isAr ? 'العودة إلى المتجر' : 'BACK TO SHOP'}</Link>
+        <small>{isAr ? 'إنشاء حساب' : 'CREATE ACCOUNT'}</small>
+        <h2>{isAr ? 'انضم إلى عالمنا.' : 'Join the archive.'}</h2>
 
         {error && <p className="pb-error" role="alert">{error}</p>}
 
         <label>
-          FULL NAME
+          {isAr ? 'الاسم الكامل' : 'FULL NAME'}
           <input name="name" value={form.name} onChange={change} required autoComplete="name" />
         </label>
         <label>
-          EMAIL
+          {isAr ? 'البريد الإلكتروني' : 'EMAIL'}
           <input name="email" type="email" value={form.email} onChange={change} required autoComplete="email" />
         </label>
         <label>
-          PASSWORD
+          {isAr ? 'كلمة المرور' : 'PASSWORD'}
           <input name="password" type="password" value={form.password} onChange={change} minLength={8} required autoComplete="new-password" />
         </label>
         <label>
-          CONFIRM PASSWORD
+          {isAr ? 'تأكيد كلمة المرور' : 'CONFIRM PASSWORD'}
           <input name="password_confirmation" type="password" value={form.password_confirmation} onChange={change} minLength={8} required autoComplete="new-password" />
         </label>
 
         <button className="pb-btn" disabled={loading}>
-          {loading ? 'CREATING' : 'CREATE ACCOUNT'} <ArrowUpRight size={15} />
+          {loading ? (isAr ? 'جارٍ الإنشاء...' : 'CREATING') : (isAr ? 'إنشاء الحساب' : 'CREATE ACCOUNT')} <ArrowUpRight size={15} />
         </button>
-        <p>Already a member? <Link to="/login">Sign in.</Link></p>
+        <p>{isAr ? 'لديك حساب بالفعل؟' : 'Already a member?'} <Link to="/login">{isAr ? 'سجّل الدخول.' : 'Sign in.'}</Link></p>
       </form>
     </div>
   );
