@@ -20,7 +20,7 @@ const heroSlides = [
     title: 'L’UNIFORME DU QUOTIDIEN',
     desc: 'Coton peigné lourd, matières franches et finitions soignées pour durer au fil des saisons.',
     link: '/shop',
-    cta: '{isAr ? 'عرض الكل' : 'VOIR TOUT'} LE VESTIAIRE'
+    cta: 'VOIR TOUT LE VESTIAIRE'
   },
   {
     image: '/molimao/slider-2.jpg',
