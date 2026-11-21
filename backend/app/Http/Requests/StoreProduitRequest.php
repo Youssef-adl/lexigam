@@ -19,6 +19,13 @@ class StoreProduitRequest extends FormRequest
             'prix' => ['required','numeric','min:0'],
             'stock' => ['required','integer','min:0'],
             'image' => ['nullable','file','mimes:jpeg,png,jpg,webp','max:5120'],
+            'hover' => ['nullable','string','max:2048'],
+            'gallery' => ['nullable','array','max:8'],
+            'gallery.*' => ['string','max:2048'],
+            'sizes' => ['nullable','array','max:12'],
+            'sizes.*' => ['string','max:30'],
+            'fit' => ['nullable','string','max:255'],
+            'material' => ['nullable','string','max:255'],
             'categorie_id' => ['required','integer','exists:categories,id'],
         ];
     }
