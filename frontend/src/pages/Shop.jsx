@@ -267,10 +267,16 @@ export default function Shop({ category = 'All Products' }) {
     return arr;
   }, [d, q, activeTab, sort]);
 
+  const isDatabaseProduct = (product) => {
+    const id = Number(product?.id);
+    return Number.isSafeInteger(id) && id > 0;
+  };
+
   const handleQuickAdd = (e, product) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(addToCart({ produit: product, quantite: 1, taille: product.sizes?.[0] || 'M' }));
+    if (!isDatabaseProduct(product)) return;
+    dispatch(addToCart({ produit: { ...product, id: Number(product.id) }, quantite: 1, taille: product.sizes?.[0] || 'M' }));
   };
 
   const getPageTitle = () => {
@@ -365,15 +371,21 @@ export default function Shop({ category = 'All Products' }) {
                   <Link to={`/product/${p.id || 'm1'}`} className="mm-card-media">
                     <img src={primarySrc} alt={p.nom} className="mm-img-primary" loading="lazy" />
                     <img src={hoverSrc} alt={`${p.nom} vue portée`} className="mm-img-hover" loading="lazy" />
-                    <button
-                      type="button"
-                      className="mm-quick-add"
-                      onClick={(e) => handleQuickAdd(e, p)}
-                      title="Ajouter au panier"
-                      aria-label="Ajouter au panier"
-                    >
-                      <Plus size={20} strokeWidth={2.4} />
-                    </button>
+                    {isDatabaseProduct(p) ? (
+                      <button
+                        type="button"
+                        className="mm-quick-add"
+                        onClick={(e) => handleQuickAdd(e, p)}
+                        title={isAr ? 'إضافة إلى السلة' : 'Ajouter au panier'}
+                        aria-label={isAr ? 'إضافة إلى السلة' : 'Ajouter au panier'}
+                      >
+                        <Plus size={20} strokeWidth={2.4} />
+                      </button>
+                    ) : (
+                      <span className="mm-demo-badge" aria-label={isAr ? 'منتج للعرض فقط' : 'Aperçu uniquement'}>
+                        {isAr ? 'للعرض فقط' : 'APERÇU'}
+                      </span>
+                    )}
                   </Link>
 
                   {p.sizes && p.sizes.length > 0 && (
