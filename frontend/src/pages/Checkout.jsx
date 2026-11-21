@@ -139,7 +139,14 @@ export default function Checkout() {
                 </label>
               </div>
 
-              {checkoutError && <p className="pb-error" role="alert">{checkoutError}</p>}
+              {checkoutError && (
+                <>
+                  <p className="pb-error" role="alert">{checkoutError}</p>
+                  <Link to="/cart" className="pb-back">
+                    {isAr ? 'العودة إلى السلة لتعديل المنتجات' : 'RETOUR AU PANIER POUR MODIFIER LES ARTICLES'}
+                  </Link>
+                </>
+              )}
 
               <button
                 className="pb-btn"
@@ -178,7 +185,14 @@ export default function Checkout() {
                 <em>{isAr ? 'متاح حسب منطقة التوصيل.' : 'Available for eligible delivery zones.'}</em>
               </label>
 
-              {checkoutError && <p className="pb-error" role="alert">{checkoutError}</p>}
+              {checkoutError && (
+                <>
+                  <p className="pb-error" role="alert">{checkoutError}</p>
+                  <Link to="/cart" className="pb-back">
+                    {isAr ? 'العودة إلى السلة لتعديل المنتجات' : 'RETOUR AU PANIER POUR MODIFIER LES ARTICLES'}
+                  </Link>
+                </>
+              )}
 
               <div className="pb-check-actions">
                 <button onClick={() => setStep(1)}>
