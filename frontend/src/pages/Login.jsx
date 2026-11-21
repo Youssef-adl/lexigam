@@ -4,8 +4,11 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 import { login } from '../store/authSlice';
 import api from '../axios';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Login() {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -50,25 +53,25 @@ export default function Login() {
       </div>
 
       <form className="pb-auth-form" onSubmit={submit}>
-        <Link to="/shop" className="pb-back"><ArrowLeft size={14} /> BACK TO SHOP</Link>
-        <small>SIGN IN</small>
-        <h2>Welcome back.</h2>
+        <Link to="/shop" className="pb-back"><ArrowLeft size={14} /> {isAr ? 'العودة إلى المتجر' : 'BACK TO SHOP'}</Link>
+        <small>{isAr ? 'تسجيل الدخول' : 'SIGN IN'}</small>
+        <h2>{isAr ? 'مرحباً بعودتك.' : 'Welcome back.'}</h2>
 
         {error && <p className="pb-error" role="alert">{error}</p>}
 
         <label>
-          EMAIL
+          {isAr ? 'البريد الإلكتروني' : 'EMAIL'}
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" />
         </label>
         <label>
-          PASSWORD
+          {isAr ? 'كلمة المرور' : 'PASSWORD'}
           <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required autoComplete="current-password" />
         </label>
 
         <button className="pb-btn" disabled={loading}>
-          {loading ? 'SIGNING IN' : 'SIGN IN'} <ArrowUpRight size={15} />
+          {loading ? (isAr ? 'جارٍ الدخول...' : 'SIGNING IN') : (isAr ? 'دخول' : 'SIGN IN')} <ArrowUpRight size={15} />
         </button>
-        <p>New here? <Link to="/register">Create an account.</Link></p>
+        <p>{isAr ? 'مستخدم جديد؟' : 'New here?'} <Link to="/register">{isAr ? 'أنشئ حساباً.' : 'Create an account.'}</Link></p>
       </form>
     </div>
   );
