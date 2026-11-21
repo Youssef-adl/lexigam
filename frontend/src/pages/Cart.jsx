@@ -15,6 +15,10 @@ export default function Cart() {
     const value = Number(product?.prix ?? product?.price ?? product?.prix_unitaire);
     return Number.isFinite(value) ? value : 0;
   };
+  const isDatabaseProduct = (product) => {
+    const id = Number(product?.id);
+    return Number.isSafeInteger(id) && id > 0;
+  };
   const total = items.reduce((sum, item) => sum + getPrice(item.produit) * (Number(item.quantite) || 1), 0);
 
   if (!items.length) {
@@ -99,6 +103,11 @@ export default function Cart() {
                   <h2 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 6px', color: '#0f0f0f' }}>
                     {i.produit.nom}
                   </h2>
+                  {!isDatabaseProduct(i.produit) && (
+                    <small className="mm-cart-preview-warning">
+                      {isAr ? 'منتج تجريبي — غير قابل للطلب' : 'Aperçu — non commandable'}
+                    </small>
+                  )}
                   <div style={{ fontSize: '12px', color: '#777', marginBottom: '12px' }}>
                     {isAr ? 'المقاس:' : 'Taille :'} <strong>{i.taille || 'M'}</strong>
                   </div>
