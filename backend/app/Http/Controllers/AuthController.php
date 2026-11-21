@@ -1,11 +1,11 @@
 <?php
 
-namespace App\\Http\\Controllers;
+namespace App\Http\Controllers;
 
-use App\\Models\\User;
-use Illuminate\\Http\\Request;
-use Illuminate\\Support\\Facades\\Hash;
-use Illuminate\\Validation\\Rules\\Password;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -15,7 +15,6 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', Password::min(8)],
-            // Public registration may create clients or vendors, never administrators.
             'role' => ['sometimes', 'in:client,vendeur'],
         ]);
 
@@ -57,7 +56,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Revoke only the token used by this device/session.
         $request->user()->currentAccessToken()?->delete();
 
         return response()->json(['message' => 'logged out']);
