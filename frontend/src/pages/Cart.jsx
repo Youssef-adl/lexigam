@@ -33,12 +33,12 @@ export default function Cart() {
     );
   }
 
-  const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\\/+$/, '');
-  const backendOrigin = apiUrl.replace(/\\/api$/i, '');
+  const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
+  const backendOrigin = apiUrl.endsWith('/api') ? apiUrl.slice(0, -4) : apiUrl;
   const src = (product) => {
     const image = product?.image || product?.primary || product?.image_url || '';
     if (!image) return '';
-    if (/^https?:\\/\\//i.test(image)) return image;
+    if (image.startsWith('http://') || image.startsWith('https://')) return image;
     return backendOrigin + (image.startsWith('/') ? image : '/' + image);
   };
 
