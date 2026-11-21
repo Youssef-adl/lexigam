@@ -50,28 +50,28 @@ const heroSlides = [
 
 const newProducts = [
   {
-    name: 'T-shirt Oversize « Grow » — Sérigraphie d’Atelier',
+    name: 'T-shirt Oversize « Grow » — Écru & Marquage Atelier',
     price: '450 DH',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     primary: '/molimao/prod-grow-1.jpg',
     hover: '/molimao/prod-grow-2.jpg'
   },
   {
-    name: 'Hoodie Brut « Radiant » — Molleton Épais 340g',
+    name: 'Casquette Trucker « Radiant » — Mesh Kaki',
     price: '790 DH',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     primary: '/molimao/prod-radiant-1.jpg',
     hover: '/molimao/prod-radiant-2.jpg'
   },
   {
-    name: 'Sweat Col Rond « Puder » — Coton Biologique',
+    name: 'Sweat Col Rond « Puder » — Beige Sable',
     price: '690 DH',
     sizes: ['S', 'M', 'L', 'XL'],
     primary: '/molimao/prod-puder-1.jpg',
     hover: '/molimao/prod-puder-2.jpg'
   },
   {
-    name: 'T-shirt Graphic « Krom » — Coton Peigné 240g',
+    name: 'Sweat Graphique « Krom » — Noir',
     price: '450 DH',
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     primary: '/molimao/prod-krom-1.jpg',
