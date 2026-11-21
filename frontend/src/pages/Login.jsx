@@ -6,7 +6,7 @@ export default function Login(){
   try{
    await ensureCsrf();
    const r=await api.post('/login',{email,password});
-   dispatch(login({user:r.data.user}));
+   dispatch(login({user:r.data.user, token:r.data.token}));
    const role=r.data.user.role;
    navigate(location.state?.from||(role==='admin'?'/admin/dashboard':role==='vendeur'?'/vendor/dashboard':'/shop'));
   }catch(err){

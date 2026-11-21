@@ -30,7 +30,9 @@ class AuthController extends Controller
             $request->session()->regenerate();
         }
 
-        return response()->json(['success' => true,'user' => $user], 201);
+        $token = $user->createToken('api')->plainTextToken;
+
+        return response()->json(['success' => true, 'user' => $user, 'token' => $token], 201);
     }
 
     public function login(Request $request)
@@ -46,22 +48,32 @@ class AuthController extends Controller
             ]);
         }
 
-        $request->session()->regenerate();
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
 
-        return response()->json(['success' => true,'user' => $request->user()]);
+        $user = $request->user();
+        $token = $user->createToken('api')->plainTextToken;
+
+        return response()->json(['success' => true, 'user' => $user, 'token' => $token]);
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->user()) {
+            $request->user()->currentAccessToken()?->delete();
+        }
+        if ($request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return response()->json(['success' => true]);
     }
 
     public function me(Request $request)
     {
-        return response()->json(['success' => true,'user' => $request->user()]);
+        return response()->json(['success' => true, 'user' => $request->user()]);
     }
 }

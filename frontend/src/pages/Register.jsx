@@ -4,7 +4,7 @@ export default function Register(){
  const[f,setF]=useState({name:'',email:'',password:'',password_confirmation:''}),[error,setError]=useState(''),[loading,setLoading]=useState(false),dispatch=useDispatch(),navigate=useNavigate();
  const ch=e=>setF({...f,[e.target.name]:e.target.value});
  const submit=async e=>{e.preventDefault();setLoading(true);setError('');
-  try{await ensureCsrf();const r=await api.post('/register',f);dispatch(login({user:r.data.user}));navigate('/shop');}
+  try{await ensureCsrf();const r=await api.post('/register',f);dispatch(login({user:r.data.user, token:r.data.token}));navigate('/shop');}
   catch(err){setError(Object.values(err.response?.data?.errors||{})?.[0]?.[0]||err.response?.data?.message||'Could not create your account.');}
   finally{setLoading(false)}
  };
