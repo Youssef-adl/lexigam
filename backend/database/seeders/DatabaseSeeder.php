@@ -1,16 +1,16 @@
 <?php
 
-namespace Database\\Seeders;
+namespace Database\Seeders;
 
-use Illuminate\\Database\\Seeder;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Run the application's development seeders.
      *
-     * Production data must be managed explicitly. In particular, never import
-     * a SQL dump from a deploy-time seeder: dumps can contain DROP TABLE.
+     * Never import a SQL dump from a deploy-time seeder. Production data
+     * must be managed explicitly to protect live customer records.
      */
     public function run(): void
     {
