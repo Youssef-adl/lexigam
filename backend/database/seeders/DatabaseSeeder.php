@@ -1,34 +1,22 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
+use Illuminate\\Database\\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the application's development seeders.
+     *
+     * Production data must be managed explicitly. In particular, never import
+     * a SQL dump from a deploy-time seeder: dumps can contain DROP TABLE.
      */
     public function run(): void
     {
-        $dumpFile = database_path('lexigam_dump.sql');
-        if (File::exists($dumpFile)) {
-            // Import the dump if the database has not been populated yet
-            try {
-                $hasProducts = DB::table('produits')->exists();
-            } catch (\Throwable $e) {
-                $hasProducts = false;
-            }
-
-            if (!$hasProducts) {
-                $sql = File::get($dumpFile);
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-                DB::unprepared($sql);
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-                return;
-            }
+        if (app()->environment('production')) {
+            $this->command?->warn('Database seeding is disabled in production to protect live data.');
+            return;
         }
 
         $this->call([
