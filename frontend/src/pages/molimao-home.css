@@ -1354,3 +1354,39 @@ html[dir="rtl"] .mm-footer-contact-item { direction: rtl; justify-content: flex-
   html[dir="rtl"] .mm-footer-main { grid-template-columns: 1fr; }
   html[dir="rtl"] .mm-footer-brand-col { grid-column: auto; }
 }
+
+
+/* Keep the Arabic desktop header balanced around the centered wordmark. */
+@media (min-width: 901px) {
+  html[dir="rtl"] .mm-navbar {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: 16px;
+  }
+  html[dir="rtl"] .mm-nav-left {
+    min-width: 0;
+    overflow: hidden;
+    gap: 12px;
+  }
+  html[dir="rtl"] .mm-desktop-nav {
+    min-width: 0;
+    gap: clamp(10px, 1vw, 16px);
+  }
+  html[dir="rtl"] .mm-desktop-nav a {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  /* Journal, About and Contact remain available inside the drawer menu. */
+  html[dir="rtl"] .mm-desktop-nav a:nth-child(n+6) {
+    display: none;
+  }
+  html[dir="rtl"] .mm-brand-link {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    padding-inline: 12px;
+  }
+  html[dir="rtl"] .mm-nav-actions {
+    min-width: 0;
+    gap: 10px;
+  }
+}
