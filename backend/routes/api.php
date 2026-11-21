@@ -1,24 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\\Support\\Facades\\Route;
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategorieController;
-use App\Http\Controllers\ProduitController;
-use App\Http\Controllers\PanierController;
-use App\Http\Controllers\CommandeController;
-use App\Http\Controllers\PaiementController;
-use App\Http\Controllers\LivraisonController;
-use App\Http\Controllers\AvisController;
-use App\Http\Controllers\RetourController;
-use App\Http\Controllers\LigneCommandeController;
-use App\Http\Controllers\LignePanierController;
-use App\Http\Controllers\AuthController;
+use App\\Http\\Controllers\\UserController;
+use App\\Http\\Controllers\\CategorieController;
+use App\\Http\\Controllers\\ProduitController;
+use App\\Http\\Controllers\\PanierController;
+use App\\Http\\Controllers\\CommandeController;
+use App\\Http\\Controllers\\PaiementController;
+use App\\Http\\Controllers\\LivraisonController;
+use App\\Http\\Controllers\\AvisController;
+use App\\Http\\Controllers\\RetourController;
+use App\\Http\\Controllers\\LigneCommandeController;
+use App\\Http\\Controllers\\LignePanierController;
+use App\\Http\\Controllers\\AuthController;
 
-
-
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Public authentication endpoints are throttled to reduce brute-force abuse.
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
 /*
 | PUBLIC
@@ -40,16 +39,12 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('users', UserController::class);
-        // Routes d'approbation et suppression des produits
         Route::put('produits/{id}/approve', [ProduitController::class, 'approve']);
         Route::put('produits/{id}/reject', [ProduitController::class, 'reject']);
         Route::put('produits/{id}/approve-deletion', [ProduitController::class, 'approveDeletion']);
         Route::put('produits/{id}/reject-deletion', [ProduitController::class, 'rejectDeletion']);
-        
         Route::put('retours/{id}/approve', [RetourController::class, 'approve']);
         Route::put('retours/{id}/reject', [RetourController::class, 'reject']);
-        
-        // Gestion des avis par l'admin
         Route::delete('avis/{id}', [AvisController::class, 'destroy']);
     });
 
@@ -61,8 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('produits', [ProduitController::class, 'store']);
         Route::put('produits/{produit}', [ProduitController::class, 'update']);
         Route::delete('produits/{produit}', [ProduitController::class, 'destroy']);
-        Route::get('vendor-orders', [CommandeController::class, 'vendorOrders']); // Back to original name for dashboard compatibility
-        Route::get('vendor-returns', [RetourController::class, 'vendorReturns']); // New route for vendors to see return requests
+        Route::get('vendor-orders', [CommandeController::class, 'vendorOrders']);
+        Route::get('vendor-returns', [RetourController::class, 'vendorReturns']);
         Route::put('produits/{id}/request-deletion', [ProduitController::class, 'requestDeletion']);
     });
 
