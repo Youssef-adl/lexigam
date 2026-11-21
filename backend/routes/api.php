@@ -1,21 +1,20 @@
 <?php
 
-use Illuminate\\Support\\Facades\\Route;
+use Illuminate\Support\Facades\Route;
 
-use App\\Http\\Controllers\\UserController;
-use App\\Http\\Controllers\\CategorieController;
-use App\\Http\\Controllers\\ProduitController;
-use App\\Http\\Controllers\\PanierController;
-use App\\Http\\Controllers\\CommandeController;
-use App\\Http\\Controllers\\PaiementController;
-use App\\Http\\Controllers\\LivraisonController;
-use App\\Http\\Controllers\\AvisController;
-use App\\Http\\Controllers\\RetourController;
-use App\\Http\\Controllers\\LigneCommandeController;
-use App\\Http\\Controllers\\LignePanierController;
-use App\\Http\\Controllers\\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\PanierController;
+use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\LivraisonController;
+use App\Http\Controllers\AvisController;
+use App\Http\Controllers\RetourController;
+use App\Http\Controllers\LigneCommandeController;
+use App\Http\Controllers\LignePanierController;
+use App\Http\Controllers\AuthController;
 
-// Public authentication endpoints are throttled to reduce brute-force abuse.
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
@@ -30,13 +29,9 @@ Route::get('categories', [CategorieController::class, 'index']);
 | AUTH REQUIRED
 */
 Route::middleware('auth:sanctum')->group(function () {
-
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    /*
-    | ADMIN
-    */
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('users', UserController::class);
         Route::put('produits/{id}/approve', [ProduitController::class, 'approve']);
@@ -48,9 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('avis/{id}', [AvisController::class, 'destroy']);
     });
 
-    /*
-    | ADMIN & VENDEUR
-    */
     Route::middleware('role:admin,vendeur')->group(function () {
         Route::apiResource('categories', CategorieController::class);
         Route::post('produits', [ProduitController::class, 'store']);
@@ -61,23 +53,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('produits/{id}/request-deletion', [ProduitController::class, 'requestDeletion']);
     });
 
-    /*
-    | CLIENT
-    */
     Route::middleware('role:client')->group(function () {
         Route::apiResource('paniers', PanierController::class);
         Route::post('paniers/sync', [PanierController::class, 'sync']);
         Route::apiResource('ligne-paniers', LignePanierController::class);
     });
 
-    /*
-    | ALL AUTH USERS
-    */
     Route::apiResource('commandes', CommandeController::class);
     Route::apiResource('avis', AvisController::class)->except(['destroy']);
     Route::apiResource('retours', RetourController::class);
     Route::apiResource('paiements', PaiementController::class);
     Route::apiResource('livraisons', LivraisonController::class);
     Route::apiResource('ligne-commandes', LigneCommandeController::class);
-
 });
