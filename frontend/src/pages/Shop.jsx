@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Plus } from 'lucide-react';
 import api from '../axios';
+import { useLanguage } from '../i18n/LanguageContext';
 import { addToCart } from '../store/cartSlice';
 
 const demoProducts = [
@@ -205,6 +206,8 @@ const categoryTabs = [
 ];
 
 export default function Shop({ category = 'All Products' }) {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
   const [d, setD] = useState([]);
   const [load, setLoad] = useState(true);
   const [activeTab, setActiveTab] = useState(
@@ -271,29 +274,29 @@ export default function Shop({ category = 'All Products' }) {
   };
 
   const getPageTitle = () => {
-    if (activeTab === 'Women') return 'Vestiaire Femmes';
-    if (activeTab === 'Men') return 'Vestiaire Hommes';
-    if (activeTab === 'Art') return 'Éditions Art & Sérigraphies';
-    if (activeTab === 'Accessoires') return 'Accessoires & Objets';
-    return 'Toutes les pièces';
+    if (activeTab === 'Women') return isAr ? 'مجموعة النساء' : 'Vestiaire Femmes';
+    if (activeTab === 'Men') return isAr ? 'مجموعة الرجال' : 'Vestiaire Hommes';
+    if (activeTab === 'Art') return isAr ? 'إصدارات فنية وطباعة حريرية' : 'Éditions Art & Sérigraphies';
+    if (activeTab === 'Accessoires') return isAr ? 'إكسسوارات وقطع مختارة' : 'Accessoires & Objets';
+    return isAr ? 'جميع القطع' : 'Toutes les pièces';
   };
 
   return (
     <>
       <SEO
-        title={`Boutique LEXIGAM — ${getPageTitle()}`}
-        description="Découvrez les vestes d'atelier, t-shirts, sweats à capuche et tirages d'art du vestiaire indépendant LEXIGAM."
+        title={isAr ? `متجر LEXIGAM — ${getPageTitle()}` : `Boutique LEXIGAM — ${getPageTitle()}`}
+        description={isAr ? 'اكتشفوا قطع LEXIGAM المستقلة من الملابس والإكسسوارات والإصدارات الفنية.' : "Découvrez les vestes d'atelier, t-shirts, sweats à capuche et tirages d'art du vestiaire indépendant LEXIGAM."}
       />
       <div className="mm-section" style={{ paddingTop: '40px', minHeight: '80vh' }}>
         {/* Shop Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '28px' }}>
           <div>
-            <span className="mm-eyebrow">BOUTIQUE EN LIGNE</span>
+            <span className="mm-eyebrow">{isAr ? 'المتجر الإلكتروني' : 'BOUTIQUE EN LIGNE'}</span>
             <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, margin: '6px 0 0', color: '#0f0f0f' }}>
               {getPageTitle()}
             </h1>
             <p style={{ fontSize: '13px', color: '#777', margin: '6px 0 0' }}>
-              {filteredProducts.length} pièces disponibles au catalogue
+              {isAr ? `${filteredProducts.length} قطعة متاحة في المتجر` : `${filteredProducts.length} pièces disponibles au catalogue`}
             </p>
           </div>
 
@@ -314,9 +317,9 @@ export default function Shop({ category = 'All Products' }) {
                   cursor: 'pointer'
                 }}
               >
-                <option value="NEW">Nouveautés d'abord</option>
-                <option value="PRICE_LOW">Prix : ordre croissant</option>
-                <option value="PRICE_HIGH">Prix : ordre décroissant</option>
+                <option value="NEW">{isAr ? 'الأحدث أولاً' : "Nouveautés d'abord"}</option>
+                <option value="PRICE_LOW">{isAr ? 'السعر: من الأقل إلى الأعلى' : 'Prix : ordre croissant'}</option>
+                <option value="PRICE_HIGH">{isAr ? 'السعر: من الأعلى إلى الأقل' : 'Prix : ordre décroissant'}</option>
               </select>
               <ChevronDown size={14} style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#777' }} />
             </div>
@@ -342,7 +345,7 @@ export default function Shop({ category = 'All Products' }) {
                 transition: 'all 0.2s ease'
               }}
             >
-              {tab.label}
+              {isAr ? ({ ALL: 'جميع القطع', Women: 'نساء', Men: 'رجال', Art: 'إصدارات فنية', Accessoires: 'إكسسوارات' }[tab.key] || tab.label) : tab.label}
             </button>
           ))}
         </div>
@@ -350,7 +353,7 @@ export default function Shop({ category = 'All Products' }) {
         {/* Products Grid */}
         {load ? (
           <div style={{ textAlign: 'center', padding: '100px 0', color: '#888', fontWeight: 600 }}>
-            Chargement des pièces...
+            {isAr ? 'جارٍ تحميل المنتجات...' : 'Chargement des pièces...'}
           </div>
         ) : filteredProducts.length ? (
           <div className="mm-grid-4">
@@ -396,16 +399,16 @@ export default function Shop({ category = 'All Products' }) {
         ) : (
           <div style={{ textAlign: 'center', padding: '80px 20px', color: '#777' }}>
             <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>
-              Aucune pièce trouvée
+              {isAr ? 'لم يتم العثور على منتجات' : 'Aucune pièce trouvée'}
             </h3>
-            <p>Essayez de sélectionner une autre catégorie ou modifiez vos critères de recherche.</p>
+            <p>{isAr ? 'جرّبوا اختيار فئة أخرى أو تعديل كلمات البحث.' : 'Essayez de sélectionner une autre catégorie ou modifiez vos critères de recherche.'}</p>
             <button
               type="button"
               className="mm-outline-btn"
               onClick={() => setActiveTab('ALL')}
               style={{ marginTop: '16px' }}
             >
-              Afficher tout le vestiaire
+              {isAr ? 'عرض جميع القطع' : 'Afficher tout le vestiaire'}
             </button>
           </div>
         )}
