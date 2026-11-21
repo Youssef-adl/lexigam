@@ -1,44 +1,47 @@
 import axios from 'axios';
 
-const apiRoot = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Accept either the backend origin or an API URL ending in /api.
+// This avoids both /api/sanctum/csrf-cookie and accidental /api/api routes.
+const configuredApiUrl = String(
+  import.meta.env.VITE_API_URL || 'http://localhost:8000'
+).trim().replace(/\/+$/, '');
 
-export const ensureCsrf = () => axios.get(`${apiRoot}/sanctum/csrf-cookie`, {
-  withCredentials: true,
-  withXSRFToken: true,
-});
+const backendOrigin = configuredApiUrl.replace(/\/api$/i, '');
+const apiBaseUrl = `${backendOrigin}/api`;
 
 const api = axios.create({
-  baseURL: `${apiRoot}/api`,
-  withCredentials: true,
-  withXSRFToken: true,
+  baseURL: apiBaseUrl,
+  headers: {
+    Accept: 'application/json',
+  },
 });
 
 api.interceptors.request.use((config) => {
   config.headers = config.headers || {};
   config.headers.Accept = 'application/json';
+
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  } else if (config.headers.Authorization) {
+    delete config.headers.Authorization;
   }
+
   return config;
 });
 
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
+  (error) => {
     const status = error.response?.status;
     const config = error.config || {};
     const path = config.url || '';
 
-    if (status === 419 && !config._csrfRetry) {
-      config._csrfRetry = true;
-      await ensureCsrf();
-      return api(config);
-    }
-
-    if ((status === 401 || status === 419)
-      && localStorage.getItem('user')
-      && !/\/(login|register|logout|me)$/.test(path)) {
+    if (
+      status === 401 &&
+      localStorage.getItem('user') &&
+      !/\/(login|register|logout|me)$/.test(path)
+    ) {
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       window.dispatchEvent(new CustomEvent('lexigam:auth-expired'));
