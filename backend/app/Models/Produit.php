@@ -11,12 +11,14 @@ class Produit extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom','description','prix','stock','image','user_id','categorie_id','statut','deletion_reason',
+        'nom','description','prix','stock','image','hover','gallery','sizes','fit','material','user_id','categorie_id','statut','deletion_reason',
     ];
 
     protected $casts = [
         'prix' => 'decimal:2',
         'stock' => 'integer',
+        'gallery' => 'array',
+        'sizes' => 'array',
     ];
 
     public function vendeur(){ return $this->belongsTo(User::class,'user_id'); }
