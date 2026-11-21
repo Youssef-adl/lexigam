@@ -23,7 +23,7 @@ const LanguageContext=createContext(null);
 export function LanguageProvider({children}){
  const [language,setLanguage]=useState(()=>localStorage.getItem('lexigam-language')||'fr');
  const [theme,setTheme]=useState(()=>localStorage.getItem('lexigam-theme')||'light');
- useEffect(()=>{localStorage.setItem('lexigam-language',language);document.documentElement.lang=language;document.documentElement.dir=language==='ar'?'rtl':'ltr'},[language]);
+ useEffect(()=>{localStorage.setItem('lexigam-language',language);document.documentElement.lang=language==='ar'?'ar':'fr';document.documentElement.dir=language==='ar'?'rtl':'ltr';document.documentElement.dataset.language=language;document.documentElement.classList.toggle('lang-ar',language==='ar')},[language]);
  useEffect(()=>{localStorage.setItem('lexigam-theme',theme);document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme},[theme]);
  const value=useMemo(()=>({language,setLanguage,theme,setTheme,t:translations[language]}),[language,theme]);
  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
