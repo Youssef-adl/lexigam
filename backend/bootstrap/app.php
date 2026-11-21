@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->statefulApi();
+        // Authentication is handled by Sanctum personal access tokens in
+        // the Authorization: Bearer header. The SPA and API are hosted on
+        // different top-level domains, so cookie-based SPA auth / CSRF
+        // initialization is intentionally not enabled.
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
