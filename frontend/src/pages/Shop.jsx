@@ -2,257 +2,414 @@ import SEO from '../components/SEO';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { SlidersHorizontal, X, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
 import api from '../axios';
 import { addToCart } from '../store/cartSlice';
-import { useLanguage } from '../i18n/LanguageContext';
 
-const demo = [
-  ['ARCHIVE BOMBER', 890, '/webpImage/image-1.jpg'],
-  ['HEAVYWEIGHT HOODIE', 590, '/webpImage/image-7.jpg'],
-  ['WIDE CARGO TROUSER', 640, '/webpImage/image-8.jpg'],
-  ['CORE TEE / 02', 290, '/webpImage/image-11.jpg'],
-  ['DISTRICT OVERSHIRT', 690, '/webpImage/image-6.jpg'],
-  ['RAW DENIM 01', 720, '/webpImage/image-2.jpg'],
-  ['AFTER DARK JACKET', 1190, '/webpImage/image-3.jpg'],
-  ['FIELD TEE / 01', 350, '/webpImage/image-5.jpg'],
-  ['MINIMAL FLEECE', 490, '/webpImage/image-12.jpg'],
-  ['STUDIO SHIRT', 620, '/webpImage/image-14.jpg'],
-  ['UTILITY VEST', 540, '/webpImage/image-15.jpg'],
-  ['CASABLANCA HOODIE', 600, '/webpImage/image-16.jpg'],
+const demoProducts = [
+  {
+    id: 'm1',
+    nom: 'T-shirt Oversize « Grow » — Sérigraphie d’Atelier',
+    prix: 450.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-grow-1.jpg',
+    hover: '/molimao/prod-grow-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Coton peigné lourd 240g avec sérigraphie exclusive Grow sur la poitrine et coupe décontractée.'
+  },
+  {
+    id: 'm2',
+    nom: 'Hoodie Brut « Radiant » — Molleton Épais 340g',
+    prix: 790.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-radiant-1.jpg',
+    hover: '/molimao/prod-radiant-2.jpg',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Molleton épais 340g avec intérieur brossé doux. Capuche doublée généreuse et finitions bord-côte.'
+  },
+  {
+    id: 'm3',
+    nom: 'Sweat Col Rond « Puder » — Coton Biologique',
+    prix: 690.00,
+    category: 'Women',
+    categoryName: 'Femmes',
+    image: '/molimao/prod-puder-1.jpg',
+    hover: '/molimao/prod-puder-2.jpg',
+    sizes: ['S', 'M', 'L', 'XL'],
+    description: 'Couleur minérale exclusive, toucher velours, confectionné en 100% coton biologique pré-rétréci.'
+  },
+  {
+    id: 'm4',
+    nom: 'T-shirt Graphic « Krom » — Coton Peigné 240g',
+    prix: 450.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-krom-1.jpg',
+    hover: '/molimao/prod-krom-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Sérigraphie graphique industrielle au dos et logo atelier brodé discret sur le buste.'
+  },
+  {
+    id: 'm5',
+    nom: 'T-shirt Minimaliste « Sutra » — Noir Minéral',
+    prix: 420.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-sutra-1.jpg',
+    hover: '/molimao/prod-sutra-2.jpg',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'L’essentiel du vestiaire streetwear quotidien. Coupe droite moderne et col côtelé indéformable.'
+  },
+  {
+    id: 'm6',
+    nom: 'T-shirt Studio « Cupid » — Coupe Boxy Femme',
+    prix: 450.00,
+    category: 'Women',
+    categoryName: 'Femmes',
+    image: '/molimao/prod-cupid-1.jpg',
+    hover: '/molimao/prod-cupid-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L'],
+    description: 'Coupe ample boxy contemporaine avec illustration studio originale imprimée à la main.'
+  },
+  {
+    id: 'm7',
+    nom: 'T-shirt « Dijamant » — Sérigraphie Géométrique',
+    prix: 450.00,
+    category: 'Women',
+    categoryName: 'Femmes',
+    image: '/molimao/prod-diamond-1.jpg',
+    hover: '/molimao/prod-diamond-2.jpg',
+    sizes: ['S', 'M', 'L'],
+    description: 'Motif géométrique inspiré du brutalisme sur jersey de coton épais doux au toucher.'
+  },
+  {
+    id: 'm8',
+    nom: 'T-shirt « Borovi » — Vert Forêt Urbex',
+    prix: 420.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-borovi-1.jpg',
+    hover: '/molimao/prod-borovi-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    description: 'Teinte vert forêt profond, inspiré de la nature brute environnante et des explorations urbaines.'
+  },
+  {
+    id: 'm9',
+    nom: 'T-shirt « Rituals » — Coton Lourd Noir',
+    prix: 450.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-kafa-m-1.jpg',
+    hover: '/molimao/prod-kafa-m-2.jpg',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Inspiré des rituels caféiers des métropoles. Graphisme sérigraphié haute durabilité.'
+  },
+  {
+    id: 'm10',
+    nom: 'T-shirt « Pahulja » — Gris Chiné Homme',
+    prix: 420.00,
+    category: 'Men',
+    categoryName: 'Hommes',
+    image: '/molimao/prod-pahulja-m-1.jpg',
+    hover: '/molimao/prod-pahulja-m-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    description: 'Gris chiné intemporel, maille dense et douce pour un confort supérieur en toutes saisons.'
+  },
+  {
+    id: 'm11',
+    nom: 'T-shirt « Pahulja » — Blanc Craie Femme',
+    prix: 420.00,
+    category: 'Women',
+    categoryName: 'Femmes',
+    image: '/molimao/prod-pahulja-w-1.jpg',
+    hover: '/molimao/prod-pahulja-w-2.jpg',
+    sizes: ['XS', 'S', 'M', 'L'],
+    description: 'Blanc craie lumineux, coupe féminine décontractée et col net en bord-côte double.'
+  },
+  {
+    id: 'm12',
+    nom: 'Portefeuille Cuir « Frame » — Tannage Végétal',
+    prix: 590.00,
+    category: 'Accessoires',
+    categoryName: 'Accessoires',
+    image: '/molimao/prod-frame-1.jpg',
+    hover: '/molimao/prod-frame-2.jpg',
+    sizes: ['Taille Unique'],
+    description: 'Cuir véritable teinté dans la masse avec logo LEXIGAM marqué à chaud et fentes pour cartes.'
+  },
+  {
+    id: 'm13',
+    nom: 'Tirage Édition 01 — « Avion » Sérigraphie Numérotée',
+    prix: 350.00,
+    category: 'Art',
+    categoryName: 'Éditions Art',
+    image: '/molimao/art-avion-1.jpg',
+    hover: '/molimao/art-avion-2.jpg',
+    sizes: ['30x40 cm', '50x70 cm'],
+    description: 'Tirage d’art numéroté et gaufré à la main sur papier d’archive 250g.'
+  },
+  {
+    id: 'm14',
+    nom: 'Tirage Édition 02 — « Mahala Color » Architecture Urbaine',
+    prix: 350.00,
+    category: 'Art',
+    categoryName: 'Éditions Art',
+    image: '/molimao/art-color-mahala-1.jpg',
+    hover: '/molimao/art-color-mahala-2.jpg',
+    sizes: ['30x40 cm', '50x70 cm'],
+    description: 'Composition géométrique et teintes chaudes inspirées des façades urbaines contemporaines.'
+  },
+  {
+    id: 'm15',
+    nom: 'Tirage Édition 03 — « Mahala Noir » Étude Géométrique',
+    prix: 350.00,
+    category: 'Art',
+    categoryName: 'Éditions Art',
+    image: '/molimao/art-mahala-1.jpg',
+    hover: '/molimao/art-mahala-2.jpg',
+    sizes: ['30x40 cm', '50x70 cm'],
+    description: 'Encre noire intense sur fond papier blanc mat avec bordure passe-partout.'
+  },
+  {
+    id: 'm16',
+    nom: 'Tirage Édition 04 — « Ptice » Façades Urbaines',
+    prix: 350.00,
+    category: 'Art',
+    categoryName: 'Éditions Art',
+    image: '/molimao/art-ptice-1.jpg',
+    hover: '/molimao/art-ptice-2.jpg',
+    sizes: ['30x40 cm', '50x70 cm'],
+    description: 'Lignes épurées et contrastes graphiques forts pour espaces intérieurs contemporains.'
+  },
+  {
+    id: 'm17',
+    nom: 'Tirage Édition 05 — « Trafika » Esquisse d’Atelier',
+    prix: 350.00,
+    category: 'Art',
+    categoryName: 'Éditions Art',
+    image: '/molimao/art-trafika-1.jpg',
+    hover: '/molimao/art-trafika-2.jpg',
+    sizes: ['30x40 cm', '50x70 cm'],
+    description: 'Croquis d’atelier original tiré en série très limitée à 50 exemplaires numérotés.'
+  }
 ];
 
-const fits = ['ALL', 'STRAIGHT', 'BAGGY', 'RELAXED', 'SLIM', 'WIDE LEG'];
-const colors = ['BLACK', 'WHITE', 'BLUE', 'GREY', 'GREEN'];
-const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-
-const shopImages = [
-  '/shopImage/image-1.jpg',
-  '/shopImage/image-2.jpg',
-  '/shopImage/image-3.jpg',
-  '/shopImage/image-4.jpg',
-  '/shopImage/image-5.jpg',
-  '/shopImage/image-6.png',
-  '/shopImage/image-7.jpg',
-  '/shopImage/image-8.png',
-  '/shopImage/image-9.jpg',
-  '/shopImage/image-10.png',
-  '/shopImage/image-11.jpg',
-  '/shopImage/image-12.jpg',
+const categoryTabs = [
+  { key: 'ALL', label: 'Tout le vestiaire' },
+  { key: 'Women', label: 'Femmes' },
+  { key: 'Men', label: 'Hommes' },
+  { key: 'Art', label: 'Éditions Art' },
+  { key: 'Accessoires', label: 'Accessoires' }
 ];
 
 export default function Shop({ category = 'All Products' }) {
-  const { t, language } = useLanguage();
   const [d, setD] = useState([]);
-  const [apiError, setApiError] = useState(false);
   const [load, setLoad] = useState(true);
-  const [drawer, setDrawer] = useState(false);
-  const [fit, setFit] = useState('ALL');
-  const [color, setColor] = useState('ALL');
-  const [size, setSize] = useState('ALL');
+  const [activeTab, setActiveTab] = useState(
+    category === 'Women' ? 'Women' : category === 'Men' ? 'Men' : 'ALL'
+  );
   const [sort, setSort] = useState('NEW');
-  const [validShopImages, setValidShopImages] = useState(shopImages);
 
   const loc = useLocation();
   const dispatch = useDispatch();
   const q = new URLSearchParams(loc.search).get('nom');
+  const catParam = new URLSearchParams(loc.search).get('category');
+
+  useEffect(() => {
+    if (catParam) {
+      setActiveTab(catParam);
+    } else if (category === 'Women') {
+      setActiveTab('Women');
+    } else if (category === 'Men') {
+      setActiveTab('Men');
+    }
+  }, [catParam, category]);
 
   useEffect(() => {
     api
       .get(q ? '/produits?nom=' + encodeURIComponent(q) : '/produits')
-      .then((x) => { setD(x.data?.data || x.data || []); setApiError(false); })
-      .catch(() => { setD([]); setApiError(true); })
+      .then((x) => {
+        const res = x.data?.data || x.data || [];
+        setD(res.length ? res : demoProducts);
+      })
+      .catch(() => {
+        setD(demoProducts);
+      })
       .finally(() => setLoad(false));
   }, [q]);
 
-  const data = useMemo(() => {
-    if (apiError && !import.meta.env.DEV) return [];
-    let arr = d.length
-      ? d
-      : demo.map((x, i) => ({
-          id: 'demo' + i,
-          nom: x[0],
-          prix: x[1],
-          description: 'Premium everyday garment.',
-          image: x[2],
-          taille: 'M',
-        }));
+  const filteredProducts = useMemo(() => {
+    let arr = d.length ? d : demoProducts;
 
-    if (q) arr = arr.filter((p) => (p.nom || '').toLowerCase().includes(q.toLowerCase()));
-    if (fit !== 'ALL')
-      arr = arr.filter((p) =>
-        (p.description || p.nom || p.fit || '').toLowerCase().includes(fit.toLowerCase())
-      );
-    if (color !== 'ALL')
-      arr = arr.filter((p) =>
-        (p.color || p.couleur || p.description || p.nom || '')
-          .toLowerCase()
-          .includes(color.toLowerCase())
-      );
-    if (size !== 'ALL')
-      arr = arr.filter(
-        (p) =>
-          !p.taille ||
-          (Array.isArray(p.taille)
-            ? p.taille.includes(size)
-            : String(p.taille).toUpperCase().includes(size))
-      );
-    if (sort === 'PRICE_LOW') arr = [...arr].sort((a, b) => Number(a.prix) - Number(b.prix));
-    if (sort === 'PRICE_HIGH') arr = [...arr].sort((a, b) => Number(b.prix) - Number(a.prix));
+    if (q) {
+      arr = arr.filter((p) => (p.nom || '').toLowerCase().includes(q.toLowerCase()));
+    }
+
+    if (activeTab !== 'ALL') {
+      arr = arr.filter((p) => {
+        const cat = (p.category || p.categoryName || p.categorie?.nom || '').toLowerCase();
+        return cat.includes(activeTab.toLowerCase());
+      });
+    }
+
+    if (sort === 'PRICE_LOW') {
+      arr = [...arr].sort((a, b) => Number(a.prix) - Number(b.prix));
+    }
+    if (sort === 'PRICE_HIGH') {
+      arr = [...arr].sort((a, b) => Number(b.prix) - Number(a.prix));
+    }
 
     return arr;
-  }, [d, q, fit, color, size, sort, apiError]);
+  }, [d, q, activeTab, sort]);
 
-  const title =
-    category === 'Men'
-      ? t.men
-      : category === 'Women'
-      ? t.women
-      : category === 'New Arrivals'
-      ? t.new
-      : t.allProducts;
+  const handleQuickAdd = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(addToCart({ produit: product, quantite: 1, taille: product.sizes?.[0] || 'M' }));
+  };
 
-  return (<><SEO title={title} description={`LEXIGAM — ${title}`} />
-    <div className="pb-shop">
-      <div className="pb-shop-bar">
-        <div>
-          <small>
-            LEXIGAM / {language === 'ar' ? 'المتجر' : 'STORE'}
-          </small>
-          <h1>{title}</h1>
-          <p>
-            {validShopImages.length} {language === 'ar' ? 'قطعة في الأرشيف' : 'pieces available in archive'}
-          </p>
-        </div>
-        <div className="pb-shop-controls">
-          <button className="pb-filter-toggle" onClick={() => setDrawer(true)}>
-            <SlidersHorizontal size={15} />{' '}
-            {language === 'ar' ? 'تصفية وترتيب' : 'FILTERS & SORT'}
-          </button>
-          <div className="pb-sort-select">
-            <select value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="NEW">{language === 'ar' ? 'الأحدث' : 'NEWEST'}</option>
-              <option value="PRICE_LOW">
-                {language === 'ar' ? 'السعر: من الأقل للأعلى' : 'PRICE: LOW TO HIGH'}
-              </option>
-              <option value="PRICE_HIGH">
-                {language === 'ar' ? 'السعر: من الأعلى للأقل' : 'PRICE: HIGH TO LOW'}
-              </option>
-            </select>
-            <ChevronDown size={14} />
+  const getPageTitle = () => {
+    if (activeTab === 'Women') return 'Vestiaire Femmes';
+    if (activeTab === 'Men') return 'Vestiaire Hommes';
+    if (activeTab === 'Art') return 'Éditions Art & Sérigraphies';
+    if (activeTab === 'Accessoires') return 'Accessoires & Objets';
+    return 'Toutes les pièces';
+  };
+
+  return (
+    <>
+      <SEO
+        title={`Boutique LEXIGAM — ${getPageTitle()}`}
+        description="Découvrez les vestes d'atelier, t-shirts, sweats à capuche et tirages d'art du vestiaire indépendant LEXIGAM."
+      />
+      <div className="mm-section" style={{ paddingTop: '40px', minHeight: '80vh' }}>
+        {/* Shop Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '28px' }}>
+          <div>
+            <span className="mm-eyebrow">BOUTIQUE EN LIGNE</span>
+            <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, margin: '6px 0 0', color: '#0f0f0f' }}>
+              {getPageTitle()}
+            </h1>
+            <p style={{ fontSize: '13px', color: '#777', margin: '6px 0 0' }}>
+              {filteredProducts.length} pièces disponibles au catalogue
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <div style={{ position: 'relative' }}>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                style={{
+                  appearance: 'none',
+                  padding: '9px 36px 9px 16px',
+                  borderRadius: '20px',
+                  border: '1px solid #eaeaea',
+                  background: '#ffffff',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#333',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="NEW">Nouveautés d'abord</option>
+                <option value="PRICE_LOW">Prix : ordre croissant</option>
+                <option value="PRICE_HIGH">Prix : ordre décroissant</option>
+              </select>
+              <ChevronDown size={14} style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: '#777' }} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="pb-active-filters">
-        <div className="pb-pill-group">
-          {fits.map((f) => (
+        {/* Category Tabs */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '36px', borderBottom: '1px solid #eaeaea', paddingBottom: '16px' }}>
+          {categoryTabs.map((tab) => (
             <button
-              key={f}
-              className={fit === f ? 'active' : ''}
-              onClick={() => setFit(f)}
+              key={tab.key}
+              type="button"
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                padding: '8px 18px',
+                borderRadius: '20px',
+                border: activeTab === tab.key ? '1.5px solid #0f0f0f' : '1px solid #eaeaea',
+                background: activeTab === tab.key ? '#0f0f0f' : '#ffffff',
+                color: activeTab === tab.key ? '#ffffff' : '#444444',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
             >
-              {f}
+              {tab.label}
             </button>
           ))}
         </div>
-      </div>
 
-      {drawer && (
-        <aside className="pb-drawer-backdrop" onClick={() => setDrawer(false)}>
-          <div className="pb-drawer" onClick={(e) => e.stopPropagation()}>
-            <div className="pb-drawer-head">
-              <h3>{language === 'ar' ? 'التصفية' : 'FILTERS'}</h3>
-              <button onClick={() => setDrawer(false)}>
-                <X size={18} />
-              </button>
-            </div>
-            <div className="pb-drawer-body">
-              <label>FIT</label>
-              <div className="pb-drawer-chips">
-                {fits.map((f) => (
-                  <button
-                    key={f}
-                    className={fit === f ? 'active' : ''}
-                    onClick={() => setFit(f)}
-                  >
-                    {f}
-                  </button>
-                ))}
-              </div>
-
-              <label>COLOR</label>
-              <div className="pb-drawer-chips">
-                {colors.map((c) => (
-                  <button
-                    key={c}
-                    className={color === c ? 'active' : ''}
-                    onClick={() => setColor(c)}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-
-              <label>SIZE</label>
-              <div className="pb-drawer-chips">
-                {sizes.map((s) => (
-                  <button
-                    key={s}
-                    className={size === s ? 'active' : ''}
-                    onClick={() => setSize(s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="pb-drawer-foot">
-              <button
-                className="pb-btn dark"
-                onClick={() => {
-                  setFit('ALL');
-                  setColor('ALL');
-                  setSize('ALL');
-                }}
-              >
-                RESET
-              </button>
-              <button className="pb-btn" onClick={() => setDrawer(false)}>
-                APPLY
-              </button>
-            </div>
+        {/* Products Grid */}
+        {load ? (
+          <div style={{ textAlign: 'center', padding: '100px 0', color: '#888', fontWeight: 600 }}>
+            Chargement des pièces...
           </div>
-        </aside>
-      )}
+        ) : filteredProducts.length ? (
+          <div className="mm-grid-4">
+            {filteredProducts.map((p) => {
+              const primarySrc = p.image || '/molimao/prod-grow-1.jpg';
+              const hoverSrc = p.hover || p.hoverImage || primarySrc;
+              return (
+                <article className="mm-product-card" key={p.id || p.nom}>
+                  <Link to={`/product/${p.id || 'm1'}`} className="mm-card-media">
+                    <img src={primarySrc} alt={p.nom} className="mm-img-primary" loading="lazy" />
+                    <img src={hoverSrc} alt={`${p.nom} vue portée`} className="mm-img-hover" loading="lazy" />
+                    <button
+                      type="button"
+                      className="mm-quick-add"
+                      onClick={(e) => handleQuickAdd(e, p)}
+                      title="Ajouter au panier"
+                      aria-label="Ajouter au panier"
+                    >
+                      <Plus size={20} strokeWidth={2.4} />
+                    </button>
+                  </Link>
 
-      {load ? (
-        <div className="pb-loading-screen"><span>LOADING ARCHIVE</span></div>
-      ) : apiError && !import.meta.env.DEV ? (
-        <div className="pb-empty"><small>STORE / OFFLINE</small><h1>Catalogue unavailable.</h1><p>Please try again in a moment.</p></div>
-      ) : validShopImages.length ? (
-        <div className="pb-shop-grid">
-          {validShopImages.map((src, i) => {
-            const product = data[i];
-            const label = product?.nom || `LEXIGAM piece ${i + 1}`;
-            const href = product?.id ? '/product/' + product.id : '/shop';
-            return (
-              <article className="pb-product-card pb-product-card-image-only" key={src}>
-                <Link to={href} aria-label={label} className="pb-product-img">
-                  <img
-                    src={src}
-                    alt={label}
-                    loading="lazy"
-                    decoding="async"
-                    onError={() => setValidShopImages((current) => current.filter((image) => image !== src))}
-                  />
-                </Link>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="pb-empty"><small>STORE / ARCHIVE</small><h1>NO RESULTS.</h1><p>Try changing your filters or search.</p></div>
-      )}
-    </div></>);
+                  {p.sizes && p.sizes.length > 0 && (
+                    <div className="mm-card-sizes">
+                      {p.sizes.map((s) => (
+                        <span key={s} className="mm-size-tag">{s}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mm-card-info">
+                    <Link to={`/product/${p.id || 'm1'}`} className="mm-product-title">
+                      {p.nom}
+                    </Link>
+                    <div className="mm-product-price">
+                      {typeof p.prix === 'number' ? p.prix.toFixed(0) : p.prix} DH
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '80px 20px', color: '#777' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#111', marginBottom: '8px' }}>
+              Aucune pièce trouvée
+            </h3>
+            <p>Essayez de sélectionner une autre catégorie ou modifiez vos critères de recherche.</p>
+            <button
+              type="button"
+              className="mm-outline-btn"
+              onClick={() => setActiveTab('ALL')}
+              style={{ marginTop: '16px' }}
+            >
+              Afficher tout le vestiaire
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }

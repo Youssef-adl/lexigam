@@ -1,91 +1,122 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {ArrowUp,ArrowUpRight,Music2,Mail,MapPin,Phone,ShieldCheck} from 'lucide-react';
-import {useLanguage} from '../i18n/LanguageContext';
+import { Link } from 'react-router-dom';
+import { ArrowUp, MapPin, Phone, Mail, Music2 } from 'lucide-react';
 
-export default function Footer(){
- const {language}=useLanguage();
- const ar=language==='ar';
- const backTop=()=>window.scrollTo({top:0,behavior:'smooth'});
- return <footer className="pb-footer-retail">
-   <section className="mm-service-bottom">
-    <div className="mm-service-grid">
-      <article>
-        <img src="/webpImage/image-10.png" alt="" aria-hidden="true"/>
-        <div>
-          <h3>OPTIONS DE LIVRAISON RAPIDE</h3>
-          <p>La livraison rapide est disponible pour toutes les commandes. Le délai de livraison est de 24 à 48 heures. Les frais sont de 7,00 KM, et la livraison est offerte pour les commandes de plus de 100,00 KM.</p>
+export default function Footer() {
+  const backTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  return (
+    <footer className="mm-footer">
+      <div className="mm-footer-main">
+        {/* Colonne 1: Identité LEXIGAM */}
+        <div className="mm-footer-brand-col">
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{
+              fontFamily: "'Mulish', sans-serif",
+              fontSize: '22px',
+              fontWeight: 900,
+              letterSpacing: '-0.04em',
+              color: '#0f0f0f',
+              textTransform: 'uppercase'
+            }}>
+              LEXIGAM
+            </span>
+            <span style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: '#EB5728',
+              display: 'inline-block',
+              marginBottom: '7px'
+            }} />
+          </Link>
+          <p className="mm-footer-slogan">
+            LEXIGAM est un label vestimentaire indépendant fondé sur des coupes nettes,
+            des matières lourdes et une esthétique street art contemporaine. Conçu pour le mouvement.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span className="mm-footer-contact-item">
+              <MapPin size={15} style={{ color: '#EB5728' }} /> Boulevard d’Anfa, Casablanca, Maroc
+            </span>
+            <a href="tel:+212522000000" className="mm-footer-contact-item">
+              <Phone size={15} style={{ color: '#EB5728' }} /> +212 5 22 00 00 00
+            </a>
+            <a href="mailto:support@lexigam.com" className="mm-footer-contact-item">
+              <Mail size={15} style={{ color: '#EB5728' }} /> support@lexigam.com
+            </a>
+          </div>
+          <div className="mm-footer-socials">
+            <a href="#" className="mm-social-link" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
+            <a href="#" className="mm-social-link" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+              </svg>
+            </a>
+            <a href="#" className="mm-social-link" aria-label="TikTok">
+              <Music2 size={16} />
+            </a>
+          </div>
         </div>
-      </article>
-      <article>
-        <span className="mm-footer-shield"><ShieldCheck size={40} strokeWidth={1.4}/></span>
-        <div>
-          <h3>PAIEMENT SÉCURISÉ</h3>
-          <p>Monri propose un système de paiement en ligne rapide et sécurisé. Les transactions et les données sont protégées par les technologies de chiffrement SSL les plus avancées.</p>
+
+        {/* Colonne 2: BOUTIQUE */}
+        <div className="mm-footer-col">
+          <h4>BOUTIQUE</h4>
+          <ul>
+            <li><Link to="/women">Vestiaire Femmes</Link></li>
+            <li><Link to="/men">Vestiaire Hommes</Link></li>
+            <li><Link to="/shop?category=Art">Éditions Art & Sérigraphies</Link></li>
+            <li><Link to="/shop?category=Accessoires">Accessoires & Objets</Link></li>
+            <li><Link to="/shop">Tous les produits</Link></li>
+          </ul>
         </div>
-      </article>
-    </div>
-   </section>
-   <div className="pb-footer-social">
-    <a href="#" aria-label="Facebook">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-    </a>
-    <a href="#" aria-label="X">X</a>
-    <a href="#" aria-label="Instagram">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-    </a>
-    <a href="#" aria-label="TikTok"><Music2 size={16}/></a>
-   </div>
 
-   <div className="pb-footer-retail-main">
-    <div className="pb-footer-contact">
-      <Link to="/" className="pb-footer-retail-logo">LEXIGAM<sup>®</sup></Link>
-      <p>{ar?'أزياء مستقلة من الدار البيضاء.':'Independent clothing from Casablanca.'}</p>
-      <div className="pb-footer-contact-lines">
-       <span><MapPin size={13}/> CASABLANCA / MOROCCO</span>
-       <a href="tel:+212500000000"><Phone size={13}/> +212 5 00 00 00 00</a>
-       <a href="mailto:support@lexigam.com"><Mail size={13}/> support@lexigam.com</a>
-      </div>
-    </div>
+        {/* Colonne 3: INFORMATIONS */}
+        <div className="mm-footer-col">
+          <h4>INFORMATIONS</h4>
+          <ul>
+            <li><Link to="/about">À propos de LEXIGAM</Link></li>
+            <li><Link to="/blog">Le Journal du Studio</Link></li>
+            <li><Link to="/contact">Nous contacter</Link></li>
+            <li><Link to="/terms">Conditions Générales</Link></li>
+            <li><Link to="/returns">Livraison & Retours</Link></li>
+            <li><Link to="/privacy">Politique de Confidentialité</Link></li>
+          </ul>
+        </div>
 
-    <nav className="pb-footer-retail-links" aria-label="Footer navigation">
-      <div>
-       <small>{ar?'المتجر':'SHOP'}</small>
-       <Link to="/new-arrivals">{ar?'الجديد':'NEW IN'}</Link>
-       <Link to="/men">{ar?'رجال':'MEN'}</Link>
-       <Link to="/women">{ar?'نساء':'WOMEN'}</Link>
-       <Link to="/shop">{ar?'كل المنتجات':'ALL PRODUCTS'}</Link>
+        {/* Colonne 4: PAIEMENT & SÉCURITÉ */}
+        <div className="mm-footer-col">
+          <h4>PAIEMENT & SÉCURITÉ</h4>
+          <p style={{ fontSize: '12px', color: '#666', lineHeight: 1.6, margin: '0 0 12px' }}>
+            Paiement en ligne sécurisé par carte bancaire avec technologie 3D Secure et cryptage SSL.
+            Paiement à la livraison également accepté.
+          </p>
+          <div className="mm-payment-logos">
+            <img src="/molimao/payweb.png" alt="Passerelle sécurisée" loading="lazy" />
+            <img src="/molimao/monri-cards.jpg" alt="Cartes bancaires acceptées" loading="lazy" />
+          </div>
+        </div>
       </div>
-      <div>
-       <small>{ar?'المعلومات':'INFO'}</small>
-       <Link to="/about">{ar?'عنّا':'ABOUT'}</Link>
-       <Link to="/blog">{ar?'المجلة':'JOURNAL'}</Link>
-       <Link to="/contact">{ar?'تواصل':'CONTACT'}</Link>
-       <Link to="/cart">{ar?'السلة':'BAG'}</Link>
-      </div>
-      <div>
-       <small>{ar?'القانوني':'LEGAL'}</small>
-       <Link to="/privacy">{ar?'الخصوصية':'PRIVACY'}</Link>
-       <Link to="/terms">{ar?'الشروط':'TERMS'}</Link>
-       <Link to="/returns">{ar?'الإرجاع':'RETURNS'}</Link>
-      </div>
-    </nav>
 
-    <div className="pb-footer-payments">
-      <small>{ar?'طرق الدفع':'PAYMENT METHODS'}</small>
-      <div className="pb-payment-images">
-        <img src="/webpImage/image-13.png" alt="pay@web and Monri secure payment" loading="lazy" />
-        <img src="/webpImage/image-10.jpg" alt="Mastercard Maestro Visa and Visa Electron" loading="lazy" />
+      {/* Bas de page */}
+      <div className="mm-footer-bottom">
+        <span>© 2026 LEXIGAM SARL. Tous droits réservés.</span>
+        <span>Casablanca / Maroc</span>
+        <button
+          type="button"
+          className="mm-back-top-btn"
+          onClick={backTop}
+          aria-label="Retour en haut"
+          title="Retour en haut"
+        >
+          <ArrowUp size={16} />
+        </button>
       </div>
-      <p>{ar?'الدفع عند الاستلام متاح حالياً.':'Cash on delivery is currently available at checkout.'}</p>
-    </div>
-   </div>
-
-   <div className="pb-footer-bottom-retail">
-     <span>© 2026 LEXIGAM®</span>
-     <span>CASABLANCA / MOROCCO</span>
-     <span>FR / AR</span>
-     <button type="button" className="pb-back-top" onClick={backTop} aria-label="Back to top"><ArrowUp size={14}/></button>
-   </div>
- </footer>
+    </footer>
+  );
 }

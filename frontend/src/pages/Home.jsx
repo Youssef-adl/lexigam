@@ -1,84 +1,412 @@
-import React,{useEffect,useState} from 'react';
-import {Link} from 'react-router-dom';
-import {ArrowUpRight,ChevronLeft,ChevronRight,ShieldCheck} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Plus, ArrowUpRight, Truck, ShieldCheck } from 'lucide-react';
 import SEO from '../components/SEO';
-import {useLanguage} from '../i18n/LanguageContext';
-import useEditorialMotion from '../hooks/useEditorialMotion';
+import { useLanguage } from '../i18n/LanguageContext';
 import './molimao-home.css';
 
-const heroSlides=['/webpImage/image-20.jpg','/webpImage/image-22.jpg','/webpImage/image-21.jpg'];
-
-const featured = [
-  {name:'Ljubav, t-shirt femme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L'],image:'/webpImage/image-14.jpg'},
-  {name:'Šibica, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-1.jpg'},
-  {name:'Molimao « FRAME » portefeuille',price:'120.00 KM',sizes:[],image:'/webpImage/image-11 copy.jpg'},
-  {name:'Icon, casquette',price:'60.00 KM',sizes:[],image:'/webpImage/image-17.jpg'},
-  {name:'TAG, tote bag',price:'40.00 KM',sizes:[],image:'/webpImage/image-1 copy.jpg'},
-  {name:'Krom, t-shirt oversize homme manches courtes',price:'60.00 KM',sizes:['XS','S','M','L','XL','XXL'],image:'/webpImage/image-4.jpg'},
-  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-7.jpg'},
-  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
+const heroSlides = [
+  {
+    image: '/molimao/slider-shibica.jpg',
+    badge: 'NOUVEAU DROP',
+    title: 'ŠIBICA / CASABLANCA',
+    desc: 'Coupes amples, esthétique brute et sérigraphies d’atelier taillées pour le mouvement de la ville.',
+    link: '/shop',
+    cta: 'DÉCOUVRIR LE VESTIAIRE'
+  },
+  {
+    image: '/molimao/slider-1.jpg',
+    badge: 'STREETWEAR ÉDITORIAL',
+    title: 'L’UNIFORME DU QUOTIDIEN',
+    desc: 'Coton peigné lourd, matières franches et finitions soignées pour durer au fil des saisons.',
+    link: '/shop',
+    cta: 'VOIR TOUT LE VESTIAIRE'
+  },
+  {
+    image: '/molimao/slider-2.jpg',
+    badge: 'MINIMALISME GRAPHIQUE',
+    title: 'PROPORTIONS NETTES',
+    desc: 'Des pièces contemporaines inspirées de l’architecture urbaine et du design fonctionnel.',
+    link: '/shop',
+    cta: 'ACHETER LA SÉLECTION'
+  },
+  {
+    image: '/molimao/slider-3.jpg',
+    badge: 'SÉRIES NUMÉROTÉES',
+    title: 'ÉDITIONS D’ART LIMITÉES',
+    desc: 'Sérigraphies d’art numérotées sur papier d’archive pour votre espace de vie.',
+    link: '/shop?category=Art',
+    cta: 'VOIR LES TIRAGES'
+  },
+  {
+    image: '/molimao/slider-feb.jpg',
+    badge: 'COLLECTION CAPSULE',
+    title: 'MATIÈRES & VOLUMES',
+    desc: 'Explorez nos hoodies lourds, sweats à col rond et pièces unisexes de mi-saison.',
+    link: '/shop',
+    cta: 'EXPLORER LA GAMME'
+  }
 ];
 
 const newProducts = [
-  {name:'Grow, t-shirt oversize homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-12.jpg'},
-  {name:'Before, t-shirt homme manches courtes',price:'50.00 KM',sizes:['M','XS','S','L','XL','XXL'],image:'/webpImage/image-15.jpg'},
-  {name:'Cupid, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-9.jpg'},
-  {name:'Dijamant, t-shirt oversize femme manches courtes',price:'50.00 KM',sizes:['S','M','L'],image:'/webpImage/image-28.jpg'},
+  {
+    name: 'T-shirt Oversize « Grow » — Sérigraphie d’Atelier',
+    price: '450 DH',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-grow-1.jpg',
+    hover: '/molimao/prod-grow-2.jpg'
+  },
+  {
+    name: 'Hoodie Brut « Radiant » — Molleton Épais 340g',
+    price: '790 DH',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-radiant-1.jpg',
+    hover: '/molimao/prod-radiant-2.jpg'
+  },
+  {
+    name: 'Sweat Col Rond « Puder » — Coton Biologique',
+    price: '690 DH',
+    sizes: ['S', 'M', 'L', 'XL'],
+    primary: '/molimao/prod-puder-1.jpg',
+    hover: '/molimao/prod-puder-2.jpg'
+  },
+  {
+    name: 'T-shirt Graphic « Krom » — Coton Peigné 240g',
+    price: '450 DH',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-krom-1.jpg',
+    hover: '/molimao/prod-krom-2.jpg'
+  }
+];
+
+const featuredProducts = [
+  {
+    name: 'T-shirt Minimaliste « Sutra » — Noir Minéral',
+    price: '420 DH',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-sutra-1.jpg',
+    hover: '/molimao/prod-sutra-2.jpg'
+  },
+  {
+    name: 'T-shirt Studio « Cupid » — Coupe Boxy Femme',
+    price: '450 DH',
+    sizes: ['XS', 'S', 'M', 'L'],
+    primary: '/molimao/prod-cupid-1.jpg',
+    hover: '/molimao/prod-cupid-2.jpg'
+  },
+  {
+    name: 'T-shirt « Dijamant » — Sérigraphie Géométrique',
+    price: '450 DH',
+    sizes: ['S', 'M', 'L'],
+    primary: '/molimao/prod-diamond-1.jpg',
+    hover: '/molimao/prod-diamond-2.jpg'
+  },
+  {
+    name: 'T-shirt « Borovi » — Vert Forêt Urbex',
+    price: '420 DH',
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    primary: '/molimao/prod-borovi-1.jpg',
+    hover: '/molimao/prod-borovi-2.jpg'
+  },
+  {
+    name: 'T-shirt « Rituals » — Coton Lourd Noir',
+    price: '450 DH',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-kafa-m-1.jpg',
+    hover: '/molimao/prod-kafa-m-2.jpg'
+  },
+  {
+    name: 'T-shirt « Pahulja » — Gris Chiné Homme',
+    price: '420 DH',
+    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    primary: '/molimao/prod-pahulja-m-1.jpg',
+    hover: '/molimao/prod-pahulja-m-2.jpg'
+  },
+  {
+    name: 'T-shirt « Pahulja » — Blanc Craie Femme',
+    price: '420 DH',
+    sizes: ['XS', 'S', 'M', 'L'],
+    primary: '/molimao/prod-pahulja-w-1.jpg',
+    hover: '/molimao/prod-pahulja-w-2.jpg'
+  },
+  {
+    name: 'Portefeuille Cuir « Frame » — Tannage Végétal',
+    price: '590 DH',
+    sizes: ['Taille Unique'],
+    primary: '/molimao/prod-frame-1.jpg',
+    hover: '/molimao/prod-frame-2.jpg'
+  }
 ];
 
 const artPrints = [
-  '/webpImage/image-14 copy.jpg',
-  '/webpImage/image-26.jpg',
-  '/webpImage/image-21 copy.jpg',
-  '/webpImage/image-2 copy.jpg',
-  '/webpImage/image-11.jpg',
-  '/webpImage/image-8.jpg',
+  {
+    title: 'Tirage Édition 01 — « Avion » Sérigraphie Numérotée',
+    price: '350 DH',
+    primary: '/molimao/art-avion-1.jpg',
+    hover: '/molimao/art-avion-2.jpg'
+  },
+  {
+    title: 'Tirage Édition 02 — « Mahala Color » Architecture Urbaine',
+    price: '350 DH',
+    primary: '/molimao/art-color-mahala-1.jpg',
+    hover: '/molimao/art-color-mahala-2.jpg'
+  },
+  {
+    title: 'Tirage Édition 03 — « Mahala Noir » Étude Géométrique',
+    price: '350 DH',
+    primary: '/molimao/art-mahala-1.jpg',
+    hover: '/molimao/art-mahala-2.jpg'
+  },
+  {
+    title: 'Tirage Édition 04 — « Ptice » Façades Urbaines',
+    price: '350 DH',
+    primary: '/molimao/art-ptice-1.jpg',
+    hover: '/molimao/art-ptice-2.jpg'
+  },
+  {
+    title: 'Tirage Édition 05 — « Trafika » Esquisse d’Atelier',
+    price: '350 DH',
+    primary: '/molimao/art-trafika-1.jpg',
+    hover: '/molimao/art-trafika-2.jpg'
+  }
 ];
 
-function ProductCard({product}){
-  return <article className="mm-product-card">
-    <Link to="/shop" className="mm-product-image">
-      <img src={product.image} alt={product.name} loading="lazy"/>
-    </Link>
-    {product.sizes.length>0 && <div className="mm-sizes">{product.sizes.map(s=><span key={s}>{s}</span>)}</div>}
-    <div className="mm-product-name">{product.name}</div>
-    <div className="mm-product-price">{product.price}</div>
-  </article>;
+function ProductCard({ product }) {
+  return (
+    <article className="mm-product-card">
+      <Link to="/shop" className="mm-card-media">
+        <img src={product.primary} alt={product.name} className="mm-img-primary" loading="lazy" />
+        <img src={product.hover} alt={`${product.name} vue portée`} className="mm-img-hover" loading="lazy" />
+        <div className="mm-quick-add" title="Ajouter au panier">
+          <Plus size={20} strokeWidth={2.4} />
+        </div>
+      </Link>
+      {product.sizes && product.sizes.length > 0 && (
+        <div className="mm-card-sizes">
+          {product.sizes.map((s) => (
+            <span key={s} className="mm-size-tag">{s}</span>
+          ))}
+        </div>
+      )}
+      <div className="mm-card-info">
+        <Link to="/shop" className="mm-product-title">{product.name}</Link>
+        <div className="mm-product-price">{product.price}</div>
+      </div>
+    </article>
+  );
 }
 
-export default function Home(){
-  const {language,setLanguage,t}=useLanguage();
-  useEditorialMotion();
-  useEffect(()=>{if(language!=='fr')setLanguage('fr')},[language,setLanguage]);
-  const [hero,setHero]=useState(0);
-  const [artSlide,setArtSlide]=useState(0);
-  const products=newProducts;
+export default function Home() {
+  const [slide, setSlide] = useState(0);
+  const [artSlide, setArtSlide] = useState(0);
 
-  const visibleArt=[0,1,2,3].map(offset=>artPrints[(artSlide+offset)%artPrints.length]);
-    useEffect(()=>{const id=setInterval(()=>setHero(v=>(v+1)%heroSlides.length),5500);return()=>clearInterval(id)},[]);
+  // Auto rotation for hero slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlide((curr) => (curr + 1) % heroSlides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
 
-  return <><SEO title="LEXIGAM — Vêtements indépendants" description="Vêtements indépendants, objets graphiques et journal visuel depuis Casablanca."/><main className="mm-home">
-    <section className="pb-hero pb-hero-editorial">
-      <div className="pb-hero-image"><img src={heroSlides[hero]} alt="LEXIGAM campaign"/><div/></div>
-      <div className="pb-hero-copy">
-        <small>{t.heroEyebrow}</small>
-        <h1>{t.heroTitle.split(' / ')[0]}<br/><i>/</i> {t.heroTitle.split(' / ')[1]}</h1>
-        <p>{t.heroText}</p>
-        <Link to="/shop" className="pb-btn">{t.shopCollection} <ArrowUpRight size={16}/></Link>
-      </div>
-      <div className="pb-hero-count">
-        <span>{String(hero+1).padStart(2,'0')} / 03</span>
-        <div><button onClick={()=>setHero((hero+2)%3)}><ChevronLeft size={13}/></button><button onClick={()=>setHero((hero+1)%3)}><ChevronRight size={13}/></button></div>
-      </div>
-    </section>
-    <section className="mm-products-section"><header className="mm-section-heading centered"><div className="mm-eyebrow">NOUVEAUTÉS</div></header><div className="mm-new-grid">{products.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
+  const nextHero = () => setSlide((s) => (s + 1) % heroSlides.length);
+  const prevHero = () => setSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length);
 
-    <section className="mm-story"><div className="mm-story-image"><img src="/webpImage/image-20.jpg" alt="Summer collection 26 Urbex"/></div><div className="mm-story-copy"><div className="mm-eyebrow">PHOTOBOOK</div><h2>COLLECTION ÉTÉ 26 — URBEX</h2><p>Urbex vient de l'expression Urban Exploration : l'exploration de lieux urbains abandonnés et oubliés. Cette série photo capture notre collection dans les espaces de notre nouveau studio.</p><Link to="/blog" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div></section>
+  const visibleArt = [0, 1, 2, 3].map((offset) => artPrints[(artSlide + offset) % artPrints.length]);
+  const nextArt = () => setArtSlide((s) => (s + 1) % artPrints.length);
+  const prevArt = () => setArtSlide((s) => (s - 1 + artPrints.length) % artPrints.length);
 
-    <section className="mm-products-section mm-featured"><header className="mm-section-heading"><div className="mm-eyebrow">SÉLECTION</div></header><div className="mm-featured-grid">{featured.map((p,i)=><ProductCard product={p} key={p.name+i}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">TOUS LES PRODUITS</Link></div></section>
+  return (
+    <>
+      <SEO
+        title="LEXIGAM — Vêtements Indépendants & Design Streetwear"
+        description="LEXIGAM est un label indépendant associant coupes soignées, design streetwear minimaliste et éditions d'art."
+      />
+      <main className="mm-home">
+        {/* Full-bleed Hero Carousel */}
+        <section className="mm-hero-slider">
+          {heroSlides.map((s, idx) => (
+            <div key={s.image} className={`mm-slide ${idx === slide ? 'active' : ''}`}>
+              <img src={s.image} alt={s.title} />
+              <div className="mm-slide-overlay">
+                <div className="mm-slide-content">
+                  <span className="mm-slide-badge">{s.badge}</span>
+                  <h2>{s.title}</h2>
+                  <Link to={s.link} className="mm-primary-btn">
+                    {s.cta} <ArrowUpRight size={15} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
 
-    <section className="mm-flagship"><div className="mm-flagship-copy"><div className="mm-eyebrow">LEXIGAM FLAGSHIP STORE</div><h2>LEXIGAM FLAGSHIP STORE</h2><p>Depuis août 2021, notre univers peut être découvert à Sarajevo, dans un lieu emblématique de la ville.</p><Link to="/about" className="mm-outline-btn">NASTAVI ČITANJE...</Link></div><div className="mm-flagship-image"><img src="/webpImage/image-3.jpg" alt="Flagship store Sarajevo"/></div></section>
+          <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevHero} aria-label="Diapositive précédente">
+            <ChevronLeft size={22} />
+          </button>
+          <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextHero} aria-label="Diapositive suivante">
+            <ChevronRight size={22} />
+          </button>
 
-    <section className="mm-art"><div className="mm-art-stage"><button type="button" aria-label="Previous art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v-1+artPrints.length)%artPrints.length)}><ChevronLeft size={18}/></button><div className="mm-art-track">{visibleArt.map((src,i)=><div className="mm-art-frame" key={src+i}><img src={src} alt="Art print" loading="lazy"/></div>)}</div><button type="button" aria-label="Next art print" className="mm-art-arrow" onClick={()=>setArtSlide(v=>(v+1)%artPrints.length)}><ChevronRight size={18}/></button></div><div className="mm-art-dots">{artPrints.slice(0,4).map((_,i)=><button key={i} className={i===artSlide%4?'active':''} onClick={()=>setArtSlide(i)} aria-label={'Art print '+(i+1)}/>)}</div><div className="mm-center-btn"><Link to="/shop" className="mm-outline-btn">ÉDITIONS ART</Link></div></section>
-  </main></>;
+          <div className="mm-slider-dots">
+            {heroSlides.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className={`mm-dot ${idx === slide ? 'active' : ''}`}
+                onClick={() => setSlide(idx)}
+                aria-label={`Aller au slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Notice Strip */}
+        <div className="mm-delivery-strip">
+          <Truck size={18} />
+          <span>LIVRAISON OFFERTE PAR COURSIER RAPIDE POUR TOUTE COMMANDE SUPÉRIEURE À 500 DH</span>
+        </div>
+
+        {/* Section: Nouveautés */}
+        <section className="mm-section">
+          <header className="mm-section-header centered">
+            <h2 className="mm-section-title">Nouveautés</h2>
+          </header>
+          <div className="mm-grid-4">
+            {newProducts.map((p) => (
+              <ProductCard key={p.name} product={p} />
+            ))}
+          </div>
+          <div className="mm-btn-center">
+            <Link to="/shop" className="mm-outline-btn">
+              TOUS LES NOUVEAUX PRODUITS
+            </Link>
+          </div>
+        </section>
+
+        {/* Editorial Split Story Section */}
+        <section className="mm-editorial-section">
+          <div className="mm-editorial-split">
+            <div className="mm-editorial-media">
+              <img src="/molimao/coffee-editorial.jpg" alt="Atelier et savoir-faire LEXIGAM" loading="lazy" />
+            </div>
+            <div className="mm-editorial-copy">
+              <span className="mm-eyebrow">SAVOIR-FAIRE & ATELIER</span>
+              <h2>L'art du vêtement quotidien — Carnet d'atelier LEXIGAM</h2>
+              <p>
+                Dans notre studio, chaque coupe est éprouvée dans le mouvement de la ville. Nous sélectionnons
+                des toiles denses, des cotons peignés lourds et des encres de sérigraphie durables conçues
+                pour traverser les saisons sans perdre leur prestance ni leur tombé impeccable.
+              </p>
+              <div>
+                <Link to="/blog" className="mm-outline-btn">
+                  LIRE LE JOURNAL...
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section: Sélection du Studio */}
+        <section className="mm-section">
+          <header className="mm-section-header">
+            <h2 className="mm-section-title">Sélection du Studio</h2>
+            <Link to="/shop" className="mm-outline-btn" style={{ minWidth: 'auto', height: '36px', fontSize: '10px' }}>
+              VOIR TOUT
+            </Link>
+          </header>
+          <div className="mm-grid-4">
+            {featuredProducts.map((p) => (
+              <ProductCard key={p.name} product={p} />
+            ))}
+          </div>
+          <div className="mm-btn-center">
+            <Link to="/shop" className="mm-outline-btn">
+              TOUTE LA BOUTIQUE
+            </Link>
+          </div>
+        </section>
+
+        {/* Flagship Store Section */}
+        <section className="mm-flagship-section">
+          <div className="mm-flagship-split">
+            <div className="mm-flagship-copy">
+              <span className="mm-eyebrow">STUDIO & BOUTIQUE LEXIGAM</span>
+              <h2>Notre espace flagship store</h2>
+              <p>
+                Venez découvrir notre univers en vrai dans notre studio et boutique à Casablanca.
+                Prenez le temps d'essayer nos coupes, de toucher les matières et d'explorer nos séries limitées
+                d'art graphique dans un lieu convivial et dédié à la création.
+              </p>
+              <div>
+                <Link to="/about" className="mm-outline-btn">
+                  DÉCOUVRIR LE LIEU...
+                </Link>
+              </div>
+            </div>
+            <div className="mm-flagship-media">
+              <img src="/molimao/flagship-store.jpg" alt="Flagship store LEXIGAM" loading="lazy" />
+            </div>
+          </div>
+        </section>
+
+        {/* Art Prints Carousel Section */}
+        <section className="mm-art-section">
+          <div className="mm-section" style={{ padding: '0' }}>
+            <header className="mm-section-header centered">
+              <h2 className="mm-section-title">Éditions Art & Sérigraphies</h2>
+            </header>
+            <div className="mm-art-slider-wrap">
+              <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevArt} aria-label="Tirage précédent">
+                <ChevronLeft size={20} />
+              </button>
+              <div className="mm-art-slider">
+                {visibleArt.map((art, idx) => (
+                  <article key={art.title + idx} className="mm-art-card">
+                    <Link to="/shop?category=Art" className="mm-art-frame">
+                      <img src={art.primary} alt={art.title} loading="lazy" />
+                    </Link>
+                    <div className="mm-art-title">{art.title}</div>
+                    <div className="mm-art-price">{art.price}</div>
+                  </article>
+                ))}
+              </div>
+              <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextArt} aria-label="Tirage suivant">
+                <ChevronRight size={20} />
+              </button>
+            </div>
+            <div className="mm-btn-center">
+              <Link to="/shop?category=Art" className="mm-outline-btn">
+                TOUTES LES ÉDITIONS D'ART
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust & Guarantee Blocks */}
+        <section className="mm-trust-section">
+          <div className="mm-trust-grid">
+            <article className="mm-trust-card">
+              <img src="/molimao/delivery.png" alt="Livraison express" className="mm-trust-icon" />
+              <div>
+                <h3>LIVRAISON RAPIDE & SUIVIE</h3>
+                <p>
+                  Livraison express par coursier en 24h à 48h partout au Maroc et à l'international.
+                  La livraison est offerte pour toute commande à partir de 500 DH.
+                </p>
+              </div>
+            </article>
+            <article className="mm-trust-card">
+              <img src="/molimao/secure.png" alt="Paiement sécurisé" className="mm-trust-icon" />
+              <div>
+                <h3>PAIEMENT 100% SÉCURISÉ</h3>
+                <p>
+                  Transactions bancaires cryptées et sécurisées par protocole SSL et 3D Secure.
+                  Option de paiement en espèces à la livraison également disponible.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </>
+  );
 }

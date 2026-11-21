@@ -1,2 +1,123 @@
-import React from 'react';import{Link}from'react-router-dom';import{ArrowUpRight}from'lucide-react';import{useLanguage}from'../i18n/LanguageContext';
-export default function Blog(){const {t,language}=useLanguage();const posts=language==='ar'?[['URBEX','دراسة بصرية للخرسانة والأقمشة والأماكن التي لا نلاحظها.','/webpImage/image-20.jpg'],['NIGHT SHIFT','ماذا يحدث عندما تصبح المدينة هي الاستوديو؟','/webpImage/image-21.jpg'],['THE UNIFORM','لماذا يمكن للملابس اليومية أن تحمل شخصية واضحة؟','/webpImage/image-22.jpg'],['CASABLANCA NOTES','ملاحظات بصرية من الأماكن التي تشكل LEXIGAM.','/webpImage/image-23.jpg']]:[['URBEX','Étude visuelle du béton, des matières et des lieux oubliés.','/webpImage/image-20.jpg'],['NIGHT SHIFT','Quand la ville devient le studio.','/webpImage/image-21.jpg'],['THE UNIFORM','Pourquoi une pièce quotidienne peut garder du caractère.','/webpImage/image-22.jpg'],['CASABLANCA NOTES','Carnet visuel des lieux qui façonnent LEXIGAM.','/webpImage/image-23.jpg']];return <div className='ma-page ma-journal'><div className='ma-page-head'><small>LEXIGAM / {t.journal}</small><h1>{t.journalTitle}</h1><p>{t.journalText}</p></div><div className='ma-post-grid'>{posts.map((p,i)=><Link to='/blog' key={p[0]} className={'ma-post '+(i===0?'featured':'')}><div><img src={p[2]} alt={p[0]}/><span>{String(i+1).padStart(2,'0')}</span></div><small>{p[0]}</small><h2>{p[1]}</h2><b>{language==='ar'?'اقرأ':'LIRE'} <ArrowUpRight size={14}/></b></Link>)}</div></div>}
+import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
+import SEO from '../components/SEO';
+
+const posts = [
+  {
+    id: 1,
+    title: 'Runnin’ on coffee since 1462 — Le rituel urbain qui se porte',
+    date: 'Novembre 2026',
+    category: 'RITUELS URBAINS',
+    image: '/molimao/coffee-editorial.jpg',
+    excerpt:
+      'Le café dans les grandes métropoles n’est pas qu’une boisson : c’est une institution, une pause nécessaire et un moment de partage. Découvrez les coulisses de notre nouvelle collection de hoodies et t-shirts.',
+  },
+  {
+    id: 2,
+    title: 'Urbex & Ville — Exploration visuelle des espaces bruts',
+    date: 'Octobre 2026',
+    category: 'CARNET VISUEL',
+    image: '/molimao/slider-shibica.jpg',
+    excerpt:
+      'Une série photo au cœur des friches urbaines et des architectures oubliées pour capturer la texture, le béton et la force des coupes oversize LEXIGAM.',
+  },
+  {
+    id: 3,
+    title: 'L’Uniforme Quotidien — Pourquoi la simplicité exige de la rigueur',
+    date: 'Septembre 2026',
+    category: 'DESIGN & MATIÈRE',
+    image: '/molimao/slider-1.jpg',
+    excerpt:
+      'Comment concevoir un t-shirt qui ne se déforme pas, garde son éclat et conserve sa structure après des dizaines de ports ? Décryptage de notre coton peigné 240g.',
+  },
+  {
+    id: 4,
+    title: 'Sérigraphies d’art — De l’atelier d’impression au cadre',
+    date: 'Août 2026',
+    category: 'ÉDITIONS D’ART',
+    image: '/molimao/slider-3.jpg',
+    excerpt:
+      'Le processus artisanal derrière nos affiches d’art : choix du papier d’archive, mélanges d’encres mates et tirages manuels numérotés.',
+  },
+];
+
+export default function Blog() {
+  return (
+    <>
+      <SEO
+        title="Le Journal — LEXIGAM / Histoires & Carnets Visuels"
+        description="Plongez dans les récits, inspirations graphiques et carnets de bord du studio LEXIGAM."
+      />
+      <div className="mm-section" style={{ paddingTop: '50px' }}>
+        <div style={{ marginBottom: '40px' }}>
+          <span className="mm-eyebrow">RÉCITS & DOCUMENTATION</span>
+          <h1 style={{ fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 800, margin: '8px 0 16px', color: '#0f0f0f' }}>
+            Le Journal LEXIGAM
+          </h1>
+          <p style={{ maxWidth: '640px', fontSize: '15px', color: '#666', lineHeight: 1.7 }}>
+            Articles, carnets d'ambiance, coulisses de fabrication et regards croisés sur l'art urbain et le textile.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '36px' }}>
+          {posts.map((post) => (
+            <article key={post.id} style={{ display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
+              <div
+                style={{
+                  aspectRatio: '16 / 10',
+                  overflow: 'hidden',
+                  borderRadius: '3px',
+                  background: '#f2f2f2',
+                  marginBottom: '18px',
+                }}
+              >
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.4s ease',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.04)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 700, color: '#EB5728', marginBottom: '8px', letterSpacing: '0.05em' }}>
+                <span>{post.category}</span>
+                <span style={{ color: '#888' }}>{post.date}</span>
+              </div>
+
+              <h2 style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1.3, margin: '0 0 10px', color: '#0f0f0f' }}>
+                {post.title}
+              </h2>
+
+              <p style={{ fontSize: '13px', lineHeight: 1.6, color: '#666', margin: '0 0 16px', flex: 1 }}>
+                {post.excerpt}
+              </p>
+
+              <div>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: '#0f0f0f',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                  }}
+                >
+                  LIRE L'ARTICLE <ArrowUpRight size={14} />
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
