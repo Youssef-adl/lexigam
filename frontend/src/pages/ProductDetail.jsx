@@ -313,7 +313,14 @@ export default function ProductDetail() {
     : commonSizes;
   const fit = p?.fit || 'Relaxed fit';
   const material = p?.material || 'Premium everyday fabric';
-  const category = p?.categorie?.nom || 'LEXIGAM ARCHIVE';
+  const categoryKey = p?.categorie?.nom || '';
+  const categoryLabels = {
+    Men: isAr ? 'رجال' : 'Hommes',
+    Women: isAr ? 'نساء' : 'Femmes',
+    Art: isAr ? 'إصدارات فنية' : 'Éditions Art',
+    Accessoires: isAr ? 'إكسسوارات' : 'Accessoires',
+  };
+  const category = categoryLabels[categoryKey] || categoryKey || 'LEXIGAM ARCHIVE';
   const sku = p?.sku || 'N/A';
   const total = Number(p?.prix || 0) * qty;
   const isDatabaseProduct = Number.isSafeInteger(Number(p?.id)) && Number(p?.id) > 0;
