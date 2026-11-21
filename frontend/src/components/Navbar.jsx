@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingBag, Menu, X, UserRound, Heart, ChevronRight } from 'lucide-react';
+import { Search, ShoppingBag, Menu, X, UserRound, Heart, ChevronRight, LogOut } from 'lucide-react';
 import { logout } from '../store/authSlice';
 import { clearCart } from '../store/cartSlice';
 import api from '../axios';
@@ -15,6 +15,10 @@ export default function Navbar() {
   const location = useLocation();
   const { language, setLanguage } = useLanguage();
   const isAr = language === 'ar';
+  const selectLanguage = (nextLanguage) => {
+    setLanguage(nextLanguage);
+    setOpen(false);
+  };
 
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -24,6 +28,11 @@ export default function Navbar() {
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   // Sync cart for clients
   useEffect(() => {
@@ -62,6 +71,7 @@ export default function Navbar() {
   };
 
   const logoutUser = async () => {
+    setOpen(false);
     try {
       await api.post('/logout');
     } catch {}
@@ -88,7 +98,9 @@ export default function Navbar() {
             type="button"
             className="mm-mobile-menu-btn"
             onClick={() => setOpen((v) => !v)}
-            aria-label="Menu"
+            aria-label={isAr ? 'فتح القائمة' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="lexigam-mobile-drawer"
           >
             <Menu size={20} />
             <span className="hidden-mobile">{isAr ? 'القائمة' : 'MENU'}</span>
@@ -172,11 +184,7 @@ export default function Navbar() {
             </Link>
           )}
 
-          {user && (
-            <button type="button" className="mm-logout-btn" onClick={logoutUser}>
-              {isAr ? 'تسجيل الخروج' : 'DÉCONNEXION'}
-            </button>
-          )}
+
         </div>
       </header>
 
@@ -186,7 +194,7 @@ export default function Navbar() {
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
-      <aside className={`mm-drawer ${open ? 'open' : ''}`} aria-label={isAr ? 'القائمة الجانبية' : 'Menu latéral'}>
+      <aside id="lexigam-mobile-drawer" className={`mm-drawer ${open ? 'open' : ''}`} aria-hidden={!open} aria-label={isAr ? 'القائمة الجانبية' : 'Menu latéral'}>
         <div className="mm-drawer-head">
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
             <span style={{ fontSize: '20px', fontWeight: 900, color: '#0f0f0f', letterSpacing: '-0.04em' }}>
@@ -226,19 +234,35 @@ export default function Navbar() {
             <button
               type="button"
               className={`mm-lang-chip ${language === 'fr' ? 'active' : ''}`}
-              onClick={() => setLanguage('fr')}
+              onClick={() => selectLanguage('fr')}
             >
               Français
             </button>
             <button
               type="button"
               className={`mm-lang-chip ${language === 'ar' ? 'active' : ''}`}
-              onClick={() => setLanguage('ar')}
+              onClick={() => selectLanguage('ar')}
             >
               العربية
             </button>
           </div>
-          <div style={{ fontSize: '11px', color: '#777', lineHeight: 1.5 }}>
+          {user && (
+            <div className="mm-drawer-account">
+              <Link to="/dashboard" className="mm-drawer-account-link" onClick={() => setOpen(false)}>
+                <UserRound size={17} />
+                <span>{isAr ? 'حسابي' : 'Mon compte'}</span>
+              </Link>
+              <div className="mm-drawer-account-meta">
+                <strong>{user.nom || user.name || (isAr ? 'حساب LEXIGAM' : 'Compte LEXIGAM')}</strong>
+                {user.email && <span>{user.email}</span>}
+              </div>
+              <button type="button" className="mm-drawer-logout" onClick={logoutUser}>
+                <LogOut size={16} />
+                <span>{isAr ? 'تسجيل الخروج' : 'Se déconnecter'}</span>
+              </button>
+            </div>
+          )}
+          <div className="mm-drawer-location" style={{ fontSize: '11px', color: '#777', lineHeight: 1.7 }}>
             <strong>{isAr ? 'استوديو ومتجر LEXIGAM' : 'Studio & Boutique LEXIGAM'}</strong><br />
             {isAr ? 'الدار البيضاء / المغرب' : 'Casablanca / Maroc'}<br />
             support@lexigam.com
