@@ -20,7 +20,7 @@ const heroSlides = [
     title: 'L’UNIFORME DU QUOTIDIEN',
     desc: 'Coton peigné lourd, matières franches et finitions soignées pour durer au fil des saisons.',
     link: '/shop',
-    cta: 'VOIR TOUT LE VESTIAIRE'
+    cta: '{isAr ? 'عرض الكل' : 'VOIR TOUT'} LE VESTIAIRE'
   },
   {
     image: '/molimao/slider-2.jpg',
@@ -197,6 +197,8 @@ function ProductCard({ product }) {
 }
 
 export default function Home() {
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
   const [slide, setSlide] = useState(0);
   const [artSlide, setArtSlide] = useState(0);
 
@@ -214,6 +216,11 @@ export default function Home() {
   const visibleArt = [0, 1, 2, 3].map((offset) => artPrints[(artSlide + offset) % artPrints.length]);
   const nextArt = () => setArtSlide((s) => (s + 1) % artPrints.length);
   const prevArt = () => setArtSlide((s) => (s - 1 + artPrints.length) % artPrints.length);
+  const displaySlides = isAr ? heroSlides.map((item, index) => ({ ...item,
+    badge: ['إصدار جديد','أزياء شارع بطابع تحريري','بساطة بصرية','إصدارات فنية محدودة','مجموعة خاصة'][index],
+    title: ['ŠIBICA / الدار البيضاء','زيّ يومي بروح المدينة','تناسق بصري واضح','فن مطبوع بإصدارات محدودة','خامات وأحجام معاصرة'][index],
+    cta: ['اكتشف المجموعة','تصفّح كل القطع','اكتشف الاختيارات','اكتشف المطبوعات','استكشف المجموعة'][index]
+  })) : heroSlides;
 
   return (
     <>
@@ -224,7 +231,7 @@ export default function Home() {
       <main className="mm-home">
         {/* Full-bleed Hero Carousel */}
         <section className="mm-hero-slider">
-          {heroSlides.map((s, idx) => (
+          {displaySlides.map((s, idx) => (
             <div key={s.image} className={`mm-slide ${idx === slide ? 'active' : ''}`}>
               <img src={s.image} alt={s.title} />
               <div className="mm-slide-overlay">
@@ -239,10 +246,10 @@ export default function Home() {
             </div>
           ))}
 
-          <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevHero} aria-label="Diapositive précédente">
+          <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevHero} aria-label={isAr ? 'الشريحة السابقة' : 'Diapositive précédente'}>
             <ChevronLeft size={22} />
           </button>
-          <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextHero} aria-label="Diapositive suivante">
+          <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextHero} aria-label={isAr ? 'الشريحة التالية' : 'Diapositive suivante'}>
             <ChevronRight size={22} />
           </button>
 
@@ -253,7 +260,7 @@ export default function Home() {
                 type="button"
                 className={`mm-dot ${idx === slide ? 'active' : ''}`}
                 onClick={() => setSlide(idx)}
-                aria-label={`Aller au slide ${idx + 1}`}
+                aria-label={isAr ? `الانتقال إلى الشريحة ${idx + 1}` : `Aller au slide ${idx + 1}`}
               />
             ))}
           </div>
@@ -262,13 +269,13 @@ export default function Home() {
         {/* Notice Strip */}
         <div className="mm-delivery-strip">
           <Truck size={18} />
-          <span>LIVRAISON OFFERTE PAR COURSIER RAPIDE POUR TOUTE COMMANDE SUPÉRIEURE À 500 DH</span>
+          <span>{isAr ? 'توصيل مجاني عبر خدمة سريعة للطلبات التي تتجاوز 500 درهم' : 'LIVRAISON OFFERTE PAR COURSIER RAPIDE POUR TOUTE COMMANDE SUPÉRIEURE À 500 DH'}</span>
         </div>
 
         {/* Section: Nouveautés */}
         <section className="mm-section">
           <header className="mm-section-header centered">
-            <h2 className="mm-section-title">Nouveautés</h2>
+            <h2 className="mm-section-title">{isAr ? 'وصل حديثاً' : 'Nouveautés'}</h2>
           </header>
           <div className="mm-grid-4">
             {newProducts.map((p) => (
@@ -277,7 +284,7 @@ export default function Home() {
           </div>
           <div className="mm-btn-center">
             <Link to="/shop" className="mm-outline-btn">
-              TOUS LES NOUVEAUX PRODUITS
+              {isAr ? 'كل المنتجات الجديدة' : 'TOUS LES NOUVEAUX PRODUITS'}
             </Link>
           </div>
         </section>
@@ -289,16 +296,14 @@ export default function Home() {
               <img src="/molimao/coffee-editorial.jpg" alt="Atelier et savoir-faire LEXIGAM" loading="lazy" />
             </div>
             <div className="mm-editorial-copy">
-              <span className="mm-eyebrow">SAVOIR-FAIRE & ATELIER</span>
-              <h2>L'art du vêtement quotidien — Carnet d'atelier LEXIGAM</h2>
+              <span className="mm-eyebrow">{isAr ? 'الحِرفة والاستوديو' : 'SAVOIR-FAIRE & ATELIER'}</span>
+              <h2>{isAr ? 'فنّ الملابس اليومية — من دفتر استوديو LEXIGAM' : "L'art du vêtement quotidien — Carnet d'atelier LEXIGAM"}</h2>
               <p>
-                Dans notre studio, chaque coupe est éprouvée dans le mouvement de la ville. Nous sélectionnons
-                des toiles denses, des cotons peignés lourds et des encres de sérigraphie durables conçues
-                pour traverser les saisons sans perdre leur prestance ni leur tombé impeccable.
+                {isAr ? 'في استوديو LEXIGAM نختبر كل قصّة مع حركة المدينة. نختار أقمشة متينة وقطناً ممشطاً ثقيلاً وأحبار طباعة تدوم عبر المواسم وتحافظ على شكل القطعة وجودتها.' : 'Dans notre studio, chaque coupe est éprouvée dans le mouvement de la ville. Nous sélectionnons des toiles denses, des cotons peignés lourds et des encres de sérigraphie durables conçues pour traverser les saisons sans perdre leur prestance ni leur tombé impeccable.'}
               </p>
               <div>
                 <Link to="/blog" className="mm-outline-btn">
-                  LIRE LE JOURNAL...
+                  {isAr ? 'اقرأ المجلة...' : 'LIRE LE JOURNAL...'}
                 </Link>
               </div>
             </div>
@@ -308,9 +313,9 @@ export default function Home() {
         {/* Section: Sélection du Studio */}
         <section className="mm-section">
           <header className="mm-section-header">
-            <h2 className="mm-section-title">Sélection du Studio</h2>
+            <h2 className="mm-section-title">{isAr ? 'اختيارات الاستوديو' : 'Sélection du Studio'}</h2>
             <Link to="/shop" className="mm-outline-btn" style={{ minWidth: 'auto', height: '36px', fontSize: '10px' }}>
-              VOIR TOUT
+              {isAr ? 'عرض الكل' : 'VOIR TOUT'}
             </Link>
           </header>
           <div className="mm-grid-4">
@@ -320,7 +325,7 @@ export default function Home() {
           </div>
           <div className="mm-btn-center">
             <Link to="/shop" className="mm-outline-btn">
-              TOUTE LA BOUTIQUE
+              {isAr ? 'تصفّح المتجر' : 'TOUTE LA BOUTIQUE'}
             </Link>
           </div>
         </section>
@@ -329,16 +334,14 @@ export default function Home() {
         <section className="mm-flagship-section">
           <div className="mm-flagship-split">
             <div className="mm-flagship-copy">
-              <span className="mm-eyebrow">STUDIO & BOUTIQUE LEXIGAM</span>
-              <h2>Notre espace flagship store</h2>
+              <span className="mm-eyebrow">{isAr ? 'استوديو ومتجر LEXIGAM' : 'STUDIO & BOUTIQUE LEXIGAM'}</span>
+              <h2>{isAr ? 'مساحتنا ومتجرنا الرئيسي' : 'Notre espace flagship store'}</h2>
               <p>
-                Venez découvrir notre univers en vrai dans notre studio et boutique à Casablanca.
-                Prenez le temps d'essayer nos coupes, de toucher les matières et d'explorer nos séries limitées
-                d'art graphique dans un lieu convivial et dédié à la création.
+                {isAr ? 'اكتشفوا عالمنا عن قرب في استوديو ومتجر LEXIGAM بالدار البيضاء. جرّبوا القصّات، وتعرّفوا على الخامات، واكتشفوا إصداراتنا الفنية المحدودة في مساحة مخصصة للإبداع.' : 'Venez découvrir notre univers en vrai dans notre studio et boutique à Casablanca. Prenez le temps d’essayer nos coupes, de toucher les matières et d’explorer nos séries limitées d’art graphique dans un lieu convivial et dédié à la création.'}
               </p>
               <div>
                 <Link to="/about" className="mm-outline-btn">
-                  DÉCOUVRIR LE LIEU...
+                  {isAr ? 'اكتشف المكان...' : 'DÉCOUVRIR LE LIEU...'}
                 </Link>
               </div>
             </div>
@@ -352,10 +355,10 @@ export default function Home() {
         <section className="mm-art-section">
           <div className="mm-section" style={{ padding: '0' }}>
             <header className="mm-section-header centered">
-              <h2 className="mm-section-title">Éditions Art & Sérigraphies</h2>
+              <h2 className="mm-section-title">{isAr ? 'إصدارات فنية وطباعة حريرية' : 'Éditions Art & Sérigraphies'}</h2>
             </header>
             <div className="mm-art-slider-wrap">
-              <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevArt} aria-label="Tirage précédent">
+              <button type="button" className="mm-slider-arrow mm-arrow-prev" onClick={prevArt} aria-label={isAr ? 'الإصدار السابق' : 'Tirage précédent'}>
                 <ChevronLeft size={20} />
               </button>
               <div className="mm-art-slider">
@@ -369,13 +372,13 @@ export default function Home() {
                   </article>
                 ))}
               </div>
-              <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextArt} aria-label="Tirage suivant">
+              <button type="button" className="mm-slider-arrow mm-arrow-next" onClick={nextArt} aria-label={isAr ? 'الإصدار التالي' : 'Tirage suivant'}>
                 <ChevronRight size={20} />
               </button>
             </div>
             <div className="mm-btn-center">
               <Link to="/shop?category=Art" className="mm-outline-btn">
-                TOUTES LES ÉDITIONS D'ART
+                {isAr ? 'جميع الإصدارات الفنية' : "TOUTES LES ÉDITIONS D'ART"}
               </Link>
             </div>
           </div>
@@ -387,20 +390,18 @@ export default function Home() {
             <article className="mm-trust-card">
               <img src="/molimao/delivery.png" alt="Livraison express" className="mm-trust-icon" />
               <div>
-                <h3>LIVRAISON RAPIDE & SUIVIE</h3>
+                <h3>{isAr ? 'توصيل سريع مع تتبّع' : 'LIVRAISON RAPIDE & SUIVIE'}</h3>
                 <p>
-                  Livraison express par coursier en 24h à 48h partout au Maroc et à l'international.
-                  La livraison est offerte pour toute commande à partir de 500 DH.
+                  {isAr ? 'توصيل سريع خلال 24 إلى 48 ساعة في المغرب وخارجه. التوصيل مجاني للطلبات ابتداءً من 500 درهم.' : "Livraison express par coursier en 24h à 48h partout au Maroc et à l'international. La livraison est offerte pour toute commande à partir de 500 DH."}
                 </p>
               </div>
             </article>
             <article className="mm-trust-card">
               <img src="/molimao/secure.png" alt="Paiement sécurisé" className="mm-trust-icon" />
               <div>
-                <h3>PAIEMENT 100% SÉCURISÉ</h3>
+                <h3>{isAr ? 'دفع آمن 100٪' : 'PAIEMENT 100% SÉCURISÉ'}</h3>
                 <p>
-                  Transactions bancaires cryptées et sécurisées par protocole SSL et 3D Secure.
-                  Option de paiement en espèces à la livraison également disponible.
+                  {isAr ? 'معاملات مشفّرة ومحمية بتقنيتي SSL و3D Secure، مع إمكانية الدفع نقداً عند الاستلام.' : 'Transactions bancaires cryptées et sécurisées par protocole SSL et 3D Secure. Option de paiement en espèces à la livraison également disponible.'}
                 </p>
               </div>
             </article>
