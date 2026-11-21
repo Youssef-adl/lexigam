@@ -14,7 +14,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', Password::min(8)],
             // Public registration may create clients or vendors, never administrators.
             'role' => ['sometimes', 'in:client,vendeur'],
         ]);
