@@ -247,6 +247,7 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [review, setReview] = useState({ note: 5, commentaire: '' });
   const [error, setError] = useState(false);
+  const [cartError, setCartError] = useState('');
   const [reviewError, setReviewError] = useState('');
 
   const isAr = language === 'ar';
@@ -315,12 +316,21 @@ export default function ProductDetail() {
   const category = p?.categorie?.nom || 'LEXIGAM ARCHIVE';
   const sku = p?.sku || 'N/A';
   const total = Number(p?.prix || 0) * qty;
+  const isDatabaseProduct = Number.isSafeInteger(Number(p?.id)) && Number(p?.id) > 0;
 
   const addProduct = () => {
+    setCartError('');
     if (!size || !p) return;
+    if (!isDatabaseProduct) {
+      setCartError(isAr
+        ? 'هذا المنتج للعرض فقط حالياً، ولم تتم إضافته إلى قاعدة بيانات المتجر بعد.'
+        : "Cet article est une prévisualisation et n'est pas encore disponible à la commande.");
+      return;
+    }
 
     dispatch(addToCart({
       ...p,
+      id: Number(p.id),
       image: activeImage,
       taille: size,
       quantite: qty,
@@ -490,7 +500,7 @@ export default function ProductDetail() {
               <button
                 type="button"
                 className="pb-detail-add"
-                disabled={!size || Number(p.stock) < 1}
+                disabled={!size || Number(p.stock) < 1 || !isDatabaseProduct}
                 onClick={addProduct}
               >
                 <span>
@@ -499,6 +509,14 @@ export default function ProductDetail() {
                 </span>
                 <ArrowUpRight size={17} />
               </button>
+              {!isDatabaseProduct && (
+                <p className="pb-inline-error" role="status">
+                  {isAr
+                    ? 'منتج للعرض فقط — غير متاح للطلب حتى يتم نشره في المتجر.'
+                    : "Article de démonstration — indisponible à la commande tant qu'il n'est pas publié dans la boutique."}
+                </p>
+              )}
+              {cartError && <p className="pb-inline-error" role="alert">{cartError}</p>}
 
               <button
                 type="button"
@@ -591,7 +609,7 @@ export default function ProductDetail() {
               <p className="pb-detail-muted">{isAr ? 'لا توجد تقييمات بعد.' : 'No reviews yet.'}</p>
             )}
 
-            {user?.role === 'client' && (
+            {user?.role === 'client' && isDatabaseProduct && (
               <form className="pb-detail-review-form" onSubmit={submit}>
                 <small>{isAr ? 'أضف تقييماً' : 'LAISSER UN AVIS'}</small>
                 {reviewError && <p className="pb-inline-error">{reviewError}</p>}
@@ -613,6 +631,11 @@ export default function ProductDetail() {
                   {isAr ? 'إرسال التقييم' : 'SUBMIT REVIEW'} <ArrowUpRight size={14} />
                 </button>
               </form>
+            )}
+            {user?.role === 'client' && !isDatabaseProduct && (
+              <p className="pb-detail-muted">
+                {isAr ? 'التقييمات غير متاحة لمنتجات العرض.' : 'Les avis ne sont pas disponibles pour les produits de démonstration.'}
+              </p>
             )}
           </div>
         </section>
