@@ -10,8 +10,9 @@ Architecture:
 
 1. Create a Railway project and add a MySQL service.
 2. Add a service from this GitHub repository and select branch `deploy/production-readiness` for the first preview. Set the service Root Directory to `/backend`.
-3. Generate a public domain for the Laravel service. The checked-in `backend/railway.json` runs migrations at startup, creates the public storage symlink, serves Laravel on Railway's `PORT`, and exposes the Laravel `/up` health endpoint.
-4. In the Laravel service Variables, set:
+3. In Service Settings → Build, set the Custom Build Command to `sh railway-build.sh`. This installs production Composer dependencies and creates Laravel's public storage symlink in the build image.
+4. In Service Settings → Deploy, set the Pre-deploy Command to `php artisan migrate --force`, the Healthcheck Path to `/up`, and leave the Start Command on Railway's detected Laravel/PHP server. Railway's Laravel detection uses its managed PHP web server; do not replace it with `php artisan serve` for production.
+5. In the Laravel service Variables, set:
    - `APP_NAME=LEXIGAM`
    - `APP_ENV=production`
    - `APP_DEBUG=false`
@@ -29,9 +30,9 @@ Architecture:
    - `SESSION_DRIVER=database`
    - `CACHE_STORE=database`
    - `QUEUE_CONNECTION=database`
-5. Generate `APP_KEY` from the backend directory with `php artisan key:generate --show` in a trusted local terminal, then paste the generated value into Railway Variables. Never commit it or put it in Vercel.
-6. Add a Railway Volume to the Laravel service with mount path exactly `/app/storage/app/public`. This keeps product image uploads across redeploys. The API's public storage symlink points to this directory.
-7. Deploy and check `https://<your-railway-api-domain>/up`. It should return a healthy response.
+6. Generate `APP_KEY` from the backend directory with `php artisan key:generate --show` in a trusted local terminal, then paste the generated value into Railway Variables. Never commit it or put it in Vercel.
+7. Add a Railway Volume to the Laravel service with mount path exactly `/app/storage/app/public`. This keeps product image uploads across redeploys. The build-created API public storage symlink points to this directory.
+8. Deploy and check `https://<your-railway-api-domain>/up`. It should return a healthy response.
 
 Railway MySQL service references use the service name in the variable expression. If your database service is not named `MySQL`, change the reference prefix to its actual Railway service name.
 
